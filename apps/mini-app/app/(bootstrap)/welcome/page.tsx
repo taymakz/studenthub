@@ -75,8 +75,11 @@ export default function WelcomePage() {
       /* storage blocked - gate re-shows next launch */
     }
     try {
-      const { cloudStorage } = await import("@tma.js/sdk-react")
-      await cloudStorage.setItem(INTRO_STORAGE_KEY, flag)
+      const { cloudStorageSet } = await import("@/lib/tma-storage")
+      // Hang-proof + non-blocking: localStorage above already marked the
+      // intro complete; cloud mirror must never delay navigation (the raw
+      // SDK setItem can pend forever without a Telegram bridge response).
+      void cloudStorageSet(INTRO_STORAGE_KEY, flag)
     } catch {
       /* cloudStorage unavailable outside Telegram */
     }
