@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next"
 import Script from "next/script"
 import { Vazirmatn } from "next/font/google"
+import { Analytics } from "@vercel/analytics/next"
 
 import "./globals.css"
 import { TanstackQueryProvider } from "@/providers/tanstack-query"
@@ -142,6 +143,7 @@ export default function RootLayout({
             </ThemeProvider>
           </SDKLaunchParamsProvider>
         </SDKProvider>
+        <Analytics />
       </body>
     </html>
   )
