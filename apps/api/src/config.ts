@@ -70,9 +70,9 @@ export const config = {
     .default("")
     .asString(),
 
-  /** Public raw base for registry PDFs — repo is public, static URL (no env). */
+  /** Public raw base for registry PDFs — jsDelivr CDN (Iran POP) */
   CHART_PDF_BASE_URL:
-    "https://raw.githubusercontent.com/taymakz/studenthub/main/packages/registry/registry",
+    "https://cdn.jsdelivr.net/gh/taymakz/studenthub@main/packages/registry/registry",
 
   /** HS256 secret for the admin session JWT — enterprise: must be strong. */
   SECRET_KEY: (() => {

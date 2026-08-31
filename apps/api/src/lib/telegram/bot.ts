@@ -204,9 +204,12 @@ export async function sendRichMessage(
     ? { inline_keyboard: payload.buttons }
     : undefined
   const parseMode = payload.parseMode
+  let media:
+    | { field: "photo" | "video" | "document"; source: string }
+    | null = null
   try {
     // fileId takes precedence over Url (broadcast cached)
-    const media =
+    media =
       payload.photoFileId || payload.photoUrl
         ? ({
             field: "photo",
@@ -235,9 +238,9 @@ export async function sendRichMessage(
         if (parseMode) form.append("parse_mode", parseMode)
         if (replyMarkup)
           form.append("reply_markup", JSON.stringify(replyMarkup))
-        await callBotApi(media.field, form)
+        await callBotApi(`send${media.field.charAt(0).toUpperCase()}${media.field.slice(1)}`, form)
       } else {
-        await callMethod(media.field, {
+        await callMethod(`send${media.field.charAt(0).toUpperCase()}${media.field.slice(1)}`, {
           chat_id: chatId,
           [media.field]: media.source,
           caption: payload.text || undefined,
@@ -256,6 +259,7 @@ export async function sendRichMessage(
     })
     return { ok: true }
   } catch (error) {
+    console.warn(`[telegram] sendRichMessage failed:`, errorMessage(error), { chatId, media: media?.field, source: media?.source?.slice(0, 120) })
     return { ok: false, error: errorMessage(error) }
   }
 }
@@ -316,7 +320,19 @@ function inferMediaType(
   return "document"
 }
 
-// Upload once to TELEGRAM_UPLOADS_CHAT_ID and return fileId for broadcast reuse
+// Upload once to STORAGE topic and return fileId for broadcast reuse — uses SERVICE_TOPICS_STORAGE_ID as private storage
+function getUploadsTarget(): { chatId: string; threadId?: number } | null {
+  const raw = config.TELEGRAM_SERVICE_TOPICS_STORAGE_ID
+  if (!raw) return null
+  if (raw.includes("_")) {
+    const [c, t] = raw.split("_")
+    const tid = Number.parseInt(t ?? "", 10)
+    if (tid === 1) return { chatId: c }
+    return { chatId: c, threadId: Number.isFinite(tid) ? tid : undefined }
+  }
+  return { chatId: raw }
+}
+
 export async function ingestMedia(
   file: Blob,
   fileName: string,
@@ -326,7 +342,8 @@ export async function ingestMedia(
   if (!_check2.ok) {
     return { ok: false, error: `فایل بزرگتر از 4MB است` }
   }
-  if (dry() || !config.TELEGRAM_UPLOADS_CHAT_ID) {
+  const uploadsTarget = getUploadsTarget()
+  if (dry() || !uploadsTarget) {
     console.log(
       `[telegram:dry] ingestMedia(${mediaType}) ${fileName} (${file.size}b)`
     )
@@ -334,13 +351,10 @@ export async function ingestMedia(
   }
   const buffer = Buffer.from(await file.arrayBuffer())
   try {
-    const msg = await callUpload<TelegramMessage>(
-      mediaType,
-      mediaType,
-      buffer,
-      fileName,
-      { chat_id: config.TELEGRAM_UPLOADS_CHAT_ID }
-    )
+    const msg = await callUpload<TelegramMessage>(mediaType, mediaType, buffer, fileName, {
+      chat_id: uploadsTarget.chatId,
+      ...(uploadsTarget.threadId ? { message_thread_id: uploadsTarget.threadId } : {}),
+    })
     const fileId =
       mediaType === "photo"
         ? msg.photo?.[msg.photo.length - 1]?.file_id
@@ -389,7 +403,8 @@ export async function ingestFile(
   fileName: string,
   caption?: string
 ): Promise<{ ok: true; fileId: string } | { ok: false; error: string }> {
-  if (dry() || !config.TELEGRAM_UPLOADS_CHAT_ID) {
+  const uploadsTarget = getUploadsTarget()
+  if (dry() || !uploadsTarget) {
     console.log(
       `[telegram:dry] sendDocument(upload) ${fileName} (${file.size}b)`
     )
@@ -407,7 +422,8 @@ export async function ingestFile(
       buffer,
       fileName,
       {
-        chat_id: config.TELEGRAM_UPLOADS_CHAT_ID,
+        chat_id: uploadsTarget.chatId,
+        ...(uploadsTarget.threadId ? { message_thread_id: uploadsTarget.threadId } : {}),
         ...(caption ? { caption } : {}),
       }
     )
@@ -424,7 +440,8 @@ export async function ingestPdfBytes(
   bytes: Buffer,
   fileName: string
 ): Promise<{ ok: true; fileId: string } | { ok: false; error: string }> {
-  if (dry() || !config.TELEGRAM_UPLOADS_CHAT_ID) {
+  const uploadsTarget = getUploadsTarget()
+  if (dry() || !uploadsTarget) {
     console.log(
       `[telegram:dry] sendDocument(pdf) ${fileName} (${bytes.length}b)`
     )
@@ -439,7 +456,10 @@ export async function ingestPdfBytes(
       "document",
       bytes,
       fileName,
-      { chat_id: config.TELEGRAM_UPLOADS_CHAT_ID }
+      {
+        chat_id: uploadsTarget!.chatId,
+        ...(uploadsTarget!.threadId ? { message_thread_id: uploadsTarget!.threadId } : {}),
+      }
     )
     const fileId = message.document?.file_id
     if (!fileId) return { ok: false, error: "Telegram returned no file_id" }
