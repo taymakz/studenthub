@@ -8,7 +8,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 Open-source StudentHub platform — Telegram Mini App + browser web (via Telegram Login Widget) — for university students (curriculum charts, course offerings, diff notifications). **Vercel serverless** (Hono on Bun) + **Postgres is the only infra** (no Redis/MinIO/BullMQ). University data lives in a **git registry** (`packages/registry`), not DB.
 
-**Version:** `1.0.0-beta.0` • **Branch:** `main` • **Migrated from** legacy `4.1.9` Supabase — only `azad-malard / computer-engineering` (uni 1/major 1) kept, 291 profiles, 330 noted, 5676 passed, 98 professor votes. Other universities dropped (users go to `/setup`). See Migration notes below.
+**Versions:** mini-app `1.0.0-beta.1` (actively versioned); all **other** workspaces pinned to `1.0.0` (static, never bumped). • **Branch:** `main` • **Migrated from** legacy `4.1.9` Supabase — only `azad-malard / computer-engineering` (uni 1/major 1) kept, 291 profiles, 330 noted, 5676 passed, 98 professor votes. Other universities dropped (users go to `/setup`). See Migration notes below.
 
 ## Commands
 
@@ -40,14 +40,14 @@ pnpm --filter @workspace/registry build-index
 ## Packages
 
 - `packages/db` — Drizzle schemas: `users`, `university_profiles` (`bachelors-degree`, `currentSemesterCode=4051`), `noted_courses/passed_courses/failed_courses`, `professor_votes`, `uploads`, `feedback`, `chart_files`, `app_settings` etc. `isContributor` badge, `banned=false` for all after migration, `5725800953=SUPERADMIN`.
-- `packages/registry` — `registry/universities/<slug>/majors/<slug>/charts/<degree>/<yearDir>/<semester>.json` + `courses/<year>/<semester>/new.json` + `professors.json` etc. Loader throws `RegistryNotFoundError`; search via `registry/index/*.json`.
+- `packages/registry` — `registry/universities/<slug>/majors/<slug>/charts/<degree>/<yearDir>/<semester>.json` + `courses/<year>/<semester>/new.json` + `professors.json` etc. Loader throws `RegistryNotFoundError`; search via `registry/index/*.json`. Generated files (do not hand-edit): `old.json`/`diff.json` (rotated from `new.json` by `scripts/sync-offerings.ts`) and `professors.json` (append-only from `new.json` professor names by `scripts/sync-professors.ts`, unique sequential `prof-<n>` slugs, existing entries never removed).
 
 ## Apps
 
 - `apps/api` — Hono, routes `/app/*` + `/me/*` gated by `maintenanceGate`, `/admin/*` (OTP via bot, 1-year `aud=admin` JWT, DB-backed RBAC), `/auth/telegram/*` (`/config`, `/widget`, `/verify`). `GET /me` returns `maintenance` or full profile+offerings+chart+diff in one call.
 - `apps/mini-app` — Next 16 (port 3000, `mini-app.student-hub.localhost`), `RootLayout` (Vazirmatn, `metadataBase https://student-hub.ir`, OG `opengraph-image.tsx` dark `#141414` + `reshapePersian` + logo, `sitemap/robots/manifest`), `AppBootstrap` (web widget → welcome → setup → profile), `lib/request` + `lib/auth/web-token` + `components/auth/telegram-login-widget`.
 - `apps/admin` — Next 3002, velin kit, OTP, `hooks/use-users` infinite, `UserCard` memo includes `isContributor` + `onRoleChanged→refetch` for reactive badge, `PATCH /users/:id/contributor` sends `تبریک شما نماد مشارکت کننده دریافت کردید.`
-- `apps/extension` — WXT MV3 `assets/icon.svg` → `public/icons/icon-*.png`, activeTab, worker re-inject, `chrome.storage.local`, `courses/<year>/<semester>/new.json` export, Jalali preselect.
+- `apps/extension` — WXT MV3 `assets/icon.svg` → `public/icons/icon-*.png`, activeTab, worker re-inject, `chrome.storage.local`, `courses/<year>/<semester>/new.json` export, Jalali preselect. Extraction flow (documented in CONTRIBUTING.md): آموزشیار courses page via «صفحه دروس نیست؟» popup → raise search limit 10→100 → «استخراج از همه صفحات» walks pages; oversized results must be split main-courses then Moaref-only, merged with «ادامه».
 - `apps/chart-builder` — Next 3001, `charts/<degree>/<yearDir>/…` editor (normal/advanced), `chartDocSchema` validation, localStorage profiles.
 
 ## Registry Layout (do not deviate)

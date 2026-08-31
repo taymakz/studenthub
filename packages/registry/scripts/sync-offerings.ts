@@ -36,6 +36,7 @@ import {
   offeringPath,
 } from "../src/paths.ts"
 import type { Offering, OfferingDoc } from "../src/schema/offering.ts"
+import { syncProfessors } from "./sync-professors.ts"
 
 const TRACKED_FIELDS: Array<{ key: string; label: string }> = [
   { key: "minCapacity", label: "حداقل ظرفیت" },
@@ -48,6 +49,12 @@ const TRACKED_FIELDS: Array<{ key: string; label: string }> = [
 
 function professorName(p: Offering["professor"]): string | null {
   if (!p) return null
+  // Raw new.json stores professor as a plain string OR { fa } — handle both,
+  // otherwise diff tracking silently ignores string-form professors.
+  if (typeof p === "string") {
+    const t = p.trim()
+    return t ? t : null
+  }
   return p.fa ?? null
 }
 function fieldValue(o: Offering, key: string): string | null {
@@ -444,10 +451,15 @@ function syncChanged(before: string | null): number {
 }
 
 const { before, ensureOnly } = parseArgs()
+const professorsMajors = syncProfessors()
 const placeholders = ensurePlaceholders()
 if (ensureOnly) {
-  console.log(`Done (ensure-only). placeholders created: ${placeholders}`)
+  console.log(
+    `Done (ensure-only). placeholders created: ${placeholders}, professors updated: ${professorsMajors}`
+  )
   process.exit(0)
 }
 const rotated = syncChanged(before)
-console.log(`Done. placeholders=${placeholders} rotated=${rotated}`)
+console.log(
+  `Done. placeholders=${placeholders} rotated=${rotated} professorsUpdated=${professorsMajors}`
+)

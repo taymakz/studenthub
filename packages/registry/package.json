@@ -1,6 +1,6 @@
 {
   "name": "@workspace/registry",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0",
   "type": "module",
   "private": true,
   "scripts": {
@@ -8,6 +8,7 @@
     "validate": "tsx ./src/cli.ts validate",
     "build-index": "tsx ./src/cli.ts build-index",
     "sync": "tsx ./scripts/sync-offerings.ts",
+    "sync:professors": "tsx ./scripts/sync-professors.ts",
     "sync:ensure": "tsx ./scripts/sync-offerings.ts -- --ensure-only",
     "migrate-from-legacy": "tsx ./scripts/migrate-from-legacy.ts",
     "lint": "eslint",

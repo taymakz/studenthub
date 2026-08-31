@@ -1,6 +1,6 @@
 {
   "name": "@workspace/extension",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0",
   "description": "StudentHub registry scraper - extracts course offerings and exports registry-ready JSON",
   "private": true,
   "type": "module",
