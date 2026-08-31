@@ -8,6 +8,7 @@ import { InitialLoading } from "@/components/app/initial-loading"
 import { TelegramLoginWidget } from "@/components/auth/telegram-login-widget"
 import { isProfileComplete } from "@/lib/api"
 import { applyLaunchParams } from "@/lib/launch-params"
+import { cloudStorageGet } from "@/lib/tma-storage"
 import { resolveInitData } from "@/lib/request"
 import { clearWebToken } from "@/lib/auth/web-token"
 import { INTRO_STORAGE_KEY, DEBUG } from "@/constants"
@@ -50,6 +51,9 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
   }
 
   const hydrated = useProfileStore((s) => s.hydrated)
+  // Always-current pathname for timeouts/callbacks (avoids stale closures).
+  const pathnameRef = React.useRef(pathname)
+  pathnameRef.current = pathname
   const storeError = useProfileStore((s) => s.error)
   const profile = useProfileStore((s) => s.profile)
   const user = useProfileStore((s) => s.user)
@@ -68,13 +72,18 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
   // Safety timeout: if bootstrap is stuck (hydrate hanging, network issue,
   // etc.), force-show the UI after 12 seconds so the user isn't
   // trapped on the loading splash forever. Web-login bypasses this.
+  // If the routing gate also never completed, "/" renders null (blank
+  // screen) — fall back to /profile, the gate re-corrects on its next run.
   React.useEffect(() => {
     if (visible) return
     const t = setTimeout(() => {
-      if (!visible) setVisible(true)
+      if (!visible) {
+        setVisible(true)
+        if (pathnameRef.current === "/") router.replace("/profile")
+      }
     }, 12_000)
     return () => clearTimeout(t)
-  }, [visible])
+  }, [visible, router])
 
   // One combined `/me/bootstrap` request hydrates the app-wide profile store.
   // Guard with a ref so StrictMode double-mount (dev) never fires twice;
@@ -143,17 +152,15 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
         introCompleted = false
       }
       if (!introCompleted) {
-        try {
-          const { cloudStorage } = await import("@tma.js/sdk-react")
-          const v = await cloudStorage.getItem(INTRO_STORAGE_KEY)
-          if (v === JSON.stringify(true)) {
-            introCompleted = true
-            try {
-              localStorage.setItem(INTRO_STORAGE_KEY, v)
-            } catch {}
-          }
-        } catch {
-          // cloudStorage unavailable (web) or not yet initialized — ignore
+        // cloudStorageGet is hang-proof: the raw SDK promise stays pending
+        // forever when the Telegram bridge never answers, which used to
+        // freeze this gate (splash → 12s timeout → blank "/" page).
+        const v = await cloudStorageGet(INTRO_STORAGE_KEY)
+        if (v === JSON.stringify(true)) {
+          introCompleted = true
+          try {
+            localStorage.setItem(INTRO_STORAGE_KEY, v)
+          } catch {}
         }
       }
 
@@ -172,7 +179,10 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
       } else {
         const initData = await resolveInitData()
         const { rd } = applyLaunchParams(initData)
-        if (rd) target = rd
+        // Deep-link targets may arrive without a leading slash (start_param
+        // like "rdprofile"); router.replace would treat it as a relative
+        // path and 404 to a blank screen.
+        if (rd) target = rd.startsWith("/") ? rd : `/${rd}`
         // Don't redirect away from /setup — users navigate there intentionally
         // from settings to edit their profile even when it's already complete.
         else if (pathname === "/" || pathname === "/welcome")
