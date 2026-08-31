@@ -890,6 +890,12 @@ export async function createAnnouncementBatch(input: {
     throw new Error("TOO_MANY_VALUES")
   if (input.entryYears && input.entryYears.length > 10)
     throw new Error("TOO_MANY_VALUES")
+  const hasProfileFilter =
+    Boolean(uniSlugs?.length) ||
+    Boolean(majorSlugs?.length) ||
+    Boolean(semesters?.length) ||
+    Boolean(genders?.length) ||
+    Boolean(input.entryYears?.length)
   const scope = [
     eq(users.banned, false),
     ...(uniSlugs ? [inArray(universityProfiles.universitySlug, uniSlugs)] : []),
@@ -900,17 +906,31 @@ export async function createAnnouncementBatch(input: {
     ...(genders ? [inArray(universityProfiles.gender, genders as any)] : []),
   ]
 
-  const candidates = await db
-    .select({
-      chatId: users.id,
-      firstName: users.firstName,
-      lastName: users.lastName,
-      degree: universityProfiles.degree,
-      entryYearRange: universityProfiles.entryYearRange,
-    })
-    .from(users)
-    .innerJoin(universityProfiles, eq(universityProfiles.userId, users.id))
-    .where(and(...scope))
+  // "همه" (all filters unset) must reach EVERY user - including the ones who
+  // never completed /setup and therefore have no university_profiles row.
+  // Only join profiles when a profile-based filter is actually active.
+  const candidates = hasProfileFilter
+    ? await db
+        .select({
+          chatId: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          degree: universityProfiles.degree,
+          entryYearRange: universityProfiles.entryYearRange,
+        })
+        .from(users)
+        .innerJoin(universityProfiles, eq(universityProfiles.userId, users.id))
+        .where(and(...scope))
+    : await db
+        .select({
+          chatId: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          degree: sql<string | null>`null`,
+          entryYearRange: sql<string | null>`null`,
+        })
+        .from(users)
+        .where(and(...scope))
 
   const wantedYears =
     input.entryYears && input.entryYears.length > 0
