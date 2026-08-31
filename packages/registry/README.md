@@ -1,4 +1,4 @@
-# Registry — StudentHub Community Data
+﻿# Registry — StudentHub Community Data
 
 > Single source of truth for universities, majors, degrees, curriculum charts, semester offerings, professors, archives and groups. All JSON, contributed via PRs, validated by CI. No DB, no FK — DB rows store slugs only.
 
@@ -55,7 +55,7 @@ packages/registry/
           new.json              # latest scraped snapshot (extension writes ONLY this)
           old.json              # previous snapshot, rotated by CI (absent at first)
           diff.json             # generated diff, do not hand-edit
-        professors.json         # optional
+        professors.json         # AUTO-GENERATED from new.json (append-only)
         archives.json           # approved Telegram file_id's only
         groups.json             # Telegram groups
     index/                      # GENERATED — universities/majors/charts/offering-terms/courses
@@ -149,6 +149,8 @@ packages/registry/
 ### `professors.json` / `archives.json` / `groups.json`
 
 Each has `"$schema": "../../../../../schemas/<type>.json"` and `"type": "<type>"`. Optional — loader returns `[]` if missing, validator skips if absent. `archives.json` stores `fileId` only (file lives in Telegram).
+
+`professors.json` is **auto-generated** by `scripts/sync-professors.ts` (runs as part of `pnpm reg:build` / `reg:sync`): every professor name found in the major's `new.json` snapshots is appended with a unique sequential slug (`prof-<n>`, continuing after the highest existing id). Existing entries are never removed, renamed or re-ordered — DB votes reference the slug — so the generator is append-only and idempotent. Do not hand-edit; hand-written entries are preserved.
 
 ### All JSON files — sorted, one per line
 

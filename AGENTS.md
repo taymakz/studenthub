@@ -40,7 +40,7 @@ pnpm --filter @workspace/registry build-index
 ## Packages
 
 - `packages/db` — Drizzle schemas: `users`, `university_profiles` (`bachelors-degree`, `currentSemesterCode=4051`), `noted_courses/passed_courses/failed_courses`, `professor_votes`, `uploads`, `feedback`, `chart_files`, `app_settings` etc. `isContributor` badge, `banned=false` for all after migration, `5725800953=SUPERADMIN`.
-- `packages/registry` — `registry/universities/<slug>/majors/<slug>/charts/<degree>/<yearDir>/<semester>.json` + `courses/<year>/<semester>/new.json` + `professors.json` etc. Loader throws `RegistryNotFoundError`; search via `registry/index/*.json`.
+- `packages/registry` — `registry/universities/<slug>/majors/<slug>/charts/<degree>/<yearDir>/<semester>.json` + `courses/<year>/<semester>/new.json` + `professors.json` etc. Loader throws `RegistryNotFoundError`; search via `registry/index/*.json`. Generated files (do not hand-edit): `old.json`/`diff.json` (rotated from `new.json` by `scripts/sync-offerings.ts`) and `professors.json` (append-only from `new.json` professor names by `scripts/sync-professors.ts`, unique sequential `prof-<n>` slugs, existing entries never removed).
 
 ## Apps
 

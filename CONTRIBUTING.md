@@ -66,7 +66,7 @@ packages/registry/registry/
         new.json                         # latest scraped offerings snapshot
         old.json                         # previous snapshot (rotated by CI)
         diff.json                        # generated — never hand-edit
-      professors.json                    # optional
+      professors.json                    # AUTO-GENERATED from new.json (append-only)
       archives.json                      # approved Telegram file_ids (admin adds)
       groups.json                        # Telegram groups
   index/                                 # GENERATED — never hand-edit
@@ -241,9 +241,9 @@ Fix any validator errors, then open a PR. Rules:
 
 ### Optional files
 
-- professors.json - professor slugs + Persian names; powers professor votes.
-- groups.json - Telegram groups.
-- archives.json - approved Telegram file_ids (added by admins after upload review).
+- `professors.json` — **auto-generated** by `pnpm reg:build`: every professor name found in the major's `new.json` snapshots is appended with a unique sequential id (`prof-<n>`). Existing entries are never removed or renamed (DB votes reference the slug), so a second run is a no-op. Never hand-edit; a hand-written entry will simply be preserved by the generator.
+- `groups.json` — Telegram groups.
+- `archives.json` — approved Telegram `file_id`s (added by admins after upload review).
 
 ---
 
@@ -251,7 +251,7 @@ Fix any validator errors, then open a PR. Rules:
 
 - **New semester offerings:** repeat steps 2-5 above - the extension exports new.json, you place it under courses/<year>/<semester>/new.json, run pnpm reg:build, PR.
 - **Chart fixes** (moved course, new prerequisite, new year-dir for the incoming cohort): edit the chart JSON directly and PR. Keep isCompleted accurate.
-- **Professors / groups:** JSON edits, same flow.
+- **Professors:** nothing to do — `pnpm reg:build` derives `professors.json` from your `new.json` (append-only, unique `prof-<n>` ids).
 - Never touch old.json / diff.json - CI manages them.
 
 ---
