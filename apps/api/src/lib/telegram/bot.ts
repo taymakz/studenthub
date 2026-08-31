@@ -351,7 +351,9 @@ export async function ingestMedia(
   }
   const buffer = Buffer.from(await file.arrayBuffer())
   try {
-    const msg = await callUpload<TelegramMessage>(mediaType, mediaType, buffer, fileName, {
+    const msg = await callUpload<TelegramMessage>(
+      `send${mediaType.charAt(0).toUpperCase()}${mediaType.slice(1)}`,
+      mediaType, buffer, fileName, {
       chat_id: uploadsTarget.chatId,
       ...(uploadsTarget.threadId ? { message_thread_id: uploadsTarget.threadId } : {}),
     })
