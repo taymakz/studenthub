@@ -84,7 +84,12 @@ async function callUpload<T>(
 ): Promise<T> {
   const form = new FormData()
   for (const [key, value] of Object.entries(payload)) {
-    if (value !== undefined) form.append(key, JSON.stringify(value))
+    if (value === undefined) continue
+    // Strings (chat_id, caption, parse_mode, file refs) must be sent raw —
+    // JSON.stringify would wrap them in quotes and Telegram fails to parse
+    // them (e.g. chat_id "\"-100...\"" -> Bad Request: chat not found).
+    // Only objects/arrays/booleans/numbers need JSON encoding.
+    form.append(key, typeof value === "string" ? value : JSON.stringify(value))
   }
   form.append(field, new Blob([new Uint8Array(buffer)]), fileName)
   return callBotApi<T>(method, form)
