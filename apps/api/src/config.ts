@@ -21,14 +21,6 @@ export const config = {
     .asString(),
   /** Skip real Bot API calls (local dev) - payloads are logged instead. */
   TELEGRAM_DRY: env.get("TELEGRAM_DRY").default("false").asBool(),
-  /**
-   * Private channel/group the bot ingests user uploads into - only the
-   * resulting file_id is persisted (no object storage, per AGENTS.md).
-   */
-  TELEGRAM_UPLOADS_CHAT_ID: env
-    .get("TELEGRAM_UPLOADS_CHAT_ID")
-    .default("")
-    .asString(),
   MAX_UPLOAD_MB: env.get("MAX_UPLOAD_MB").default("45").asInt(),
   /** Open-app inline button under notification messages. */
   TELEGRAM_APP_URL: env.get("TELEGRAM_APP_URL").asString(),

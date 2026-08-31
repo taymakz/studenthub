@@ -13,7 +13,7 @@ import { formatYearDirectory } from "@workspace/registry"
 import { and, desc, eq, inArray, sql } from "drizzle-orm"
 import { createHash } from "node:crypto"
 import { readFileSync } from "node:fs"
-import { join, resolve } from "node:path"
+import { join, relative, resolve, sep } from "node:path"
 import { Hono } from "hono"
 import { z } from "zod"
 
@@ -66,11 +66,11 @@ function isSafeYearRange(s: string): boolean {
 }
 function safeRegistryPath(...parts: string[]): string | null {
   const rel = parts.join("/")
-  if (rel.includes("..") || rel.includes("\\") || rel.includes("//"))
-    return null
+  if (rel.includes("..") || rel.includes("\\")) return null
   const abs = resolve(registryRoot(), rel)
   const root = resolve(registryRoot())
-  if (!abs.startsWith(root + "/") && abs !== root) return null
+  const relFromRoot = relative(root, abs)
+  if (relFromRoot.startsWith("..")) return null
   return abs
 }
 
@@ -1311,22 +1311,41 @@ export const meRoutes = new Hono<AppEnv>()
       }
     }
 
-    // Public-repo shortcut: send raw GitHub URL, let Telegram fetch it
+    // Public-repo shortcut: send CDN URL, let Telegram fetch it — encode brackets for Telegram fetch
+    // Caption: Persian detailed like "چارت دانشگاه آزاد مهندسی کامپیوتر ورودی 402 مهر"
+    const buildCaption = () => {
+      try {
+        const idx = readIndexes()
+        const uniName = idx.universities.find((u) => u.slug === uni)?.name.fa ?? uni
+        const majorName = idx.majors.find((m) => m.uniSlug === uni && m.slug === major)?.name.fa ?? major
+        const semFa = semester === "MEHR" ? "مهر" : semester === "BAHMAN" ? "بهمن" : semester === "SUMMER" ? "تابستان" : semester
+        const yearFa = yearDir.replace(/[\[\]]/g, "")
+        return `📄 چارت ${uniName} ${majorName} ورودی ${yearFa} ${semFa}`
+      } catch {
+        return `📄 چارت ${yearDir} - ترم ${semester}`
+      }
+    }
+    const reqId = Math.random().toString(36).slice(2, 6)
     if (config.CHART_PDF_BASE_URL) {
       const base = config.CHART_PDF_BASE_URL.replace(/\/$/, "")
-      const pdfUrl = `${base}/${pdfRel}`
+      const pdfUrl = `${base}/${encodeURI(pdfRel)}`
+      console.log(`[chart:${reqId}] DEBUG trying CDN`, { pdfRel, pdfUrl, base, yearDir, semester, uni, major, degree, bytesLen: bytes.length, registryRoot: registryRoot(), userId: user.id })
       const { sendRichMessage } = await import("@/lib/telegram/bot.ts")
       const sent = await sendRichMessage(user.id, {
         documentUrl: pdfUrl,
-        text: `📄 چارت ${yearDir} - ترم ${semester}`,
+        text: buildCaption(),
       })
-      if (!sent.ok) {
-        return badRequest(c, `ارسال به تلگرام ناموفق بود: ${sent.error}`)
-      }
-      return ok(c, { sent: true, via: "url" })
+      console.log(`[chart:${reqId}] DEBUG sendRichMessage result`, JSON.stringify(sent).slice(0, 800))
+      if (sent.ok) return ok(c, { sent: true, via: "url" })
+      // Fallback to bytes upload if CDN fetch fails (e.g. Telegram 404)
+      console.warn(`[chart:${reqId}] CDN send failed, falling back to bytes:`, sent.error, "pdfUrl:", pdfUrl)
+    } else {
+      console.log(`[chart:${reqId}] DEBUG no CHART_PDF_BASE_URL, using bytes fallback`)
     }
 
+    console.log("[chart] DEBUG bytes fallback start", { bytesLen: bytes.length, pdfRel, yearDir, semester })
     const contentHash = createHash("sha256").update(bytes).digest("hex")
+    console.log("[chart] DEBUG contentHash", contentHash.slice(0, 12))
 
     const [cached] = await db
       .select()
@@ -1343,8 +1362,14 @@ export const meRoutes = new Hono<AppEnv>()
       .limit(1)
 
     let fileId: string
-    if (cached && cached.contentHash === contentHash) {
+    let isCacheHit = false
+    // Enterprise: DRY fileIds (DRY*, DRYPDF*) are fake and not sendable — treat as miss
+    const isDryId = cached?.telegramFileId?.startsWith("DRY") ?? false
+    console.log("[chart] DEBUG cache", { hasCached: !!cached, contentHash: contentHash.slice(0, 8), cachedHash: cached?.contentHash?.slice(0, 8), isDryId, cachedFileId: cached?.telegramFileId?.slice(0, 20) })
+    if (cached && cached.contentHash === contentHash && !isDryId) {
       fileId = cached.telegramFileId
+      isCacheHit = true
+      console.log("[chart] DEBUG using cached fileId", fileId.slice(0, 20))
     } else {
       // Cache miss or stale - upload fresh bytes through the bot.
       const ingested = await ingestPdfBytes(bytes, pdfRel)
@@ -1378,11 +1403,41 @@ export const meRoutes = new Hono<AppEnv>()
         })
     }
 
-    const sent = await sendStoredFile(
-      user.id,
-      fileId,
-      `📄 چارت ${yearDir} - ترم ${semester}`
-    )
+    console.log("[chart] DEBUG trying sendStoredFile", { fileId: fileId.slice(0, 20), isCacheHit, caption: buildCaption().slice(0, 40) })
+    let sent = await sendStoredFile(user.id, fileId, buildCaption())
+    console.log("[chart] DEBUG sendStoredFile result", JSON.stringify(sent).slice(0, 500))
+    // Enterprise: if cached fileId is invalid (bot token rotated, wrong bot), auto-recover
+    if (!sent.ok && isCacheHit && sent.error.includes("wrong remote file identifier")) {
+      console.warn("[chart] cached fileId invalid, re-uploading:", fileId.slice(0, 20))
+      if (cached?.id) await db.delete(chartFiles).where(eq(chartFiles.id, cached.id))
+      const ingested = await ingestPdfBytes(bytes, pdfRel)
+      if (!ingested.ok) {
+        return badRequest(c, `ارسال به تلگرام ناموفق بود: ${ingested.error}`)
+      }
+      fileId = ingested.fileId
+      await db
+        .insert(chartFiles)
+        .values({
+          universitySlug: uni,
+          majorSlug: major,
+          degree,
+          yearDir,
+          semester: semester.toLowerCase(),
+          telegramFileId: fileId,
+          contentHash,
+        })
+        .onConflictDoUpdate({
+          target: [
+            chartFiles.universitySlug,
+            chartFiles.majorSlug,
+            chartFiles.degree,
+            chartFiles.yearDir,
+            chartFiles.semester,
+          ],
+          set: { telegramFileId: fileId, contentHash, updatedAt: new Date() },
+        })
+      sent = await sendStoredFile(user.id, fileId, buildCaption())
+    }
     if (!sent.ok) {
       return badRequest(c, `ارسال به تلگرام ناموفق بود: ${sent.error}`)
     }
