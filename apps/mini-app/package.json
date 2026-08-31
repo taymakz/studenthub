@@ -20,6 +20,7 @@
     "@tanstack/react-query": "^5.102.8",
     "@tma.js/bridge": "^2.3.3",
     "@tma.js/sdk-react": "^3.0.23",
+    "@vercel/analytics": "^2.0.1",
     "@workspace/ui": "workspace:*",
     "clsx": "^2.1.1",
     "lucide-react": "^1.37.0",
