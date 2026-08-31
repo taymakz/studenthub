@@ -1,6 +1,6 @@
 {
   "name": "@workspace/admin",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "type": "module",
   "private": true,
   "portless": {
