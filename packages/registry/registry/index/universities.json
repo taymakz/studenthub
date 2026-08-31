@@ -1,0 +1,14 @@
+[
+  {
+    "slug": "azad-malard",
+    "name": {
+      "fa": "دانشگاه آزاد ملارد",
+      "en": "Malard Azad University"
+    },
+    "type": "azad",
+    "location": {
+      "fa": "تهران",
+      "en": "Tehran"
+    }
+  }
+]

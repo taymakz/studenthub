@@ -1,0 +1,47 @@
+{
+  "name": "@workspace/mini-app",
+  "version": "1.0.0-beta.0",
+  "type": "module",
+  "private": true,
+  "portless": {
+    "appPort": 3000
+  },
+  "scripts": {
+    "dev": "portless mini-app.student-hub --force next dev --turbopack",
+    "dev:bare": "next dev --turbopack --port 3000",
+    "build": "next build",
+    "start": "next start --port 3000",
+    "lint": "eslint .",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@persianlabs/icons": "^1.0.2",
+    "@tanstack/react-query": "^5.102.8",
+    "@tma.js/bridge": "^2.3.3",
+    "@tma.js/sdk-react": "^3.0.23",
+    "@workspace/ui": "workspace:*",
+    "clsx": "^2.1.1",
+    "lucide-react": "^1.37.0",
+    "motion": "^13.1.1",
+    "next": "16.3.3",
+    "next-themes": "^0.4.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-virtuoso": "^4.18.12",
+    "reicon-react": "^1.2.0",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@iconify/json": "^2.2.522",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "eslint": "^9",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}

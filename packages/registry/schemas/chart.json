@@ -1,0 +1,61 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "chart",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "type": { "type": "string", "const": "chart" },
+    "degree": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "semester": { "type": "string", "enum": ["MEHR", "BAHMAN", "BOTH"] },
+    "isCompleted": { "type": "boolean", "default": false },
+    "terms": {
+      "type": "object",
+      "patternProperties": {
+        "^[1-9][0-9]*$": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "theoreticalUnits": { "type": "integer", "minimum": 0, "maximum": 20 },
+              "practicalUnits": { "type": "integer", "minimum": 0, "maximum": 20 },
+              "prerequisites": { "oneOf": [{ "type": "array", "items": { "type": "string" } }, { "type": "integer", "minimum": 1 }] },
+              "corequisites": { "type": "array", "items": { "type": "string" } }
+            },
+            "required": ["name", "theoreticalUnits", "practicalUnits"],
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "moaref": {
+      "type": "array",
+      "items": { "$ref": "#/properties/terms/patternProperties/^[1-9][0-9]*$/items" }
+    },
+    "unknown": {
+      "type": "array",
+      "items": { "$ref": "#/properties/terms/patternProperties/^[1-9][0-9]*$/items" }
+    },
+    "electives": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "requiredUnits": { "type": "integer", "minimum": 1 },
+          "allowedTerms": { "type": "array", "items": { "type": "integer", "minimum": 1 } },
+          "courses": {
+            "type": "array",
+            "items": { "$ref": "#/properties/terms/patternProperties/^[1-9][0-9]*$/items" }
+          },
+          "minPracticalUnits": { "type": "integer", "minimum": 0 }
+        },
+        "required": ["title", "requiredUnits"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["degree", "semester", "terms"],
+  "additionalProperties": false
+}

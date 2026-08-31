@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/university.json",
+  "type": "azad",
+  "slug": "azad-malard",
+  "name": {
+    "fa": "دانشگاه آزاد ملارد",
+    "en": "Malard Azad University"
+  },
+  "location": {
+    "fa": "تهران",
+    "en": "Tehran"
+  }
+}

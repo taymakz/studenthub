@@ -1,0 +1,13 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "installCommand": "pnpm install",
+  "buildCommand": "pnpm turbo build",
+  "functions": {
+    "apps/api/dist/server.js": {
+      "includeFiles": "apps/api/dist/**"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/apps/api/dist/server.js" }
+  ]
+}

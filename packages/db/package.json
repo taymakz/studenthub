@@ -1,0 +1,44 @@
+{
+  "name": "@workspace/db",
+  "version": "1.0.0-beta.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "generate": "drizzle-kit generate",
+    "migrate": "drizzle-kit migrate",
+    "push": "drizzle-kit push",
+    "studio": "drizzle-kit studio",
+    "seed:create-superuser": "tsx ./scripts/create-superuser.ts",
+    "dev:initdata": "tsx ./scripts/create-dev-init-data.ts",
+    "migrate:old-users": "tsx ./scripts/migrate-old-users.ts",
+    "seed:mock-data": "tsx ./scripts/mock-data.ts",
+    "seed:clear": "tsx ./scripts/clear-db.ts",
+    "seed:all": "pnpm run seed:mock-data",
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "pg-connection-string": "^2.9.1"
+  },
+  "peerDependencies": {
+    "drizzle-orm": "^0.45.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "dotenv": "^17.4.2",
+    "drizzle-kit": "^0.31.10",
+    "drizzle-orm": "^0.45.2",
+    "eslint": "^9",
+    "postgres": "^3.4.9",
+    "tsx": "^4.22.4",
+    "typescript": "^5"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts",
+    "./schema/*": "./src/schema/*.ts"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "groups",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "type": { "type": "string", "const": "groups" },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "title": { "type": "string" },
+          "url": { "type": "string", "format": "uri", "pattern": "^https://t.me/" },
+          "kind": { "type": "string", "enum": ["MAJOR", "ENTRY_YEAR", "COURSE"] },
+          "entryYear": { "type": "string" }
+        },
+        "required": ["title", "url", "kind"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["groups"],
+  "additionalProperties": false
+}

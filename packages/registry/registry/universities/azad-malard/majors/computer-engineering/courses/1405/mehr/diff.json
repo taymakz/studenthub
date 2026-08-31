@@ -1,0 +1,287 @@
+{
+  "id": "66b39f32-10ec-4832-80c2-13029e334a28",
+  "generatedAt": "2026-08-31T14:21:22.849Z",
+  "beforeSha": null,
+  "afterSha": "b86af024a438d41d08edaa71503a32ceb0933a68",
+  "universitySlug": "azad-malard",
+  "majorSlug": "computer-engineering",
+  "year": 1405,
+  "semester": "MEHR",
+  "summary": {
+    "added": 1,
+    "removed": 6,
+    "changed": 5
+  },
+  "added": [
+    {
+      "index": "90313-75002",
+      "courseCode": "90313",
+      "courseName": "تفسیر موضوعی نهج‌البلاغه",
+      "courseType": "نظری",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "classCode": "75002- حیدرعلی عزیزی",
+      "degree": "کارشناسی پیوسته",
+      "presentationType": "حضوری",
+      "minCapacity": null,
+      "maxCapacity": 40,
+      "currentEnrollment": null,
+      "classSchedule": "شنبه از 09:15 تا 11:00",
+      "examSchedule": "1405/10/22 از 08:30 تا 10:30",
+      "professor": "لعیا مرادی پر",
+      "location": null
+    }
+  ],
+  "removed": [
+    {
+      "index": "7000031541-21902",
+      "courseCode": "7000031541",
+      "courseName": "معماری کامپیوتر",
+      "courseType": "نظری",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "classCode": "21902",
+      "degree": "کارشناسی ارشد ناپیوسته",
+      "presentationType": "حضوری",
+      "minCapacity": null,
+      "maxCapacity": 15,
+      "currentEnrollment": null,
+      "classSchedule": null,
+      "examSchedule": "1405/10/15 از 08:30 تا 10:30",
+      "professor": "مریم یزدی",
+      "location": null
+    },
+    {
+      "index": "7000038369-2100",
+      "courseCode": "7000038369",
+      "courseName": "یادگیری عمیق",
+      "courseType": "نظری",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "classCode": "2100",
+      "degree": "کارشناسی ارشد ناپیوسته",
+      "presentationType": "حضوری",
+      "minCapacity": null,
+      "maxCapacity": 20,
+      "currentEnrollment": null,
+      "classSchedule": "شنبه از 13:15 تا 15:55",
+      "examSchedule": "1405/10/24 از 14:00 تا 16:00",
+      "professor": "علی سلیمانی",
+      "location": null
+    },
+    {
+      "index": "4628144915-73807",
+      "courseCode": "4628144915",
+      "courseName": "مبانی داده کاوی",
+      "courseType": "نظری",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "classCode": "73807",
+      "degree": "کارشناسی پیوسته",
+      "presentationType": "حضوری",
+      "minCapacity": null,
+      "maxCapacity": 20,
+      "currentEnrollment": null,
+      "classSchedule": null,
+      "examSchedule": "1405/10/12 از 08:30 تا 10:30",
+      "professor": "علی سلیمانی",
+      "location": null
+    },
+    {
+      "index": "90610-75030",
+      "courseCode": "90610",
+      "courseName": "اندیشه اسلامی 1 (مبدا ومعاد)",
+      "courseType": "نظری",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "classCode": "75030",
+      "degree": "کارشناسی پیوسته",
+      "presentationType": "حضوری",
+      "minCapacity": null,
+      "maxCapacity": 40,
+      "currentEnrollment": null,
+      "classSchedule": "شنبه از 16:45 تا 18:30",
+      "examSchedule": "1405/10/22 از 08:30 تا 10:30",
+      "professor": "اکرم اقدسی",
+      "location": null
+    },
+    {
+      "index": "7000031546-73915",
+      "courseCode": "7000031546",
+      "courseName": "سیستم های نهفته و بی درنگ",
+      "courseType": "نظری",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "classCode": "73915",
+      "degree": "کارشناسی پیوسته",
+      "presentationType": "حضوری",
+      "minCapacity": null,
+      "maxCapacity": 30,
+      "currentEnrollment": null,
+      "classSchedule": null,
+      "examSchedule": "1405/10/23 از 14:00 تا 16:00",
+      "professor": "مریم یزدی",
+      "location": null
+    },
+    {
+      "index": "4628127605-73702",
+      "courseCode": "4628127605",
+      "courseName": "روش پژوهش و ارایه",
+      "courseType": "نظری",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "classCode": "73702",
+      "degree": "کارشناسی پیوسته",
+      "presentationType": "حضوری",
+      "minCapacity": null,
+      "maxCapacity": 50,
+      "currentEnrollment": null,
+      "classSchedule": null,
+      "examSchedule": "1405/10/17 از 11:00 تا 13:00",
+      "professor": "مهدی صدائی",
+      "location": null
+    }
+  ],
+  "updated": [
+    {
+      "after": {
+        "index": "7000031548-73945",
+        "courseCode": "7000031548",
+        "courseName": "روش پژوهش و ارائه",
+        "courseType": "نظری",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "classCode": "73945",
+        "degree": "کارشناسی پیوسته",
+        "presentationType": "حضوری",
+        "minCapacity": null,
+        "maxCapacity": 10,
+        "currentEnrollment": null,
+        "classSchedule": "شنبه از 16:05 تا 17:55",
+        "examSchedule": "1405/10/17 از 11:00 تا 13:00",
+        "professor": "مهدی صدائی",
+        "location": null
+      },
+      "changes": [
+        {
+          "field": "classSchedule",
+          "label": "زمان کلاس‌ها",
+          "before": null,
+          "after": "شنبه از 16:05 تا 17:55"
+        }
+      ]
+    },
+    {
+      "after": {
+        "index": "7000031573-73933",
+        "courseCode": "7000031573",
+        "courseName": "گرافیک کامپیوتری",
+        "courseType": "نظری",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "classCode": "73933",
+        "degree": "کارشناسی پیوسته",
+        "presentationType": "حضوری",
+        "minCapacity": null,
+        "maxCapacity": 14,
+        "currentEnrollment": null,
+        "classSchedule": "شنبه از 13:15 تا 16:00",
+        "examSchedule": "1405/10/12 از 14:00 تا 16:00",
+        "professor": null,
+        "location": null
+      },
+      "changes": [
+        {
+          "field": "classSchedule",
+          "label": "زمان کلاس‌ها",
+          "before": null,
+          "after": "شنبه از 13:15 تا 16:00"
+        }
+      ]
+    },
+    {
+      "after": {
+        "index": "4628142462-73407",
+        "courseCode": "4628142462",
+        "courseName": "گرافیک‌ کامپیوتری‌",
+        "courseType": "نظری",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "classCode": "73407",
+        "degree": "کارشناسی پیوسته",
+        "presentationType": "حضوری",
+        "minCapacity": null,
+        "maxCapacity": 50,
+        "currentEnrollment": null,
+        "classSchedule": "شنبه از 13:15 تا 16:00",
+        "examSchedule": "1405/10/12 از 14:00 تا 16:00",
+        "professor": "مهدی صدائی",
+        "location": null
+      },
+      "changes": [
+        {
+          "field": "classSchedule",
+          "label": "زمان کلاس‌ها",
+          "before": null,
+          "after": "شنبه از 13:15 تا 16:00"
+        }
+      ]
+    },
+    {
+      "after": {
+        "index": "7000031545-73905",
+        "courseCode": "7000031545",
+        "courseName": "هوش مصنوعی",
+        "courseType": "نظری",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "classCode": "73905",
+        "degree": "کارشناسی پیوسته",
+        "presentationType": "حضوری",
+        "minCapacity": null,
+        "maxCapacity": 30,
+        "currentEnrollment": null,
+        "classSchedule": "شنبه از 13:15 تا 15:55",
+        "examSchedule": "1405/10/24 از 11:00 تا 13:00",
+        "professor": "علی سلیمانی",
+        "location": null
+      },
+      "changes": [
+        {
+          "field": "maxCapacity",
+          "label": "حداکثر ظرفیت",
+          "before": "50",
+          "after": "30"
+        }
+      ]
+    },
+    {
+      "after": {
+        "index": "7000031549-73900",
+        "courseCode": "7000031549",
+        "courseName": "تحلیل و طراحی نرم افزار",
+        "courseType": "نظری",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "classCode": "73900",
+        "degree": "کارشناسی پیوسته",
+        "presentationType": "حضوری",
+        "minCapacity": null,
+        "maxCapacity": 40,
+        "currentEnrollment": null,
+        "classSchedule": "شنبه از 10:10 تا 12:50",
+        "examSchedule": "1405/10/23 از 08:30 تا 10:30",
+        "professor": "محسن محسنی",
+        "location": null
+      },
+      "changes": [
+        {
+          "field": "maxCapacity",
+          "label": "حداکثر ظرفیت",
+          "before": "50",
+          "after": "40"
+        }
+      ]
+    }
+  ]
+}

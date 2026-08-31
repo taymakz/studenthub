@@ -1,0 +1,36 @@
+{
+  "name": "studenthub-beta",
+  "version": "1.0.0-beta.0",
+  "private": true,
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "turbo format",
+    "typecheck": "turbo typecheck",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "reg:validate": "pnpm --filter @workspace/registry validate",
+    "reg:build": "pnpm reg:sync && pnpm --filter @workspace/registry validate && pnpm --filter @workspace/registry build-index",
+    "reg:sync": "pnpm --filter @workspace/registry sync",
+    "db:generate": "pnpm --filter @workspace/db generate",
+    "db:migrate": "pnpm --filter @workspace/db migrate",
+    "reg:sync:ensure": "pnpm --filter @workspace/registry sync:ensure",
+    "update": "ncu -u --target minor --packageFile \"{apps/api,apps/mini-app,apps/chart-builder,packages/ui}/package.json\" && pnpm install"
+  },
+  "devDependencies": {
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "eslint-plugin-unused-imports": "^4.4.1",
+    "npm-check-updates": "^19.6.6",
+    "prettier": "^3.9.6",
+    "prettier-plugin-tailwindcss": "^0.8.1",
+    "turbo": "^2.10.12",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.11"
+  },
+  "packageManager": "pnpm@11.24.0",
+  "engines": {
+    "node": ">=20"
+  }
+}

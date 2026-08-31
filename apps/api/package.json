@@ -1,0 +1,44 @@
+{
+  "name": "@workspace/api",
+  "version": "1.0.0-beta.0",
+  "type": "module",
+  "private": true,
+  "portless": {
+    "appPort": 8000
+  },
+  "scripts": {
+    "dev": "portless api.student-hub --force bun --watch src/index.ts",
+    "dev:bare": "bun --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "build": "node build.mjs",
+    "lint": "eslint .",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1121.0",
+    "@aws-sdk/s3-request-presigner": "^3.1121.0",
+    "@hono/zod-validator": "^0.9.0",
+    "@workspace/db": "workspace:*",
+    "@workspace/registry": "workspace:*",
+    "@workspace/ui": "workspace:*",
+    "date-fns-jalali": "4.4.0-0",
+    "drizzle-orm": "^0.45.2",
+    "env-var": "^7.5.0",
+    "hono": "^4.13.5",
+    "jose": "^6.2.10",
+    "postgres": "^3.4.9",
+    "zod": "^4.5.4"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^20",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "esbuild": "^0.28.2",
+    "eslint": "^9",
+    "typescript": "^5"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../../schemas/major.json",
+  "type": "major",
+  "slug": "computer-engineering",
+  "name": {
+    "fa": "مهندسی کامپیوتر",
+    "en": "Computer Engineering"
+  }
+}

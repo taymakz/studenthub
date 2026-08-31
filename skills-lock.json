@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "skills": {
+    "data-table": {
+      "source": "virtuoso-dev/skills",
+      "sourceType": "github",
+      "skillPath": "data-table/SKILL.md",
+      "computedHash": "02403a57b126241577b75e9c892ca88e2093769a41faddc98e39a5a07f0a581d"
+    },
+    "message-list": {
+      "source": "virtuoso-dev/skills",
+      "sourceType": "github",
+      "skillPath": "message-list/SKILL.md",
+      "computedHash": "ce63874106de258f946ff8476aedc5858247d5d0ca910d4d94337c0afd78b9bf"
+    },
+    "react-virtuoso": {
+      "source": "virtuoso-dev/skills",
+      "sourceType": "github",
+      "skillPath": "react-virtuoso/SKILL.md",
+      "computedHash": "eeadc956a3e2686844cbfd3a1b9531c4d7807ebea7405f899dea3394c55f507e"
+    },
+    "reactive-engine": {
+      "source": "virtuoso-dev/skills",
+      "sourceType": "github",
+      "skillPath": "reactive-engine/SKILL.md",
+      "computedHash": "803cac8467bcddc2beb9bee5354acbf7c601d7fa7e437311cc12fbc8594a7493"
+    },
+    "telegram-bot": {
+      "source": "claude-office-skills/skills",
+      "sourceType": "github",
+      "skillPath": "telegram-bot/SKILL.md",
+      "computedHash": "987517b2bf10b114c441a15939e2e31dce3890f826e42d0a52efdba20270c3ce"
+    },
+    "telegram-mini-app": {
+      "source": "sickn33/agentic-awesome-skills",
+      "sourceType": "github",
+      "skillPath": "skills/telegram-mini-app/SKILL.md",
+      "computedHash": "92830ec96274e421e29891e8543aecb487f082567c75dee1f26c022d1b0d4a42"
+    }
+  }
+}

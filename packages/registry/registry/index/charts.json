@@ -1,0 +1,35 @@
+[
+  {
+    "uniSlug": "azad-malard",
+    "majorSlug": "computer-engineering",
+    "degreeSlug": "bachelors-degree",
+    "yearDir": "[1403-1405]",
+    "semesters": [
+      "MEHR",
+      "BAHMAN"
+    ],
+    "path": "universities/azad-malard/majors/computer-engineering/charts/bachelors-degree/[1403-1405]/both.json"
+  },
+  {
+    "uniSlug": "azad-malard",
+    "majorSlug": "computer-engineering",
+    "degreeSlug": "bachelors-degree",
+    "yearDir": "1402",
+    "semesters": [
+      "MEHR",
+      "BAHMAN"
+    ],
+    "path": "universities/azad-malard/majors/computer-engineering/charts/bachelors-degree/1402/both.json"
+  },
+  {
+    "uniSlug": "azad-malard",
+    "majorSlug": "computer-engineering",
+    "degreeSlug": "bachelors-degree",
+    "yearDir": "[1400-1401]",
+    "semesters": [
+      "MEHR",
+      "BAHMAN"
+    ],
+    "path": "universities/azad-malard/majors/computer-engineering/charts/bachelors-degree/[1400-1401]/both.json"
+  }
+]

@@ -1,0 +1,79 @@
+export interface PagingInfo {
+  /** Total records across all pages (from "ركورد X تا Y از Z"). */
+  totalRecords: number | null;
+  /** First record index on this page (1-based). */
+  from: number | null;
+  /** Last record index on this page. */
+  to: number | null;
+  hasNext: boolean;
+  hasPrev: boolean;
+}
+
+export interface ScrapedOffering {
+  index: string;
+  courseCode: string;
+  courseName: string;
+  courseType: string | null;
+  theoreticalUnits: number;
+  practicalUnits: number;
+  classCode: string;
+  degree: string;
+  presentationType: string | null;
+  minCapacity: number | null;
+  maxCapacity: number | null;
+  currentEnrollment: number | null;
+  classSchedule: string | null;
+  examSchedule: string | null;
+  professor: string | null;
+  location: string | null;
+}
+
+export interface ScrapeResult {
+  rows: ScrapedOffering[];
+  /** How many of the known fields were matched to table headers. */
+  matchedFields: number;
+  totalFields: number;
+  duplicateCount: number;
+  paging: PagingInfo;
+  pageTitle: string;
+  pageUrl: string;
+}
+
+export type Semester = "MEHR" | "BAHMAN" | "SUMMER";
+
+export const SEMESTER_LABELS: Record<Semester, string> = {
+  MEHR: "مهر",
+  BAHMAN: "بهمن",
+  SUMMER: "تابستان",
+};
+
+// ── Background ⇄ popup messaging ────────────────────────────────────────────
+
+export type ExtractionPhase = "rewind" | "collect" | "done";
+
+export interface ExtractionProgress {
+  phase: ExtractionPhase;
+  /** Current page number (1-based, estimated when totals are known). */
+  page: number;
+  totalPages: number | null;
+  collectedRows: number;
+  addedRows: number;
+  message: string;
+}
+
+export type ExtractionEvent =
+  | { type: "EXTRACTION_STARTED"; tabId: number }
+  | { type: "EXTRACTION_PROGRESS"; progress: ExtractionProgress }
+  | {
+      type: "EXTRACTION_DONE";
+      totalRows: number;
+      pages: number;
+      duplicateCount: number;
+    }
+  | { type: "EXTRACTION_ERROR"; error: string }
+  | { type: "EXTRACTION_STOPPED"; totalRows: number };
+
+export type BackgroundRequest =
+  | { type: "START_EXTRACTION"; tabId?: number; universityId?: string }
+  | { type: "STOP_EXTRACTION" }
+  | { type: "GET_EXTRACTION_STATE" };

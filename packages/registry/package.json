@@ -1,0 +1,35 @@
+{
+  "name": "@workspace/registry",
+  "version": "1.0.0-beta.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "tsx ./src/cli.ts validate && tsx ./src/cli.ts build-index",
+    "validate": "tsx ./src/cli.ts validate",
+    "build-index": "tsx ./src/cli.ts build-index",
+    "sync": "tsx ./scripts/sync-offerings.ts",
+    "sync:ensure": "tsx ./scripts/sync-offerings.ts -- --ensure-only",
+    "migrate-from-legacy": "tsx ./scripts/migrate-from-legacy.ts",
+    "lint": "eslint",
+    "format": "prettier --write \"**/*.{ts,tsx}\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@workspace/eslint-config": "workspace:*",
+    "@workspace/typescript-config": "workspace:*",
+    "eslint": "^9",
+    "postgres": "^3.4.9",
+    "tsx": "^4.22.4",
+    "typescript": "^5"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./schema": "./src/schema/index.ts",
+    "./schema/*": "./src/schema/*.ts",
+    "./year-dir": "./src/year-dir.ts"
+  }
+}

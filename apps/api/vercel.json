@@ -1,0 +1,10 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm --filter @workspace/api build",
+  "outputDirectory": "dist",
+  "functions": {
+    "dist/server.js": {
+      "includeFiles": "dist/**"
+    }
+  }
+}

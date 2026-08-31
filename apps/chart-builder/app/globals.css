@@ -1,0 +1,32 @@
+@import "@workspace/ui/globals.css";
+@import "gradient-border-plugin";
+
+/* Active while the sidebar is collapsed. Works like the `dark` variant: the
+   class lives on <html>, is rendered server-side from the persisted cookie,
+   and is toggled by AppShell when the sidebar opens/closes, so
+   collapse-dependent styles are correct from the very first paint. */
+@custom-variant sidebar-collapse (&:is(html.sidebar-collapsed *));
+
+@layer base {
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Content-area scrollbar: secondary-colored track with a thin (~40%) thumb. */
+.content-scroll {
+  scrollbar-color: var(--muted) var(--secondary);
+}
+.content-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.content-scroll::-webkit-scrollbar-track {
+  background: var(--secondary);
+}
+.content-scroll::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 9999px;
+}
+.content-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}

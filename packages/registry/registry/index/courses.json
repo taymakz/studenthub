@@ -1,0 +1,938 @@
+[
+  {
+    "name": "آزمایشگاه پایگاه داده",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آزمایشگاه ریزپردازنده",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آزمایشگاه سیستم های عامل",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آزمایشگاه شبکه های کامپیوتری",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آزمایشگاه فیزیک 2",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آزمایشگاه مدارهای الکتریکی",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آزمایشگاه مدارهای منطقی",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آزمایشگاه مدارهای منطقی و معماری کامپیوتر",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آزمایشگاه مهندسی نرم افزار",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آزمون نرم افزار",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آشنایی با صنعت کامپیوتر (کاربینی)",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آمار و احتمال مهندسی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اخلاق اسلامی (مبانی و مفاهیم)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اصول طراحی کامپایلر",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "امنیت شبکه",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اندیشه اسلامی 1 (مبدا ومعاد)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اندیشه اسلامی 2 (نبوت و امامت)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اندیشه های امامین انقلاب اسلامی و وصایای حضرت امام خمینی(ره)",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "انس با قرآن کریم",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "انقلاب اسلامی ایران",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "برنامه سازی پیشرفته",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "پایگاه داده ها",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "پروژه نرم افزار",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "تاریخ تحلیلی صدر اسلام",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "تاریخ فرهنگ و تمدن اسلام و ایران",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "تحلیل و طراحی سیستم ها",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "تحلیل و طراحی نرم افزار",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "تربیت بدنی",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "تفسیر موضوعی نهج البلاغه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "جبر خطی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "داده ساختارها و الگوریتم ها",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "دانش خانواده و جمعیت",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "روش پژوهش و ارایه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ریاضی عمومی 1",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ریاضی عمومی 2",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ریاضیات پایه(پیش نیاز دانشگاهی)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ریاضیات گسسته",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ریاضیات مهندسی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ریزپردازنده و زبان اسمبلی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "زبان انگلیسی پیش دانشگاهی-ترکیبی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "زبان انگلیسی عمومی-ترکیبی(1)",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "زبان انگلیسی عمومی-ترکیبی(2)",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "زبان انگلیسی عمومی-ترکیبی(3)",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "زبان تخصصی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "زبان خارجی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ساختمان های داده",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "سیستم های عامل",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "سیستم های نهفته و بی درنگ",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "سیگنال ها و سیستم ها",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "شبکه های کامپیوتری",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "طراحی الگوریتم ها",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "طراحی پایگاه داده ها",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "طراحی زبان های برنامه سازی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "طراحی شیءگرای سیستم ها",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "طراحی کامپیوتری سیستمهای دیجیتال",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "علوم و معارف دفاع مقدس و مقاومت",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "فارسی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "فیزیک 1",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "فیزیک 2",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "کارآموزی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "کارگاه عمومی",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "کارگاه کامپیوتر",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "گرافیک کامپیوتری",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مبانی داده کاوی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مبانی کامپیوتر و برنامه سازی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "محاسبات عددی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مدار های الکتریکی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مدارهای الکتریکی و الکترونیکی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مدارهای منطقی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "معادلات دیفرانسیل",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "معماری کامپیوتر",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مهارت های نرم شغلی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مهندسی اینترنت",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مهندسی نرم افزار",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "نظریه زبان ها و ماشین ها",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ورزش 1",
+    "theoreticalUnits": 1,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "هوش مصنوعی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "هوش مصنوعی و سیستم های خبره",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  }
+]

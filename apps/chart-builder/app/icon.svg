@@ -1,0 +1,24 @@
+<!--
+  StudentHub extension icon.
+  Mark: icons/white.svg (inverted-triangle T monogram), white on a square
+  dark tile. Regenerate PNGs with: pnpm filter @workspace/extension icons
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="tile" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#18181b" />
+      <stop offset="100%" stop-color="#09090b" />
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#tile)" />
+  <rect x="4" y="4" width="504" height="504" rx="108" fill="none"
+        stroke="#3f3f46" stroke-opacity="0.55" stroke-width="8" />
+
+  <!-- mark: source viewBox 446.12x508.32, scaled 0.635 -> 283.3x322.8,
+       centered: x=(512-283.28)/2=114.36, y=(512-322.78)/2=94.61 -->
+  <g transform="translate(114.36 94.61) scale(0.635)" fill="#ffffff">
+    <path d="M439.3,1.2l-213.46,128.62c-1.43.86-3.22.86-4.64,0L6.82.65C3.82-1.15,0,1.01,0,4.51v264.58c0,1.58.83,3.04,2.18,3.85l219.02,131.97c1.43.86,3.22.86,4.64,0l218.1-131.42c1.35-.81,2.18-2.28,2.18-3.85V5.06c0-3.5-3.82-5.66-6.82-3.85Z"/>
+    <path d="M446.12,315.63v56.77c0,1.58-.83,3.04-2.18,3.85l-218.1,131.42c-1.43.86-3.22.86-4.64,0L2.18,375.7c-1.35-.81-2.18-2.28-2.18-3.85v-56.77c0-3.5,3.82-5.66,6.82-3.85l187.25,112.83h.01l27.12,16.34c1.43.86,3.22.86,4.65,0l213.45-128.62c3-1.81,6.82.35,6.82,3.85Z"/>
+  </g>
+</svg>

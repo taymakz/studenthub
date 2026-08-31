@@ -1,0 +1,84 @@
+@import "@workspace/ui/globals.css";
+@import "gradient-border-plugin";
+
+/* Active while the sidebar is collapsed. Works like the `dark` variant: the
+   class lives on <html>, is rendered server-side from the persisted cookie,
+   and is toggled by AppShell when the sidebar opens/closes, so
+   collapse-dependent styles are correct from the very first paint. */
+@custom-variant sidebar-collapse (&:is(html.sidebar-collapsed *));
+
+
+
+@layer base {
+  *{
+    @apply border-border
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+/* Vazirmatn RD-NL — the app's primary face: rounded dots, Persian digits,
+   Arabic script; variable weight. Non-Latin by design, so Latin glyphs fall
+   through per-character to the next font in the stack. */
+@font-face {
+  font-family: "Vazirmatn RD NL";
+  src: url("/fonts/Vazirmatn-RD-NL-VF.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+/* Vazirmatn RD-FD-NL — rounded dots + Farsi digits for NumberFlow, whose
+   digit stacks emit ASCII codepoints that RD-NL does not map. */
+@font-face {
+  font-family: "Vazirmatn RD FD";
+  src: url("/fonts/Vazirmatn-RD-FD-NL-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn RD FD";
+  src: url("/fonts/Vazirmatn-RD-FD-NL-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn RD FD";
+  src: url("/fonts/Vazirmatn-RD-FD-NL-SemiBold.woff2") format("woff2");
+  font-weight: 600;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Vazirmatn RD FD";
+  src: url("/fonts/Vazirmatn-RD-FD-NL-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-display: swap;
+}
+
+/* NumberFlow renders ASCII digit stacks in shadow DOM; the host's
+   font-family inherits through, so RD-FD makes every animated number
+   Persian with rounded dots, matching body text. */
+number-flow-react {
+  font-family: "Vazirmatn RD FD", "Vazirmatn RD NL", var(--font-sans);
+}
+
+/* Content-area scrollbar: secondary-colored track with a thin (~40%) thumb. */
+.content-scroll {
+  scrollbar-color: var(--muted) var(--secondary);
+}
+.content-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.content-scroll::-webkit-scrollbar-track {
+  background: var(--secondary);
+}
+.content-scroll::-webkit-scrollbar-thumb {
+  background: var(--muted);
+  border-radius: 9999px;
+}
+.content-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}

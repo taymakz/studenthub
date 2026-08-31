@@ -1,0 +1,29 @@
+{
+  "name": "@workspace/extension",
+  "version": "1.0.0-beta.0",
+  "description": "StudentHub registry scraper - extracts course offerings and exports registry-ready JSON",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "wxt build",
+    "zip": "wxt zip",
+    "icons": "node scripts/generate-icons.mjs",
+    "typecheck": "wxt prepare && tsc --noEmit"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.6.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@wxt-dev/module-react": "^1.2.2",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "sharp": "^0.34.5",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^5",
+    "wxt": "^0.21.4"
+  }
+}

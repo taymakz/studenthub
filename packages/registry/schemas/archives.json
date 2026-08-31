@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "archives",
+  "type": "object",
+  "properties": {
+    "$schema": { "type": "string" },
+    "type": { "type": "string", "const": "archives" },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "slug": { "type": "string" },
+          "title": { "type": "string" },
+          "description": { "type": "string" },
+          "courseName": { "type": "string" },
+          "fileId": { "type": "string", "minLength": 10 },
+          "fileName": { "type": "string" },
+          "mimeType": { "type": "string" },
+          "sizeBytes": { "type": "integer", "minimum": 0 },
+          "uploadedByChatId": { "type": "integer" },
+          "addedAt": { "type": "string", "format": "date-time" }
+        },
+        "required": ["slug", "title", "fileId", "fileName", "mimeType", "sizeBytes", "uploadedByChatId", "addedAt"],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": ["items"],
+  "additionalProperties": false
+}

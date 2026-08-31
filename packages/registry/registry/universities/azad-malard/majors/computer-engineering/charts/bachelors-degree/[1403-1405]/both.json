@@ -1,0 +1,497 @@
+{
+  "type": "chart",
+  "degree": "bachelors-degree",
+  "semester": "BOTH",
+  "isCompleted": false,
+  "terms": {
+    "1": [
+      {
+        "name": "ریاضیات پایه(پیش نیاز دانشگاهی)",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "زبان انگلیسی پیش دانشگاهی-ترکیبی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ریاضی عمومی 1",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "فیزیک 1",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "مبانی کامپیوتر و برنامه سازی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "آشنایی با صنعت کامپیوتر (کاربینی)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ],
+    "2": [
+      {
+        "name": "ریاضی عمومی 2",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ریاضی عمومی 1"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "مدارهای منطقی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ریاضیات گسسته",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "فیزیک 2",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "فیزیک 1"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "برنامه سازی پیشرفته",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مبانی کامپیوتر و برنامه سازی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "کارگاه کامپیوتر",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "زبان انگلیسی عمومی-ترکیبی(1)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ],
+    "3": [
+      {
+        "name": "جبر خطی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ریاضی عمومی 2"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "آزمایشگاه فیزیک 2",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "فیزیک 2"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "کارگاه عمومی",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "معادلات دیفرانسیل",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": [
+          "ریاضی عمومی 2"
+        ]
+      },
+      {
+        "name": "داده ساختارها و الگوریتم ها",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ریاضیات گسسته"
+        ],
+        "corequisites": [
+          "برنامه سازی پیشرفته"
+        ]
+      },
+      {
+        "name": "تربیت بدنی",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "زبان انگلیسی عمومی-ترکیبی(2)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "مهارت های نرم شغلی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "7000031538"
+        ],
+        "corequisites": []
+      }
+    ],
+    "4": [
+      {
+        "name": "مدارهای الکتریکی و الکترونیکی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "معادلات دیفرانسیل",
+          "فیزیک 2"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "آمار و احتمال مهندسی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ریاضی عمومی 1"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "معماری کامپیوتر",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مدارهای منطقی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "نظریه زبان ها و ماشین ها",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "داده ساختارها و الگوریتم ها"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "طراحی الگوریتم ها",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "داده ساختارها و الگوریتم ها"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "آزمایشگاه مدارهای منطقی",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مدارهای منطقی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "زبان انگلیسی عمومی-ترکیبی(3)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ],
+    "5": [
+      {
+        "name": "محاسبات عددی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "معادلات دیفرانسیل"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "طراحی کامپیوتری سیستمهای دیجیتال",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": [
+          "معماری کامپیوتر"
+        ]
+      },
+      {
+        "name": "سیستم های عامل",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "معماری کامپیوتر",
+          "داده ساختارها و الگوریتم ها"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "طراحی زبان های برنامه سازی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "برنامه سازی پیشرفته"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "طراحی پایگاه داده ها",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "داده ساختارها و الگوریتم ها"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "اصول طراحی کامپایلر",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "نظریه زبان ها و ماشین ها",
+          "معماری کامپیوتر"
+        ],
+        "corequisites": []
+      }
+    ],
+    "6": [
+      {
+        "name": "سیستم های نهفته و بی درنگ",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "معماری کامپیوتر"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "تحلیل و طراحی نرم افزار",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "داده ساختارها و الگوریتم ها"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "شبکه های کامپیوتری",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": [
+          "4628169362"
+        ]
+      },
+      {
+        "name": "ورزش 1",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "تربیت بدنی"
+        ],
+        "corequisites": []
+      }
+    ],
+    "7": [
+      {
+        "name": "روش پژوهش و ارایه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "مهندسی نرم افزار",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "تحلیل و طراحی نرم افزار"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "هوش مصنوعی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "داده ساختارها و الگوریتم ها",
+          "آمار و احتمال مهندسی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "گرافیک کامپیوتری",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "داده ساختارها و الگوریتم ها"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "آزمایشگاه شبکه های کامپیوتری",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "شبکه های کامپیوتری"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "علوم و معارف دفاع مقدس و مقاومت",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ],
+    "8": [
+      {
+        "name": "آزمون نرم افزار",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "تحلیل و طراحی نرم افزار"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "کارآموزی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "روش پژوهش و ارایه"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "آزمایشگاه مهندسی نرم افزار",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مهندسی نرم افزار"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "انس با قرآن کریم",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ]
+  },
+  "moaref": [
+    {
+      "name": "اندیشه اسلامی 1 (مبدا ومعاد)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "اندیشه اسلامی 2 (نبوت و امامت)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [
+        "اندیشه اسلامی 1 (مبدا ومعاد)"
+      ],
+      "corequisites": []
+    },
+    {
+      "name": "اخلاق اسلامی (مبانی و مفاهیم)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "انقلاب اسلامی ایران",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "تاریخ فرهنگ و تمدن اسلام و ایران",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "تاریخ تحلیلی صدر اسلام",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "تفسیر موضوعی نهج البلاغه",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "دانش خانواده و جمعیت",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "اندیشه های امامین انقلاب اسلامی و وصایای حضرت امام خمینی(ره)",
+      "theoreticalUnits": 1,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    }
+  ],
+  "unknown": [],
+  "electives": {}
+}

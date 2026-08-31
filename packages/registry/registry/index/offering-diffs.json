@@ -1,0 +1,16 @@
+[
+  {
+    "id": "66b39f32-10ec-4832-80c2-13029e334a28",
+    "uniSlug": "azad-malard",
+    "majorSlug": "computer-engineering",
+    "year": 1405,
+    "semester": "MEHR",
+    "createdAt": "2026-08-31T14:21:22.849Z",
+    "summary": {
+      "added": 1,
+      "removed": 6,
+      "changed": 5
+    },
+    "hasPrevious": true
+  }
+]
