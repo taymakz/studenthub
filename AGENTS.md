@@ -8,7 +8,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 Open-source StudentHub platform — Telegram Mini App + browser web (via Telegram Login Widget) — for university students (curriculum charts, course offerings, diff notifications). **Vercel serverless** (Hono on Bun) + **Postgres is the only infra** (no Redis/MinIO/BullMQ). University data lives in a **git registry** (`packages/registry`), not DB.
 
-**Version:** `1.0.0-beta.0` • **Branch:** `main` • **Migrated from** legacy `4.1.9` Supabase — only `azad-malard / computer-engineering` (uni 1/major 1) kept, 291 profiles, 330 noted, 5676 passed, 98 professor votes. Other universities dropped (users go to `/setup`). See Migration notes below.
+**Version:** `1.0.0-beta.1` • **Branch:** `main` • **Migrated from** legacy `4.1.9` Supabase — only `azad-malard / computer-engineering` (uni 1/major 1) kept, 291 profiles, 330 noted, 5676 passed, 98 professor votes. Other universities dropped (users go to `/setup`). See Migration notes below.
 
 ## Commands
 

@@ -249,7 +249,7 @@ Fix any validator errors, then open a PR. Rules:
 
 ## Updating an existing university
 
-- **New semester offerings:** repeat steps 2-5 above - the extension exports new.json, you place it under courses/<year>/<semester>/new.json, run pnpm reg:build, PR.
+- **New semester offerings (new.json only):** if your chart is already in place and you only want to refresh the offerings, just re-extract with the extension (see step 2 above) and **copy the JSON and replace `new.json` only** — then run `pnpm reg:build` and everything else is auto-generated: `old.json` (previous snapshot), `diff.json` (the change set that drives notifications) and `professors.json` (append-only professor list). You never touch those three by hand.
 - **Chart fixes** (moved course, new prerequisite, new year-dir for the incoming cohort): edit the chart JSON directly and PR. Keep isCompleted accurate.
 - **Professors:** nothing to do — `pnpm reg:build` derives `professors.json` from your `new.json` (append-only, unique `prof-<n>` ids).
 - Never touch old.json / diff.json - CI manages them.
