@@ -47,7 +47,7 @@ pnpm --filter @workspace/registry build-index
 - `apps/api` — Hono, routes `/app/*` + `/me/*` gated by `maintenanceGate`, `/admin/*` (OTP via bot, 1-year `aud=admin` JWT, DB-backed RBAC), `/auth/telegram/*` (`/config`, `/widget`, `/verify`). `GET /me` returns `maintenance` or full profile+offerings+chart+diff in one call.
 - `apps/mini-app` — Next 16 (port 3000, `mini-app.student-hub.localhost`), `RootLayout` (Vazirmatn, `metadataBase https://student-hub.ir`, OG `opengraph-image.tsx` dark `#141414` + `reshapePersian` + logo, `sitemap/robots/manifest`), `AppBootstrap` (web widget → welcome → setup → profile), `lib/request` + `lib/auth/web-token` + `components/auth/telegram-login-widget`.
 - `apps/admin` — Next 3002, velin kit, OTP, `hooks/use-users` infinite, `UserCard` memo includes `isContributor` + `onRoleChanged→refetch` for reactive badge, `PATCH /users/:id/contributor` sends `تبریک شما نماد مشارکت کننده دریافت کردید.`
-- `apps/extension` — WXT MV3 `assets/icon.svg` → `public/icons/icon-*.png`, activeTab, worker re-inject, `chrome.storage.local`, `courses/<year>/<semester>/new.json` export, Jalali preselect.
+- `apps/extension` — WXT MV3 `assets/icon.svg` → `public/icons/icon-*.png`, activeTab, worker re-inject, `chrome.storage.local`, `courses/<year>/<semester>/new.json` export, Jalali preselect. Extraction flow (documented in CONTRIBUTING.md): آموزشیار courses page via «صفحه دروس نیست؟» popup → raise search limit 10→100 → «استخراج از همه صفحات» walks pages; oversized results must be split main-courses then Moaref-only, merged with «ادامه».
 - `apps/chart-builder` — Next 3001, `charts/<degree>/<yearDir>/…` editor (normal/advanced), `chartDocSchema` validation, localStorage profiles.
 
 ## Registry Layout (do not deviate)
