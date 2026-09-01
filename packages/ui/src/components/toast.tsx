@@ -241,11 +241,11 @@ function ToastBody({
         <div className="flex min-w-0 flex-1 flex-col">
           <ToastPrimitive.Title
             data-slot="toast-title"
-            className="truncate text-sm font-semibold"
+            className=" text-xs font-semibold"
           />
           <ToastPrimitive.Description
             data-slot="toast-description"
-            className="truncate text-xs text-white/60 dark:text-neutral-900/60"
+            className=" text-xs text-white/60 dark:text-neutral-900/60"
           />
         </div>
         <ToastPrimitive.Action
