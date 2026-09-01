@@ -6,7 +6,7 @@
     {
       "index": "90313-75002",
       "courseCode": "90313",
-      "courseName": "تفسیر موضوعی نهج‌البلاغه",
+      "courseName": "تفسیر موضوعی نهج البلاغه",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -24,7 +24,7 @@
     {
       "index": "99041-75001",
       "courseCode": "99041",
-      "courseName": "تاریخ تحلیلی صدر اسلام‌",
+      "courseName": "تاریخ تحلیلی صدر اسلام",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -96,7 +96,7 @@
     {
       "index": "98841-75096",
       "courseCode": "98841",
-      "courseName": "اندیشه اسلامی 2‌ (نبوت و امامت)",
+      "courseName": "اندیشه اسلامی 2 (نبوت و امامت)",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -222,7 +222,7 @@
     {
       "index": "4628102246-73944",
       "courseCode": "4628102246",
-      "courseName": "آزمایشگاه سیستم‌های عامل",
+      "courseName": "آزمایشگاه سیستم های عامل",
       "courseType": "عملی",
       "theoreticalUnits": 0,
       "practicalUnits": 1,
@@ -348,7 +348,7 @@
     {
       "index": "99041-75044",
       "courseCode": "99041",
-      "courseName": "تاریخ تحلیلی صدر اسلام‌",
+      "courseName": "تاریخ تحلیلی صدر اسلام",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -366,7 +366,7 @@
     {
       "index": "99041-75043",
       "courseCode": "99041",
-      "courseName": "تاریخ تحلیلی صدر اسلام‌",
+      "courseName": "تاریخ تحلیلی صدر اسلام",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -384,7 +384,7 @@
     {
       "index": "99041-75042",
       "courseCode": "99041",
-      "courseName": "تاریخ تحلیلی صدر اسلام‌",
+      "courseName": "تاریخ تحلیلی صدر اسلام",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -402,7 +402,7 @@
     {
       "index": "99041-75041",
       "courseCode": "99041",
-      "courseName": "تاریخ تحلیلی صدر اسلام‌",
+      "courseName": "تاریخ تحلیلی صدر اسلام",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -924,7 +924,7 @@
     {
       "index": "4628130407-73941",
       "courseCode": "4628130407",
-      "courseName": "زبان‌ تخصصی‌",
+      "courseName": "زبان تخصصی",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -996,7 +996,7 @@
     {
       "index": "4628132653-73936",
       "courseCode": "4628132653",
-      "courseName": "ساختمان‌های داده",
+      "courseName": "ساختمان های داده",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -1014,7 +1014,7 @@
     {
       "index": "4628114001-73934",
       "courseCode": "4628114001",
-      "courseName": "پایگاه‌ داده‌ها",
+      "courseName": "پایگاه داده ها",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -1068,7 +1068,7 @@
     {
       "index": "4628142462-73407",
       "courseCode": "4628142462",
-      "courseName": "گرافیک‌ کامپیوتری‌",
+      "courseName": "گرافیک کامپیوتری",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -1086,7 +1086,7 @@
     {
       "index": "4628153620-73939",
       "courseCode": "4628153620",
-      "courseName": "نظریه زبان‌ها و ماشین‌ها",
+      "courseName": "نظریه زبان ها و ماشین ها",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -1302,7 +1302,7 @@
     {
       "index": "90313-75014",
       "courseCode": "90313",
-      "courseName": "تفسیر موضوعی نهج‌البلاغه",
+      "courseName": "تفسیر موضوعی نهج البلاغه",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1320,7 +1320,7 @@
     {
       "index": "90313-75012",
       "courseCode": "90313",
-      "courseName": "تفسیر موضوعی نهج‌البلاغه",
+      "courseName": "تفسیر موضوعی نهج البلاغه",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1338,7 +1338,7 @@
     {
       "index": "90313-75008",
       "courseCode": "90313",
-      "courseName": "تفسیر موضوعی نهج‌البلاغه",
+      "courseName": "تفسیر موضوعی نهج البلاغه",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1356,7 +1356,7 @@
     {
       "index": "90313-75045",
       "courseCode": "90313",
-      "courseName": "تفسیر موضوعی نهج‌البلاغه",
+      "courseName": "تفسیر موضوعی نهج البلاغه",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1374,7 +1374,7 @@
     {
       "index": "90313-75043",
       "courseCode": "90313",
-      "courseName": "تفسیر موضوعی نهج‌البلاغه",
+      "courseName": "تفسیر موضوعی نهج البلاغه",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1392,7 +1392,7 @@
     {
       "index": "90313-75039",
       "courseCode": "90313",
-      "courseName": "تفسیر موضوعی نهج‌البلاغه",
+      "courseName": "تفسیر موضوعی نهج البلاغه",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1410,7 +1410,7 @@
     {
       "index": "90313-75066",
       "courseCode": "90313",
-      "courseName": "تفسیر موضوعی نهج‌البلاغه",
+      "courseName": "تفسیر موضوعی نهج البلاغه",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1518,7 +1518,7 @@
     {
       "index": "98841-75021",
       "courseCode": "98841",
-      "courseName": "اندیشه اسلامی 2‌ (نبوت و امامت)",
+      "courseName": "اندیشه اسلامی 2 (نبوت و امامت)",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1536,7 +1536,7 @@
     {
       "index": "98841-75016",
       "courseCode": "98841",
-      "courseName": "اندیشه اسلامی 2‌ (نبوت و امامت)",
+      "courseName": "اندیشه اسلامی 2 (نبوت و امامت)",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1554,7 +1554,7 @@
     {
       "index": "98841-75054",
       "courseCode": "98841",
-      "courseName": "اندیشه اسلامی 2‌ (نبوت و امامت)",
+      "courseName": "اندیشه اسلامی 2 (نبوت و امامت)",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1572,7 +1572,7 @@
     {
       "index": "98841-75073",
       "courseCode": "98841",
-      "courseName": "اندیشه اسلامی 2‌ (نبوت و امامت)",
+      "courseName": "اندیشه اسلامی 2 (نبوت و امامت)",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -1950,7 +1950,7 @@
     {
       "index": "99041-75025",
       "courseCode": "99041",
-      "courseName": "تاریخ تحلیلی صدر اسلام‌",
+      "courseName": "تاریخ تحلیلی صدر اسلام",
       "courseType": "نظری",
       "theoreticalUnits": 2,
       "practicalUnits": 0,
@@ -2076,7 +2076,7 @@
     {
       "index": "4628132653-73928",
       "courseCode": "4628132653",
-      "courseName": "ساختمان‌های داده",
+      "courseName": "ساختمان های داده",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -2130,7 +2130,7 @@
     {
       "index": "4628129685-73925",
       "courseCode": "4628129685",
-      "courseName": "ریاضی‌ عمومی‌ 2",
+      "courseName": "ریاضی عمومی 2",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -2184,7 +2184,7 @@
     {
       "index": "4628117515-73604",
       "courseCode": "4628117515",
-      "courseName": "تحلیل‌ و طراحی سیستم ها",
+      "courseName": "تحلیل و طراحی سیستم ها",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -2256,7 +2256,7 @@
     {
       "index": "4628102246-73605",
       "courseCode": "4628102246",
-      "courseName": "آزمایشگاه سیستم‌های عامل",
+      "courseName": "آزمایشگاه سیستم های عامل",
       "courseType": "عملی",
       "theoreticalUnits": 0,
       "practicalUnits": 1,
@@ -2274,7 +2274,7 @@
     {
       "index": "4628101498-73705",
       "courseCode": "4628101498",
-      "courseName": "آزمایشگاه شبکه ‌های‌ کامپیوتری‌",
+      "courseName": "آزمایشگاه شبکه های کامپیوتری",
       "courseType": "عملی",
       "theoreticalUnits": 0,
       "practicalUnits": 1,
@@ -2508,7 +2508,7 @@
     {
       "index": "4628135451-73601",
       "courseCode": "4628135451",
-      "courseName": "شبکه‌های کامپیوتری",
+      "courseName": "شبکه های کامپیوتری",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -2598,7 +2598,7 @@
     {
       "index": "4628114001-73909",
       "courseCode": "4628114001",
-      "courseName": "پایگاه‌ داده‌ها",
+      "courseName": "پایگاه داده ها",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -2634,7 +2634,7 @@
     {
       "index": "4628153620-73908",
       "courseCode": "4628153620",
-      "courseName": "نظریه زبان‌ها و ماشین‌ها",
+      "courseName": "نظریه زبان ها و ماشین ها",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -2652,7 +2652,7 @@
     {
       "index": "4628150474-73907",
       "courseCode": "4628150474",
-      "courseName": "معماری‌ کامپیوتر",
+      "courseName": "معماری کامپیوتر",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -2688,7 +2688,7 @@
     {
       "index": "4628147685-73906",
       "courseCode": "4628147685",
-      "courseName": "مدار‌های الکتریکی",
+      "courseName": "مدار های الکتریکی",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -2904,7 +2904,7 @@
     {
       "index": "4628137064-73902",
       "courseCode": "4628137064",
-      "courseName": "طراحی الگوریتم‌ها",
+      "courseName": "طراحی الگوریتم ها",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,
@@ -3804,7 +3804,7 @@
     {
       "index": "4628102924-73805",
       "courseCode": "4628102924",
-      "courseName": "آزمایشگاه مهندسی نرم‌افزار",
+      "courseName": "آزمایشگاه مهندسی نرم افزار",
       "courseType": "عملی",
       "theoreticalUnits": 0,
       "practicalUnits": 1,
@@ -4002,7 +4002,7 @@
     {
       "index": "4628151527-73700",
       "courseCode": "4628151527",
-      "courseName": "مهندسی‌ اینترنت‌",
+      "courseName": "مهندسی اینترنت",
       "courseType": "نظری",
       "theoreticalUnits": 3,
       "practicalUnits": 0,

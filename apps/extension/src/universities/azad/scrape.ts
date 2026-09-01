@@ -79,8 +79,14 @@ export function scrapeOfferingsFromPage(): ScrapeResult {
 
   function cleanText(text: string): string {
     return unifyPersian(
-      toEnglishDigits(text.replace(/\s+/g, " ")).replace(/\u00a0/g, " "),
-    ).trim();
+      toEnglishDigits(
+        text
+          .replace(/[\u200c\u200d\u200e\u200f\u00a0\u2060\ufeff]/g, " ")
+          .replace(/\s+/g, " "),
+      ).replace(/\u00a0/g, " "),
+    )
+      .replace(/\s+/g, " ")
+      .trim();
   }
 
   /** Header normalization: drop ZWNJ, punctuation, collapse spaces. */
