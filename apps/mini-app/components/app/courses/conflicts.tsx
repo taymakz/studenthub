@@ -129,12 +129,15 @@ export function detectConflicts(
     }
   }
 
-  // Exam schedule overlaps — also waived for last term
+  // Exam schedule overlaps — also waived for last term (normalize spacing/ZWNJ/digits)
   if (!isLastTerm) {
     const byExam = new Map<string, Offering[]>()
     for (const o of notedOfferings) {
       if (!o.examSchedule) continue
-      const key = o.examSchedule.trim()
+      const key = o.examSchedule
+        .replace(/[\u200c\u200d\u00a0]/g, " ")
+        .replace(/\s+/g, " ")
+        .trim()
       byExam.set(key, [...(byExam.get(key) ?? []), o])
     }
     for (const [exam, group] of byExam.entries()) {

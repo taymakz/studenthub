@@ -1,5 +1,9 @@
 /** Robust, format-tolerant parsing of free-text schedule strings (registry offerings). */
 
+function unifyPersian(text: string): string {
+  return text.replace(/\u0643/g, "\u06A9").replace(/\u064A/g, "\u06CC").replace(/\u0649/g, "\u06CC")
+}
+
 // Match the weekday at the START of the schedule. Persian weekday names are
 // written with a ZWNJ (U+200C) or a plain space («سه‌شنبه»/«سه شنبه»), so allow
 // both. A substring match is wrong — «پنج‌شنبه» and «سه‌شنبه» both contain «شنبه».
@@ -7,19 +11,24 @@ const DAY_RE =
   /^(?:شنبه|یک[\s\u200c]*شنبه|دو[\s\u200c]*شنبه|سه[\s\u200c]*شنبه|چهار[\s\u200c]*شنبه|پنج[\s\u200c]*شنبه|جمعه)/
 
 function canonicalDay(d: string): string {
-  return d.replace(/[\s\u200c]/g, "")
+  // Strip spaces/ZWNJ then map to spaced canonical form used by extension/packages/ui
+  const stripped = d.replace(/[\s\u200c]/g, "")
+  if (stripped === "سهشنبه") return "سه شنبه"
+  if (stripped === "پنجشنبه") return "پنج شنبه"
+  return stripped
 }
 
-/** Canonical (space + ZWNJ stripped) form of a Persian weekday, for comparisons. */
+/** Canonical spaced form of a Persian weekday, for comparisons (syncs with extension output). */
 export function normalizeDay(d: string | null | undefined): string | null {
-  return d ? canonicalDay(d) : null
+  return d ? canonicalDay(unifyPersian(d)) : null
 }
 
 export function extractWeekday(
   schedule: string | null | undefined
 ): string | null {
   if (!schedule) return null
-  const m = schedule.trim().match(DAY_RE)
+  const unified = unifyPersian(schedule)
+  const m = unified.trim().match(DAY_RE)
   return m ? canonicalDay(m[0]) : null
 }
 
@@ -150,15 +159,15 @@ export function formatPersianDateLong(dateStr: string): string | null {
   }).format(jsDate)
 }
 
-/** Weekday name N days from today (N=0 → today's weekday). */
+/** Weekday name N days from today (N=0 → today's weekday) - synced with extension canonical. */
 export function persianWeekDayFromDays(days: number): string | null {
   const order = [
     "شنبه",
     "یکشنبه",
     "دوشنبه",
-    "سه‌شنبه",
+    "سه شنبه",
     "چهارشنبه",
-    "پنجشنبه",
+    "پنج شنبه",
     "جمعه",
   ]
   const today = getCurrentDatePersian()
