@@ -30,13 +30,11 @@ export function FailedCourses() {
     () => new Set(passed.map((p) => p.courseName)),
     [passed]
   )
-  const storeHydrated = useProfileStore((s) => s.hydrated)
   const store = useProfileStore.getState
 
   const [selected, setSelected] = useState<string[]>([])
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
-  const hydratedRef = useRef(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const selectedRef = useRef(selected)
 
@@ -45,11 +43,13 @@ export function FailedCourses() {
   }, [selected])
 
   useEffect(() => {
-    if (!hydratedRef.current && storeHydrated) {
-      setSelected(failedNames)
-      hydratedRef.current = true
-    }
-  }, [storeHydrated, failedNames])
+    // Keep the local selection in sync with the store so that failed courses added
+    // elsewhere (e.g. adding a failed pre-req from the courses conflict drawer) are
+    // reflected reactively here — instead of being seeded only once at hydration.
+
+
+    setSelected(failedNames)
+  }, [failedNames])
 
   const toggle = useCallback(
     (name: string) => {
