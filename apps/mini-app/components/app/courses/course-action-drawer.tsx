@@ -119,20 +119,38 @@ export function CourseActionDrawer({
                                 پاس شدم
                               </Button>
                               <Button
-                                className="w-full"
+                                className="w-full flex-col gap-0.5 py-2 leading-tight"
                                 variant="destructive"
                                 onClick={() => {
-                                  useProfileStore
-                                    .getState()
-                                    .toggleFailed(group.preRequisiteName!)
+                                  const st = useProfileStore.getState()
+                                  const name = group.preRequisiteName
+                                  if (!name) return
+                                  // Ensure the pre-req course is in the failed list — additive
+                                  // (don't remove an already-failed pre-req; we only add noted)=
+                                  if (!st.failed.some((f) => f.courseName === name)) {
+                                    st.setFailed([
+                                      ...st.failed.map((f) => f.courseName),
+                                      name,
+                                    ])
+                                  }
+                                  // Ensure it's also in the noted list (taken together now) —
+                                  // in this conflict, it is guaranteed to be absent from the current
+                                  // noted term, so toggleNote adds it rather than removing.
+                                  const preOffering = st.offerings.find(
+                                    (o) => o.courseName?.trim() === name.trim()
+                                  )
+                                  if (preOffering) st.toggleNote(preOffering.index)
+
+
                                   toastManager.add({
                                     type: "success",
-                                    title: "به مردودی اضافه شد",
+                                    title: "به مردودی و یادداشت اضافه شد",
                                     data: { variant: "x" },
                                   })
                                 }}
                               >
-                                حداقل یکبار مردود شدم
+                                <span>حداقل یکبار مردود شدم</span>
+                                <span className="text-xs opacity-80">اضافه کردن به یادداشت</span>
                               </Button>
                             </div>
                           )}
