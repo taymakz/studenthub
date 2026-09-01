@@ -10,6 +10,22 @@ Open-source StudentHub platform — Telegram Mini App + browser web (via Telegra
 
 **Versions:** mini-app `1.0.0-beta.1` (actively versioned); all **other** workspaces pinned to `1.0.0` (static, never bumped). • **Branch:** `main` • **Migrated from** legacy `4.1.9` Supabase — only `azad-malard / computer-engineering` (uni 1/major 1) kept, 291 profiles, 330 noted, 5676 passed, 98 professor votes. Other universities dropped (users go to `/setup`). See Migration notes below.
 
+## Commit Convention (Required)
+
+All commits **MUST** follow Conventional Commits:
+
+```
+<type>(<scope>): <short description>
+```
+
+Allowed types: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `style`, `build`, `ci`, `revert`.
+
+- Scope is optional but recommended, e.g. `feat(api): ...`, `fix(mini-app): ...`, `chore(deps): ...`. Use `*` only for cross-cutting changes: `feat(*): ...`.
+- Keep `type` and `scope` lowercase; description in imperative mood, no trailing period, max ~72 chars. Good: `feat(course): add prerequisites display` / Bad: `Feat(Course): Added prerequisites.`
+- Breaking changes via `feat!:` / `fix!:` or `BREAKING CHANGE:` footer. One logical change per commit.
+- Validated against `^(feat|fix|chore|docs|refactor|perf|test|style|build|ci|revert)(\(.+\))?: .+` — non-conforming commits will be rejected in review; squash-merge PRs must be reworded to conform.
+- Examples: `feat: add validation for university and major consistency` / `fix(telegram): handle expired file links gracefully` / `chore(deps): bump next to 15.2.3` / `feat(*): migrate shared utils to new structure`
+
 ## Commands
 
 ```bash

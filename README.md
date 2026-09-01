@@ -109,6 +109,29 @@ pnpm build
 
 PRs are welcome — both registry (data) and code. See [CONTRIBUTING.md](./CONTRIBUTING.md) for the full guide: local setup, adding a new university end-to-end, the registry JSON schemas with real examples, slug conventions, and the PR checklist.
 
+## Commit Convention
+
+All commits **must** follow Conventional Commits:
+
+```
+<type>(<scope>): <short description>
+```
+
+Allowed `type`: `feat`, `fix`, `chore`, `docs`, `refactor`, `perf`, `test`, `style`, `build`, `ci`, `revert`.
+
+- Scope is optional but recommended, e.g. `feat(api): ...`, `fix(mini-app): ...`. Use `*` only for cross-cutting changes: `feat(*): ...`.
+- Keep `type` and `scope` lowercase, use imperative mood, no trailing period, max ~72 chars.
+- Breaking changes via `feat!:` / `fix!:` or `BREAKING CHANGE:` footer.
+
+Examples:
+- `feat: add validation for university and major consistency`
+- `fix(telegram): handle expired file links gracefully`
+- `chore(deps): bump next to 15.2.3`
+- `feat(mini-app): add course conflict drawer`
+- `feat(*): migrate shared utils to new structure`
+
+Validated against `^(feat|fix|chore|docs|refactor|perf|test|style|build|ci|revert)(\(.+\))?: .+` — non-conforming commits will be rejected in review. See [AGENTS.md](./AGENTS.md) and [CONTRIBUTING.md](./CONTRIBUTING.md) for full rules.
+
 ## Star history
 
 <a href="https://star-history.dera.page/#taymakz/studenthub&Date">
