@@ -96,7 +96,10 @@ function cleanStrings(value: unknown, parentKey?: string): unknown {
     );
   }
   if (typeof value === "string") {
-    const trimmed = value.replace(/\s+/g, " ").trim();
+    const trimmed = value
+      .replace(/[\u200c\u200d\u200e\u200f\u00a0\u2060\ufeff]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
     if (trimmed === "") {
       return parentKey && NULLABLE_OFFERING_FIELDS.has(parentKey)
         ? null
