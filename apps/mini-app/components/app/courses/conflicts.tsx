@@ -197,7 +197,10 @@ export function detectConflicts(
     const entry = chartMap.get(offering.courseName)
     if (!entry) continue
 
-    // Prerequisites — must be passed OR (failed and taken together) OR enough units
+    // Prerequisites — satisfied if passed, OR (failed once AND currently taken
+    // together in the noted list). A failed pre-req alone doesn't satisfy — it
+    // must also be retaken now (mirrors the spec in
+    // packages/registry/tests/conflicts.test.ts).
     const pre = entry.prerequisites
     if (Array.isArray(pre)) {
       for (const reqName of pre) {
