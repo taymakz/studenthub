@@ -8,6 +8,29 @@ export const persianWeekDays = [
   "جمعه",
 ] as const
 
+function normalizePersianText(text: string): string {
+  return text
+    .replace(/\s+/g, " ")
+    .replace(/ي/g, "ی")
+    .replace(/ك/g, "ک")
+    .replace(/[\u200c\u200d\u00a0]/g, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+function normalizeScheduleDays(text: string): string {
+  return text
+    .replace(/سهشنبه/g, "سه شنبه")
+    .replace(/پنجشنبه/g, "پنج شنبه")
+    .replace(/یک\s+شنبه/g, "یکشنبه")
+    .replace(/دو\s+شنبه/g, "دوشنبه")
+    .replace(/چهار\s+شنبه/g, "چهارشنبه")
+}
+
+function normalizeScheduleText(text: string): string {
+  return normalizeScheduleDays(normalizePersianText(text))
+}
+
 export type PersianWeekDayType = (typeof persianWeekDays)[number]
 
 export type ScheduleCourse = {
@@ -36,36 +59,40 @@ export type ExamGroup = {
 }
 
 export function getCourseScheduleDayName(schedule: string): string {
-  const dayPart = schedule.trim().split(" از ")[0] || ""
-  return (persianWeekDays as readonly string[]).includes(dayPart) ? dayPart : ""
+  const normalized = normalizeScheduleText(schedule)
+  const dayPart = normalized.split(" از ")[0]?.trim() || ""
+  if ((persianWeekDays as readonly string[]).includes(dayPart)) return dayPart
+  const m = normalized.match(/^(شنبه|یکشنبه|دوشنبه|سه شنبه|چهارشنبه|پنج شنبه|جمعه)/)
+  if (m?.[1] && (persianWeekDays as readonly string[]).includes(m[1])) return m[1]
+  return ""
 }
 
 export function extractClassScheduleStartTime(
   schedule: string | null
 ): string | null {
   if (!schedule) return null
-  return schedule.split(" از ")[1]?.split(" تا ")[0] ?? null
+  return normalizeScheduleText(schedule).split(" از ")[1]?.split(" تا ")[0]?.trim() ?? null
 }
 
 export function extractClassScheduleEndTime(
   schedule: string | null
 ): string | null {
   if (!schedule) return null
-  return schedule.split(" از ")[1]?.split(" تا ")[1] ?? null
+  return normalizeScheduleText(schedule).split(" از ")[1]?.split(" تا ")[1]?.trim() ?? null
 }
 
 export function extractExamScheduleStartTime(
   schedule: string | null | undefined
 ): string | null {
   if (!schedule) return null
-  return schedule.split(" از ")[1]?.split(" تا ")[0] ?? null
+  return normalizeScheduleText(schedule).split(" از ")[1]?.split(" تا ")[0]?.trim() ?? null
 }
 
 export function extractExamScheduleEndTime(
   schedule: string | null | undefined
 ): string | null {
   if (!schedule) return null
-  return schedule.split(" از ")[1]?.split(" تا ")[1] ?? null
+  return normalizeScheduleText(schedule).split(" از ")[1]?.split(" تا ")[1]?.trim() ?? null
 }
 
 export function extractExamScheduleDate(
@@ -89,13 +116,13 @@ export function groupAndSortCoursesByWeekDay(
   const noSchedule: ScheduleCourse[] = []
 
   const sortByTime = (a: ScheduleCourse, b: ScheduleCourse) => {
-    const sa = a.class_schedule?.trim() || ""
-    const sb = b.class_schedule?.trim() || ""
+    const sa = normalizeScheduleText(a.class_schedule || "")
+    const sb = normalizeScheduleText(b.class_schedule || "")
     if (!sa && !sb) return 0
     if (!sa) return 1
     if (!sb) return -1
-    const ta = sa.split(" از ")[1]?.split(" تا ")[0] ?? "00:00"
-    const tb = sb.split(" از ")[1]?.split(" تا ")[0] ?? "00:00"
+    const ta = sa.split(" از ")[1]?.split(" تا ")[0]?.trim() ?? "00:00"
+    const tb = sb.split(" از ")[1]?.split(" تا ")[0]?.trim() ?? "00:00"
     return ta.localeCompare(tb)
   }
 

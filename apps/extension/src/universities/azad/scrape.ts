@@ -160,29 +160,30 @@ export function scrapeOfferingsFromPage(): ScrapeResult {
     return idx === undefined ? "" : cleanText(cells[idx]?.textContent ?? "");
   }
 
-  const PERSIAN_DAYS = [
-    "شنبه",
-    "یکشنبه",
-    "دوشنبه",
-    "سه شنبه",
-    "چهارشنبه",
-    "پنج شنبه",
-    "جمعه",
-  ];
-
   function extractFirstSchedule(scheduleText: string): string {
     if (!scheduleText) return "";
-    // ZWNJ-free, homoglyph-unified copy for matching only (سه‌شنبه -> سه شنبه,
-    // يكشنبه -> یکشنبه).
-    const cleaned = unifyPersian(scheduleText)
-      .replace(/[\u200c]/g, " ")
-      .replace(/\s+/g, " ");
-    for (const day of PERSIAN_DAYS) {
-      const pattern = new RegExp(
-        `${day}\\s*(?:از)?\\s*\\d{1,2}:\\d{2}\\s*تا\\s*\\d{1,2}:\\d{2}`,
-      );
-      const match = cleaned.match(pattern);
-      if (match) return match[0];
+    // Unify homoglyphs, replace ZWNJ/ZWJ/NBSP with space, collapse whitespace,
+    // and normalize day variants to canonical forms (سه‌شنبه/سهشنبه -> سه شنبه, etc.)
+    // This is done on a copy for matching only, then we return the canonical form.
+    let cleaned = unifyPersian(scheduleText)
+      .replace(/[\u200c\u200d\u00a0]/g, " ")
+      .replace(/\s+/g, " ")
+      .trim();
+    cleaned = cleaned
+      .replace(/سهشنبه/g, "سه شنبه")
+      .replace(/پنجشنبه/g, "پنج شنبه")
+      .replace(/یک\s+شنبه/g, "یکشنبه")
+      .replace(/دو\s+شنبه/g, "دوشنبه")
+      .replace(/چهار\s+شنبه/g, "چهارشنبه");
+
+    // Single regex that matches any canonical Persian day with time pattern,
+    // scanning left-to-right. This avoids the substring bug where "شنبه"
+    // was found inside "دوشنبه"/"یکشنبه"/etc. when looping per-day.
+    const pattern =
+      /(شنبه|یکشنبه|دوشنبه|سه شنبه|چهارشنبه|پنج شنبه|جمعه)\s+از\s+\d{1,2}:\d{2}\s+تا\s+\d{1,2}:\d{2}/g;
+    const matches = [...cleaned.matchAll(pattern)];
+    if (matches.length > 0) {
+      return matches[0][0]!;
     }
     return cleaned;
   }

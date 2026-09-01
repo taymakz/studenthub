@@ -5,7 +5,13 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
-    include: ["apps/api/tests/**/*.test.ts", "apps/admin/tests/**/*.test.ts", "packages/registry/tests/**/*.test.ts"],
+    include: [
+      "apps/api/tests/**/*.test.ts",
+      "apps/admin/tests/**/*.test.ts",
+      "packages/registry/tests/**/*.test.ts",
+      "apps/extension/tests/**/*.test.ts",
+      "packages/ui/src/lib/**/*.test.ts",
+    ],
     exclude: ["node_modules", "dist", ".turbo", "_ignore"],
     env: {
       DATABASE_URL: "postgresql://postgres:postgres@localhost:5433/studenthub",
