@@ -15,6 +15,8 @@ import { Button } from "@workspace/ui/components/button"
 import { toastManager } from "@workspace/ui/components/toast"
 
 import type { Offering } from "@/lib/api"
+import { apiClient } from "@/lib/request"
+import { useProfileStore } from "@/stores/profile-store"
 import { courseLine, escapeHtml } from "./sections"
 
 /** Single-course management drawer (nested/inset), with export + share + delete.
@@ -104,12 +106,9 @@ export function CourseActionDrawer({
                                 className="w-full"
                                 variant="success"
                                 onClick={() => {
-                                  import("@/stores/profile-store").then(
-                                    ({ useProfileStore }) =>
-                                      useProfileStore
-                                        .getState()
-                                        .togglePassed(group.preRequisiteName!)
-                                  )
+                                  useProfileStore
+                                    .getState()
+                                    .togglePassed(group.preRequisiteName!)
                                   toastManager.add({
                                     type: "success",
                                     title: "به پاس‌شده اضافه شد",
@@ -123,12 +122,9 @@ export function CourseActionDrawer({
                                 className="w-full"
                                 variant="destructive"
                                 onClick={() => {
-                                  import("@/stores/profile-store").then(
-                                    ({ useProfileStore }) =>
-                                      useProfileStore
-                                        .getState()
-                                        .toggleFailed(group.preRequisiteName!)
-                                  )
+                                  useProfileStore
+                                    .getState()
+                                    .toggleFailed(group.preRequisiteName!)
                                   toastManager.add({
                                     type: "success",
                                     title: "به مردودی اضافه شد",
@@ -150,12 +146,9 @@ export function CourseActionDrawer({
                                 className="w-full"
                                 variant="success"
                                 onClick={() => {
-                                  import("@/stores/profile-store").then(
-                                    ({ useProfileStore }) =>
-                                      useProfileStore
-                                        .getState()
-                                        .togglePassed(group.coRequisiteName!)
-                                  )
+                                  useProfileStore
+                                    .getState()
+                                    .togglePassed(group.coRequisiteName!)
                                   toastManager.add({
                                     type: "success",
                                     title: "به پاس‌شده اضافه شد",
@@ -169,25 +162,30 @@ export function CourseActionDrawer({
                                 className="w-full"
                                 variant="outline"
                                 onClick={() => {
-                                  import("@/stores/profile-store").then(
-                                    ({ useProfileStore }) => {
-                                      const all =
-                                        useProfileStore.getState().offerings
-                                      const co = all.find(
-                                        (o) =>
-                                          o.courseName === group.coRequisiteName
-                                      )
-                                      if (co)
-                                        useProfileStore
-                                          .getState()
-                                          .toggleNote(co.index)
-                                    }
-                                  )
-                                  toastManager.add({
-                                    type: "success",
-                                    title: "به یادداشت اضافه شد",
-                                    data: { variant: "x" },
-                                  })
+                                  const co = useProfileStore
+                                    .getState()
+                                    .offerings.find(
+                                      (o) =>
+                                        o.courseName?.trim() ===
+                                        group.coRequisiteName?.trim()
+                                    )
+                                  if (co) {
+                                    useProfileStore
+                                      .getState()
+                                      .toggleNote(co.index)
+                                    toastManager.add({
+                                      type: "success",
+                                      title: "به یادداشت اضافه شد",
+                                      data: { variant: "x" },
+                                    })
+                                  } else {
+                                    toastManager.add({
+                                      type: "error",
+                                      title:
+                                        "درس هم‌نیاز در دروس این نیم‌سال موجود نیست",
+                                      data: { variant: "x" },
+                                    })
+                                  }
                                 }}
                               >
                                 به یادداشتم اضافه کن
@@ -204,13 +202,9 @@ export function CourseActionDrawer({
                                 className="flex-1"
                                 variant="outline"
                                 onClick={async () => {
-                                  const { apiClient } =
-                                    await import("@/lib/request")
                                   await apiClient.patch("/me/profile", {
                                     isLastTerm: true,
                                   })
-                                  const { useProfileStore } =
-                                    await import("@/stores/profile-store")
                                   await useProfileStore.getState().refresh()
                                   toastManager.add({
                                     type: "success",
@@ -225,13 +219,9 @@ export function CourseActionDrawer({
                                 className="flex-1"
                                 variant="outline"
                                 onClick={async () => {
-                                  const { apiClient } =
-                                    await import("@/lib/request")
                                   await apiClient.patch("/me/profile", {
                                     isLastTerm: false,
                                   })
-                                  const { useProfileStore } =
-                                    await import("@/stores/profile-store")
                                   await useProfileStore.getState().refresh()
                                   toastManager.add({
                                     type: "success",
