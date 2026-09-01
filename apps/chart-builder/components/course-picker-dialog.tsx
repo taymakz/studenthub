@@ -21,11 +21,13 @@ import { UnitsBadge } from "@/components/units-badge"
 import { courseUnits, type ChartCourse } from "@/lib/chart"
 import { toFaDigits } from "@/lib/jalali"
 
-/** Normalizes for forgiving Persian search: homoglyphs, digits, spacing. */
+/** Normalizes for forgiving Persian search: homoglyphs, ZWNJ, digits, spacing. */
 function normalize(value: string): string {
   return value
     .replace(/\u0643/g, "\u06A9")
     .replace(/\u064A/g, "\u06CC")
+    .replace(/[\u200c\u200d\u00a0]/g, " ")
+    .replace(/\s+/g, " ")
     .toLowerCase()
     .trim()
 }
@@ -67,10 +69,17 @@ export function CoursePickerDialog({
     onOpenChange(next)
   }
 
-  const normalized = normalize(query)
-  const visible = normalized
-    ? courses.filter((c) => normalize(c.name).includes(normalized))
-    : courses
+  const words = normalize(query)
+    .split(/\s+/)
+    .filter(Boolean)
+  const visible =
+    words.length === 0
+      ? courses
+      : courses.filter((c) => {
+          const haystack = normalize(c.name)
+          const hayWords = haystack.split(/\s+/)
+          return words.every((w) => hayWords.some((hw) => hw.startsWith(w)))
+        })
 
   const toggle = (name: string) =>
     onSelectedChange(

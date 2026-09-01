@@ -50,11 +50,13 @@ const KIND_LABELS: Record<RequisiteKind, string> = {
   corequisites: "همنیاز",
 }
 
-/** Forgiving Persian comparison for search: homoglyphs + casing. */
+/** Forgiving Persian comparison for search: homoglyphs + ZWNJ + casing. */
 function normalize(value: string): string {
   return value
     .replace(/\u0643/g, "\u06A9")
     .replace(/\u064A/g, "\u06CC")
+    .replace(/[\u200c\u200d\u00a0]/g, " ")
+    .replace(/\s+/g, " ")
     .toLowerCase()
     .trim()
 }
@@ -330,14 +332,15 @@ export function CourseSection({
   const [selected, setSelected] = React.useState<string[]>([])
   const [query, setQuery] = React.useState("")
 
-  // Every whitespace-separated word must appear in name or code.
+  // Every whitespace-separated word must appear in name (order-independent, prefix-friendly).
   const filtered = React.useMemo(() => {
     if (!searchable) return courses
-    const words = query.split(/\s+/).filter(Boolean)
+    const words = normalize(query).split(/\s+/).filter(Boolean)
     if (words.length === 0) return courses
     return courses.filter((c) => {
       const hay = normalize(c.name)
-      return words.every((w) => hay.includes(normalize(w)))
+      const hayWords = hay.split(/\s+/)
+      return words.every((w) => hayWords.some((hw) => hw.startsWith(w)))
     })
   }, [courses, query, searchable])
 
