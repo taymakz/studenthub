@@ -256,6 +256,14 @@ export function CourseActionDrawer({
                       </div>
                     ))}
                     <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => setExportOpen(true)}
+                    >
+                      <Copy className="size-4" />
+                      خروجی
+                    </Button>
+                    <Button
                       variant="destructive"
                       className="w-full"
                       onClick={() => {
@@ -276,10 +284,7 @@ export function CourseActionDrawer({
                     <Button
                       variant="outline"
                       className="w-full"
-                      onClick={() => {
-                        onOpenChange(false)
-                        setExportOpen(true)
-                      }}
+                      onClick={() => setExportOpen(true)}
                     >
                       <Copy className="size-4" />
                       خروجی
