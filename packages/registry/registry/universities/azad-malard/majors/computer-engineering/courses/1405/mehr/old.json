@@ -1,8 +1,26 @@
 {
   "year": 1405,
   "semester": "MEHR",
-  "scrapedAt": "2026-08-29T20:26:47.017Z",
+  "scrapedAt": "2026-08-31T14:21:04.821Z",
   "offerings": [
+    {
+      "index": "90313-75002",
+      "courseCode": "90313",
+      "courseName": "تفسیر موضوعی نهج‌البلاغه",
+      "courseType": "نظری",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "classCode": "75002- حیدرعلی عزیزی",
+      "degree": "کارشناسی پیوسته",
+      "presentationType": "حضوری",
+      "minCapacity": null,
+      "maxCapacity": 40,
+      "currentEnrollment": null,
+      "classSchedule": "شنبه از 09:15 تا 11:00",
+      "examSchedule": "1405/10/22 از 08:30 تا 10:30",
+      "professor": "لعیا مرادی پر",
+      "location": null
+    },
     {
       "index": "99041-75001",
       "courseCode": "99041",
@@ -166,24 +184,6 @@
       "location": null
     },
     {
-      "index": "7000031541-21902",
-      "courseCode": "7000031541",
-      "courseName": "معماری کامپیوتر",
-      "courseType": "نظری",
-      "theoreticalUnits": 3,
-      "practicalUnits": 0,
-      "classCode": "21902",
-      "degree": "کارشناسی ارشد ناپیوسته",
-      "presentationType": "حضوری",
-      "minCapacity": null,
-      "maxCapacity": 15,
-      "currentEnrollment": null,
-      "classSchedule": null,
-      "examSchedule": "1405/10/15 از 08:30 تا 10:30",
-      "professor": "مریم یزدی",
-      "location": null
-    },
-    {
       "index": "90029-75152",
       "courseCode": "90029",
       "courseName": "فارسی",
@@ -214,9 +214,9 @@
       "minCapacity": null,
       "maxCapacity": 10,
       "currentEnrollment": null,
-      "classSchedule": null,
+      "classSchedule": "شنبه از 16:05 تا 17:55",
       "examSchedule": "1405/10/17 از 11:00 تا 13:00",
-      "professor": null,
+      "professor": "مهدی صدائی",
       "location": null
     },
     {
@@ -864,24 +864,6 @@
       "currentEnrollment": null,
       "classSchedule": "شنبه از 13:15 تا 15:55",
       "examSchedule": "1405/10/24 از 14:00 تا 16:00",
-      "professor": null,
-      "location": null
-    },
-    {
-      "index": "7000038369-2100",
-      "courseCode": "7000038369",
-      "courseName": "یادگیری عمیق",
-      "courseType": "نظری",
-      "theoreticalUnits": 3,
-      "practicalUnits": 0,
-      "classCode": "2100",
-      "degree": "کارشناسی ارشد ناپیوسته",
-      "presentationType": "حضوری",
-      "minCapacity": null,
-      "maxCapacity": 20,
-      "currentEnrollment": null,
-      "classSchedule": "شنبه از 13:15 تا 15:55",
-      "examSchedule": "1405/10/24 از 14:00 تا 16:00",
       "professor": "علی سلیمانی",
       "location": null
     },
@@ -1078,7 +1060,7 @@
       "minCapacity": null,
       "maxCapacity": 14,
       "currentEnrollment": null,
-      "classSchedule": null,
+      "classSchedule": "شنبه از 13:15 تا 16:00",
       "examSchedule": "1405/10/12 از 14:00 تا 16:00",
       "professor": null,
       "location": null
@@ -1096,7 +1078,7 @@
       "minCapacity": null,
       "maxCapacity": 50,
       "currentEnrollment": null,
-      "classSchedule": null,
+      "classSchedule": "شنبه از 13:15 تا 16:00",
       "examSchedule": "1405/10/12 از 14:00 تا 16:00",
       "professor": "مهدی صدائی",
       "location": null
@@ -1318,24 +1300,6 @@
       "location": null
     },
     {
-      "index": "4628144915-73807",
-      "courseCode": "4628144915",
-      "courseName": "مبانی داده کاوی",
-      "courseType": "نظری",
-      "theoreticalUnits": 3,
-      "practicalUnits": 0,
-      "classCode": "73807",
-      "degree": "کارشناسی پیوسته",
-      "presentationType": "حضوری",
-      "minCapacity": null,
-      "maxCapacity": 20,
-      "currentEnrollment": null,
-      "classSchedule": null,
-      "examSchedule": "1405/10/12 از 08:30 تا 10:30",
-      "professor": "علی سلیمانی",
-      "location": null
-    },
-    {
       "index": "90313-75014",
       "courseCode": "90313",
       "courseName": "تفسیر موضوعی نهج‌البلاغه",
@@ -1549,24 +1513,6 @@
       "classSchedule": "شنبه از 15:00 تا 16:45",
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "الهه کابلی",
-      "location": null
-    },
-    {
-      "index": "90610-75030",
-      "courseCode": "90610",
-      "courseName": "اندیشه اسلامی 1 (مبدا ومعاد)",
-      "courseType": "نظری",
-      "theoreticalUnits": 2,
-      "practicalUnits": 0,
-      "classCode": "75030",
-      "degree": "کارشناسی پیوسته",
-      "presentationType": "حضوری",
-      "minCapacity": null,
-      "maxCapacity": 40,
-      "currentEnrollment": null,
-      "classSchedule": "شنبه از 16:45 تا 18:30",
-      "examSchedule": "1405/10/22 از 08:30 تا 10:30",
-      "professor": "اکرم اقدسی",
       "location": null
     },
     {
@@ -2470,24 +2416,6 @@
       "location": null
     },
     {
-      "index": "7000031546-73915",
-      "courseCode": "7000031546",
-      "courseName": "سیستم های نهفته و بی درنگ",
-      "courseType": "نظری",
-      "theoreticalUnits": 3,
-      "practicalUnits": 0,
-      "classCode": "73915",
-      "degree": "کارشناسی پیوسته",
-      "presentationType": "حضوری",
-      "minCapacity": null,
-      "maxCapacity": 30,
-      "currentEnrollment": null,
-      "classSchedule": null,
-      "examSchedule": "1405/10/23 از 14:00 تا 16:00",
-      "professor": "مریم یزدی",
-      "location": null
-    },
-    {
       "index": "4628183688-73804",
       "courseCode": "4628183688",
       "courseName": "پروژه نرم افزار",
@@ -2804,11 +2732,11 @@
       "degree": "کارشناسی پیوسته",
       "presentationType": "حضوری",
       "minCapacity": null,
-      "maxCapacity": 50,
+      "maxCapacity": 30,
       "currentEnrollment": null,
       "classSchedule": "شنبه از 13:15 تا 15:55",
       "examSchedule": "1405/10/24 از 11:00 تا 13:00",
-      "professor": null,
+      "professor": "علی سلیمانی",
       "location": null
     },
     {
@@ -3866,11 +3794,11 @@
       "degree": "کارشناسی پیوسته",
       "presentationType": "حضوری",
       "minCapacity": null,
-      "maxCapacity": 50,
+      "maxCapacity": 40,
       "currentEnrollment": null,
       "classSchedule": "شنبه از 10:10 تا 12:50",
       "examSchedule": "1405/10/23 از 08:30 تا 10:30",
-      "professor": null,
+      "professor": "محسن محسنی",
       "location": null
     },
     {
@@ -4051,24 +3979,6 @@
       "classSchedule": "شنبه از 13:15 تا 15:55",
       "examSchedule": "1405/10/24 از 11:00 تا 13:00",
       "professor": "علی سلیمانی",
-      "location": null
-    },
-    {
-      "index": "4628127605-73702",
-      "courseCode": "4628127605",
-      "courseName": "روش پژوهش و ارایه",
-      "courseType": "نظری",
-      "theoreticalUnits": 2,
-      "practicalUnits": 0,
-      "classCode": "73702",
-      "degree": "کارشناسی پیوسته",
-      "presentationType": "حضوری",
-      "minCapacity": null,
-      "maxCapacity": 50,
-      "currentEnrollment": null,
-      "classSchedule": null,
-      "examSchedule": "1405/10/17 از 11:00 تا 13:00",
-      "professor": "مهدی صدائی",
       "location": null
     },
     {
