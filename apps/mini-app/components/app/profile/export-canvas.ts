@@ -190,14 +190,14 @@ export function drawExportRow(
   return y + 140
 }
 
-/** Fixed Persian weekday order (شنبه → جمعه) used by both tools. */
+/** Fixed Persian weekday order (شنبه → جمعه) used by both tools - synced with extension/packages/ui canonical (سه شنبه/پنج شنبه with space). */
 export const PERSIAN_WEEKDAYS = [
   "شنبه",
   "یکشنبه",
   "دوشنبه",
-  "سه‌شنبه",
+  "سه شنبه",
   "چهارشنبه",
-  "پنجشنبه",
+  "پنج شنبه",
   "جمعه",
 ] as const
 
