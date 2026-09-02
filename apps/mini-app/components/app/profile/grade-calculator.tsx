@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 import {
   Drawer,
@@ -20,7 +20,8 @@ import { Plus, Trash2 } from "lucide-react"
 import { ToolButton } from "./tool-card"
 import { CalculatorGradeIcon } from "./tool-icons"
 import { useNotedOfferings } from "./use-noted-offerings"
-import { GptDrawer, loadGpt, saveGpt } from "./gpt-drawer"
+import { GptDrawer } from "./gpt-drawer"
+import { loadGpt, saveGpt } from "./gpt"
 import type { Offering } from "@/lib/api"
 
 interface Row {
@@ -32,7 +33,7 @@ interface Row {
 
 type Gpt = 10 | 12 | 20
 
-const ROWS_KEY = "user-grade-calculator-rows"
+const ROWS_KEY = "user-grade-calculator-rows:v1"
 
 function toEn(str: string): string {
   const map: Record<string, string> = {
@@ -120,7 +121,8 @@ export function GradeCalculator() {
   const [gptOpen, setGptOpen] = useState(false)
   const [actionsOpen, setActionsOpen] = useState(false)
   const [rows, setRows] = useState<Row[]>(loadRows)
-  const [gpt, setGpt] = useState<Gpt | null>(() => loadGpt())
+  // Never rendered — a ref avoids a re-render on every write.
+  const gptRef = useRef<Gpt | null>(null)
   const { notedOfferings } = useNotedOfferings()
 
   const persistRows = (next: Row[]) => {
@@ -133,7 +135,7 @@ export function GradeCalculator() {
   }
 
   const setGptPersist = (next: Gpt | null) => {
-    setGpt(next)
+    gptRef.current = next
     saveGpt(next)
   }
 
@@ -260,7 +262,7 @@ export function GradeCalculator() {
           open={gptOpen}
           onOpenChange={(o) => {
             setGptOpen(o)
-            if (!o) setGpt(loadGpt())
+            if (!o) gptRef.current = loadGpt()
           }}
         />
 
