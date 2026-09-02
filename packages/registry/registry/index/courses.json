@@ -132,6 +132,18 @@
     ]
   },
   {
+    "name": "آمار کاربردی در حسابداری (1)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "آمار و احتمال مهندسی",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -144,13 +156,66 @@
     ]
   },
   {
+    "name": "آمار و احتمالات",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "اخلاق اسلامی (مبانی و مفاهیم)",
     "theoreticalUnits": 2,
     "practicalUnits": 0,
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اصول بودجه ریزی دولتی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اصول حسابداری (1)",
+    "theoreticalUnits": 4,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اصول حسابداری (2)",
+    "theoreticalUnits": 4,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -163,6 +228,42 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اصول و فنون مذاکره",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اقتصاد خرد",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اقتصاد کلان",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -186,6 +287,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -196,6 +302,11 @@
     "theoreticalUnits": 2,
     "practicalUnits": 0,
     "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
@@ -222,6 +333,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -234,7 +350,36 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "انگلیسی حسابداری (1)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "بازار سرمایه و ابزار تامین مالی اسلامی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -247,6 +392,30 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "بهایابی (1)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "بهایابی (2)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -276,10 +445,27 @@
     ]
   },
   {
+    "name": "پول و ارز و بانکداری",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "تاریخ تحلیلی صدر اسلام",
     "theoreticalUnits": 2,
     "practicalUnits": 0,
     "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
@@ -294,7 +480,24 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "تحقیق در عملیات",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -325,9 +528,14 @@
   },
   {
     "name": "تربیت بدنی",
-    "theoreticalUnits": 1,
+    "theoreticalUnits": 0,
     "practicalUnits": 0,
     "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
@@ -342,7 +550,24 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "تنظیم و کنترل بودجه دولتی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -355,6 +580,186 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری ابزار و عقود اسلامی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری بهای تمام شده (1)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری بهای تمام شده (2)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری پیشرفته (1)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری پیشرفته (2)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری مالیاتی (2)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری مدیریت",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری موارد خاص",
+    "theoreticalUnits": 1,
+    "practicalUnits": 1,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری میانه (1)",
+    "theoreticalUnits": 4,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری میانه (2)",
+    "theoreticalUnits": 4,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری و حسابرسی بخش عمومی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابرسی (1)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابرسی (2)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حقوق تجارت",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حقوق تجارت و قانون کار و بیمه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -378,7 +783,36 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "رفتار سازمانی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "روان شناسی سازمانی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -391,6 +825,30 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "روش تحقیق",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ریاضی عمومی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -420,6 +878,18 @@
     ]
   },
   {
+    "name": "ریاضی کاربردی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "ریاضیات پایه(پیش نیاز دانشگاهی)",
     "theoreticalUnits": 2,
     "practicalUnits": 0,
@@ -427,6 +897,30 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ریاضیات کاربردی در حسابداری (1)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ریاضیات کاربردی در حسابداری (2)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -456,6 +950,18 @@
     ]
   },
   {
+    "name": "ریاضیات و آمار (پیش نیاز دانشگاهی)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "ریزپردازنده و زبان اسمبلی",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -474,6 +980,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -484,6 +995,11 @@
     "theoreticalUnits": 1,
     "practicalUnits": 0,
     "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
@@ -498,6 +1014,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -508,6 +1029,11 @@
     "theoreticalUnits": 1,
     "practicalUnits": 0,
     "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
@@ -523,6 +1049,30 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "زبان تخصصی (1)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "زبان تخصصی (2)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -666,6 +1216,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -676,6 +1231,11 @@
     "theoreticalUnits": 3,
     "practicalUnits": 0,
     "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
@@ -709,12 +1269,53 @@
   },
   {
     "name": "کارآموزی",
+    "theoreticalUnits": 0,
+    "practicalUnits": 2,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "کاربرد نرم افزار در حسابداری",
     "theoreticalUnits": 2,
+    "practicalUnits": 1,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "کاربینی",
+    "theoreticalUnits": 0,
     "practicalUnits": 0,
     "refs": [
       {
         "uniSlug": "azad-malard",
-        "majorSlug": "computer-engineering",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "کارگاه حسابداری",
+    "theoreticalUnits": 0,
+    "practicalUnits": 2,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -744,6 +1345,30 @@
     ]
   },
   {
+    "name": "کنترل های داخلی و حاکمیت شرکتی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "کنترلهای داخلی و نظام راهبری شرکتی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "گرافیک کامپیوتری",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -756,6 +1381,90 @@
     ]
   },
   {
+    "name": "مالی (1)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مالی (2)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مالیاتی (1)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مالیاتی (2)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مالیه عمومی و تنظیم خط مشی مالی دولت",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مباحث جاری در حسابداری",
+    "theoreticalUnits": 1,
+    "practicalUnits": 1,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مبانی حسابداری بخش عمومی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "مبانی داده کاوی",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -763,6 +1472,18 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مبانی سازمان و کسب و کار",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -828,6 +1549,42 @@
     ]
   },
   {
+    "name": "مدیریت سرمایه گذاری",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مدیریت مالی (1)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مدیریت مالی (2)",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "معادلات دیفرانسیل",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -847,6 +1604,18 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مکاتبات تجاری و گزارش نویسی",
+    "theoreticalUnits": 1,
+    "practicalUnits": 1,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -888,6 +1657,18 @@
     ]
   },
   {
+    "name": "نرم افزارهای کاربردی در حسابداری",
+    "theoreticalUnits": 1,
+    "practicalUnits": 1,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "نظریه زبان ها و ماشین ها",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -901,9 +1682,14 @@
   },
   {
     "name": "ورزش 1",
-    "theoreticalUnits": 1,
-    "practicalUnits": 0,
+    "theoreticalUnits": 0,
+    "practicalUnits": 1,
     "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
