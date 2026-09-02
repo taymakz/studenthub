@@ -116,7 +116,10 @@ export function useCoursesData() {
 
   const newIndexes = new Set((changes?.detail?.added ?? []).map((o) => o.index))
   const chartPool = flattenChart(chart)
-  const moarefNames = new Set(chartPool.filter((c) => c.isMoaref).map((c) => c.name))
+  const moarefNames = new Set<string>()
+  for (const c of chartPool) {
+    if (c.isMoaref) moarefNames.add(c.name)
+  }
   const termByCourseName = new Map<string, number | undefined>()
   for (const c of chartPool) termByCourseName.set(c.name, c.termNumber)
 

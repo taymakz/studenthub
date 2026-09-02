@@ -34,14 +34,15 @@ function groupByExamDate(notedOfferings: Offering[]) {
     const date = extractDate(o.examSchedule) ?? "تاریخ نامشخص"
     groupMap.set(date, [...(groupMap.get(date) ?? []), o])
   }
-  return [...groupMap.entries()]
-    .map(([date, items]) => ({ date, items }))
-    .filter((g) => g.items.length > 0)
-    .sort((a, b) => {
-      if (a.date === "تاریخ نامشخص") return 1
-      if (b.date === "تاریخ نامشخص") return -1
-      return a.date.localeCompare(b.date)
-    })
+  const groups: Array<{ date: string; items: Offering[] }> = []
+  for (const [date, items] of groupMap) {
+    if (items.length > 0) groups.push({ date, items })
+  }
+  return groups.sort((a, b) => {
+    if (a.date === "تاریخ نامشخص") return 1
+    if (b.date === "تاریخ نامشخص") return -1
+    return a.date.localeCompare(b.date)
+  })
 }
 
 export function ExamSchedule() {

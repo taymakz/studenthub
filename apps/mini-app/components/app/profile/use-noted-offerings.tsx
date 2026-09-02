@@ -20,7 +20,10 @@ export function useNotedOfferings() {
     profile?.currentSemesterCode
   )
 
-  const activeIndexes = new Set(noted.filter((n) => !n.isDeleted).map((n) => n.courseIndex))
+  const activeIndexes = new Set<string>()
+  for (const n of noted) {
+    if (!n.isDeleted) activeIndexes.add(n.courseIndex)
+  }
   const notedOfferings = offerings.filter((o) => activeIndexes.has(o.index))
 
   return {

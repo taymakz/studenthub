@@ -31,6 +31,13 @@ export const COLOR_PALETTES: ColorPaletteOption[] = [
 
 const STORAGE_KEY = "sh-color-theme"
 
+// Computed once in a single pass — every non-default palette class that must
+// be removed from <html> before applying a new one.
+const REMOVABLE_THEME_CLASSES: string[] = []
+for (const t of COLOR_PALETTES) {
+  if (t.value !== "studenthub") REMOVABLE_THEME_CLASSES.push(t.value)
+}
+
 function readStored(): string {
   if (typeof window === "undefined") return "studenthub"
   try {
@@ -77,8 +84,6 @@ export function useColorTheme() {
 function applyToRoot(value: string) {
   if (typeof document === "undefined") return
   const root = document.documentElement
-  root.classList.remove(
-    ...COLOR_PALETTES.map((t) => t.value).filter((v) => v !== "studenthub")
-  )
+  root.classList.remove(...REMOVABLE_THEME_CLASSES)
   if (value && value !== "studenthub") root.classList.add(value)
 }
