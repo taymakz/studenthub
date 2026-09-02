@@ -87,5 +87,9 @@ export function SemesterDrawer({ open: controlledOpen, onOpenChange, trigger, ch
       </Drawer>
     )
   }
-  return <SemesterDrawerInner open={open} setOpen={setOpen} trigger={trigger} children={children} />
+  return (
+    <SemesterDrawerInner open={open} setOpen={setOpen} trigger={trigger}>
+      {children}
+    </SemesterDrawerInner>
+  )
 }
