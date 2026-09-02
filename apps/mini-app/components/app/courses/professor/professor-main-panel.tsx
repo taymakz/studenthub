@@ -79,9 +79,10 @@ export function ProfessorOtherCourses({
       </div>
       <div className="grid grid-cols-1 gap-2">
         {courses.map((course) => (
-          <div
+          <button
+            type="button"
             key={course.index}
-            className="cursor-pointer rounded-lg bg-muted/30 p-3 transition-colors hover:bg-muted/50"
+            className="w-full cursor-pointer rounded-lg bg-muted/30 p-3 text-start transition-colors hover:bg-muted/50"
             onClick={() => {
               onOpenChange(false)
               onSelect?.(course)
@@ -96,7 +97,7 @@ export function ProfessorOtherCourses({
               </div>
               <ChevronLeft className="size-4 shrink-0 text-muted-foreground" />
             </div>
-          </div>
+          </button>
         ))}
       </div>
     </div>

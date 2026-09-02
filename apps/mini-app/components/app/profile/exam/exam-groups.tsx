@@ -25,10 +25,10 @@ export function ExamGroups({ groups, onSelect }: { groups: { date: string; items
               {items.map((o) => {
                 const times = extractTimes(o.examSchedule)
                 return (
-                  <div key={o.index} className="relative flex cursor-pointer flex-col gap-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm" onClick={() => onSelect(o)}>
+                  <button type="button" key={o.index} className="relative flex w-full cursor-pointer flex-col gap-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm" onClick={() => onSelect(o)}>
                     <div className="mb-2 flex items-center justify-between gap-2"><div className="flex items-center gap-1"><p className="line-clamp-1 text-sm">{o.courseName}</p></div><ChevronLeft className="size-4 min-w-fit text-muted-foreground" /></div>
                     <div className="flex items-center justify-between text-xs"><p className="text-muted-foreground">{professorName(o) ?? "استادی ثبت نشده"}</p>{times.length > 0 && <div className="text-sm font-medium text-warning">{times[0]}{times[1] ? ` تا ${times[1]}` : ""}</div>}</div>
-                  </div>
+                  </button>
                 )
               })}
             </div>

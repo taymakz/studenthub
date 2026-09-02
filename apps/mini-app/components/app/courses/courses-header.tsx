@@ -176,7 +176,8 @@ function ViewCell({
   icon: ComponentType<{ className?: string; weight?: "Filled" | "Outline" }>
 }) {
   return (
-    <div
+    <button
+      type="button"
       className="flex cursor-pointer flex-col items-center gap-2.5"
       onClick={onClick}
     >
@@ -189,6 +190,6 @@ function ViewCell({
         )}
       </div>
       <p className="text-sm font-medium opacity-80">{title}</p>
-    </div>
+    </button>
   )
 }

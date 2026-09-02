@@ -45,6 +45,7 @@ export default function ContactSupport() {
                 href="https://t.me/studenthubir?direct"
                 target="_blank"
                 rel="noopener noreferrer"
+                aria-label="ارسال پیام به پشتیبانی"
               />
             }
           >
