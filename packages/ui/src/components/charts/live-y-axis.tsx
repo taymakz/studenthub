@@ -1,6 +1,6 @@
 "use client"
 
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, m } from "motion/react"
 import { memo, useEffect, useMemo, useRef, useState } from "react"
 import { createPortal } from "react-dom"
 import { useChartStable } from "./chart-context"
@@ -199,7 +199,7 @@ const LiveYAxisInner = memo(function LiveYAxisInner({
       >
         <AnimatePresence initial={false}>
           {tickData.map((tick) => (
-            <motion.div
+            <m.div
               animate={{ opacity: tick.edgeAlpha, y: tick.y }}
               className="absolute w-full"
               exit={{ opacity: 0 }}
@@ -215,7 +215,7 @@ const LiveYAxisInner = memo(function LiveYAxisInner({
               <span className="text-chart-label font-mono text-xs whitespace-nowrap">
                 {tick.label}
               </span>
-            </motion.div>
+            </m.div>
           ))}
         </AnimatePresence>
       </div>

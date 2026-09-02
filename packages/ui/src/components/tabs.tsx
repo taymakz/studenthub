@@ -2,7 +2,7 @@
 
 import { Tabs as TabsPrimitive } from "@base-ui/react/tabs"
 import { cva } from "class-variance-authority"
-import { motion } from "motion/react"
+import { m } from "motion/react"
 import * as React from "react"
 
 import { cn } from "@workspace/ui/lib/utils"
@@ -202,7 +202,7 @@ function TabsList({ className, children, ...props }: TabsPrimitive.List.Props) {
     >
       <TabsIndicatorMeasuredContext.Provider value={rect !== null}>
         {rect && (
-          <motion.span
+          <m.span
             data-slot="tabs-indicator"
             className={cn(
               "absolute start-0 top-0",
@@ -265,14 +265,14 @@ function TabsContent({
       className="focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none"
       {...props}
     >
-      <motion.div
+      <m.div
         className={className}
         initial={false}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.15, ease: "easeOut" }}
       >
         {children}
-      </motion.div>
+      </m.div>
     </TabsPrimitive.Panel>
   )
 }

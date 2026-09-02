@@ -4,6 +4,7 @@ import { Vazirmatn } from "next/font/google"
 import "./globals.css"
 
 import { ThemeProvider } from "@/components/theme-provider"
+import { MotionProvider } from "@/components/motion-provider"
 import { DirectionProvider } from "@workspace/ui/components/direction"
 import { ToastProvider } from "@workspace/ui/components/toast"
 import { cn } from "@workspace/ui/lib/utils"
@@ -51,10 +52,12 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: sidebarStateScript }} />
       </head>
       <body>
-        <ThemeProvider defaultTheme="dark">
-          <DirectionProvider direction="rtl">{children}</DirectionProvider>
-        </ThemeProvider>
-        <ToastProvider position="top-center" />
+        <MotionProvider>
+          <ThemeProvider defaultTheme="dark">
+            <DirectionProvider direction="rtl">{children}</DirectionProvider>
+          </ThemeProvider>
+          <ToastProvider position="top-center" />
+        </MotionProvider>
       </body>
     </html>
   )

@@ -3,7 +3,7 @@
 import { CheckIcon } from "lucide-react"
 import {
   AnimatePresence,
-  motion,
+  m,
   useReducedMotion,
   type Transition,
   type Variants,
@@ -158,7 +158,7 @@ export function StatusButton({
 
       <AnimatePresence initial={false}>
         {status === "idle" && (
-          <motion.span
+          <m.span
             key="idle"
             variants={variants}
             initial="initial"
@@ -167,11 +167,11 @@ export function StatusButton({
             transition={transition}
           >
             {children}
-          </motion.span>
+          </m.span>
         )}
 
         {status === "loading" && (
-          <motion.span
+          <m.span
             key="loading"
             variants={variants}
             initial="initial"
@@ -180,11 +180,11 @@ export function StatusButton({
             transition={transition}
           >
             <Spinner />
-          </motion.span>
+          </m.span>
         )}
 
         {status === "success" && (
-          <motion.span
+          <m.span
             key="success"
             role="status"
             variants={shouldReduceMotion ? variants : successVariants}
@@ -194,7 +194,7 @@ export function StatusButton({
             transition={transition}
           >
             {successContent}
-          </motion.span>
+          </m.span>
         )}
       </AnimatePresence>
     </Button>

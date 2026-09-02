@@ -1,7 +1,7 @@
 "use client"
 
 import { ParentSize } from "@visx/responsive"
-import { motion, type Transition, useReducedMotion } from "motion/react"
+import { m, type Transition, useReducedMotion } from "motion/react"
 import { type ReactNode, useId, useMemo } from "react"
 import { cn } from "@/lib/utils"
 import {
@@ -163,7 +163,7 @@ function GaugeNotchSvg({
           )
         }
         return (
-          <motion.path
+          <m.path
             animate={{ opacity: 1, scale: 1 }}
             d={pathD}
             fill={resolveBgFill(notch.index)}
@@ -199,7 +199,7 @@ function GaugeNotchSvg({
             )
           }
           return (
-            <motion.path
+            <m.path
               animate={{ opacity: 1, scale: 1 }}
               d={pathD}
               fill={resolveActiveFill(notch)}

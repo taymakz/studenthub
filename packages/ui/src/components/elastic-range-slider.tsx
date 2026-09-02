@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import {
   animate,
-  motion,
+  m,
   useMotionValue,
   useReducedMotion,
   useTransform,
@@ -456,7 +456,7 @@ export function ElasticRangeSlider({
         className
       )}
     >
-      <motion.div
+      <m.div
         ref={trackRef}
         data-slot="elastic-slider-track"
         data-active={isActive}
@@ -488,7 +488,7 @@ export function ElasticRangeSlider({
           ))}
         </div>
 
-        <motion.div
+        <m.div
           data-slot="elastic-slider-fill"
           aria-hidden="true"
           className="pointer-events-none absolute inset-y-0 bg-(--elastic-slider-fill) transition-colors group-data-[active=true]/elastic-slider:bg-(--elastic-slider-fill-active)"
@@ -498,7 +498,7 @@ export function ElasticRangeSlider({
           }}
         />
 
-        <motion.div
+        <m.div
           role="slider"
           tabIndex={0}
           data-slot="elastic-slider-handle"
@@ -515,7 +515,7 @@ export function ElasticRangeSlider({
           className="absolute top-1/2 h-5 w-1 -translate-y-1/2 cursor-pointer touch-none rounded-full bg-(--elastic-slider-handle) opacity-0 transition-opacity outline-none group-data-[active=true]/elastic-slider:opacity-50 data-[focus-visible=true]:opacity-80 data-[focus-visible=true]:ring-2 data-[focus-visible=true]:ring-ring/50"
           style={{ left: minLeft, y: "-50%" }}
         />
-        <motion.div
+        <m.div
           role="slider"
           tabIndex={0}
           data-slot="elastic-slider-handle"
@@ -548,7 +548,7 @@ export function ElasticRangeSlider({
         >
           {displayMin} – {displayMax}
         </span>
-      </motion.div>
+      </m.div>
     </div>
   )
 }

@@ -1,7 +1,7 @@
 "use client"
 
 import { arc as arcGenerator } from "@visx/shape"
-import { type MotionValue, motion, useTransform } from "motion/react"
+import { type MotionValue, m, useTransform } from "motion/react"
 import { memo, useCallback } from "react"
 import { ringCssVars, useRingHover, useRingStable } from "./ring-context"
 import { useEnterComplete } from "./use-enter-complete"
@@ -59,7 +59,7 @@ function RingProgressPath({
     }
     return <path d={progressPath} fill={color} />
   }
-  return <motion.path d={animatedProgressPath} fill={color} />
+  return <m.path d={animatedProgressPath} fill={color} />
 }
 
 export const Ring = memo(function Ring({
@@ -175,7 +175,7 @@ export const Ring = memo(function Ring({
 
   if (enterDone) {
     return (
-      <motion.g
+      <m.g
         animate={{ scale: hoverScale, opacity: layerOpacity }}
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -187,13 +187,13 @@ export const Ring = memo(function Ring({
       >
         <path d={bgPath} fill={ringCssVars.ringBackground} />
         {progressPath ? <path d={progressPath} fill={color} /> : null}
-      </motion.g>
+      </m.g>
     )
   }
 
   if (!expandComplete) {
     return (
-      <motion.g
+      <m.g
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         style={{
@@ -203,12 +203,12 @@ export const Ring = memo(function Ring({
         }}
       >
         <path d={bgPath} fill={ringCssVars.ringBackground} />
-      </motion.g>
+      </m.g>
     )
   }
 
   return (
-    <motion.g
+    <m.g
       animate={{ scale: hoverScale, opacity: layerOpacity }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -225,7 +225,7 @@ export const Ring = memo(function Ring({
         progressComplete={progressComplete}
         progressPath={progressPath}
       />
-    </motion.g>
+    </m.g>
   )
 })
 
