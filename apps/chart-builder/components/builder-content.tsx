@@ -6,6 +6,9 @@ import { PoolImportEmptyState } from "@/components/pool-import"
 import { GlobalCourseSections } from "@/components/global-course-sections"
 import { TermChartSections } from "@/components/term-chart-sections"
 import { useChartStore } from "@/components/chart-store"
+import { parsePoolInput } from "@/lib/pool"
+import { toFaDigits } from "@/lib/jalali"
+import { toastManager } from "@/components/toast"
 
 /** حالت پیشرفته is deferred: elective groups + advanced constraints land
     later, the normal (عادی) builder is fully functional meanwhile. */
@@ -29,6 +32,7 @@ function AdvancedComingSoon() {
     coming-soon panel in حالت پیشرفته) above the معارف/نامشخص globals. */
 export function BuilderContent() {
   const { pool, chart, scope } = useChartStore()
+  const { setPool } = useChartStore()
 
   const hasAnyCourses =
     pool.courses.length > 0 ||
@@ -36,6 +40,35 @@ export function BuilderContent() {
     chart.moaref.length > 0 ||
     chart.unknown.length > 0 ||
     chart.electives.length > 0
+
+  // After the first import, keep listening for Ctrl+V to merge additional pastes
+  React.useEffect(() => {
+    if (!hasAnyCourses) return
+    function onPaste(event: ClipboardEvent) {
+      const text = event.clipboardData?.getData("text") ?? ""
+      const trimmed = text.trim()
+      if (!trimmed.startsWith("[") && !trimmed.startsWith("{")) return
+      const result = parsePoolInput(trimmed)
+      if (result.error || result.courses.length === 0) return
+      event.preventDefault()
+      const existing = new Set(pool.courses.map((c) => `${c.code}|${c.name}`))
+      const fresh = result.courses.filter((c) => !existing.has(`${c.code}|${c.name}`))
+      if (fresh.length === 0) {
+        toastManager.add({ type: "info", title: "درس جدیدی یافت نشد" })
+        return
+      }
+      setPool({
+        courses: [...pool.courses, ...fresh],
+        totalOfferings: pool.totalOfferings + result.totalOfferings,
+      })
+      toastManager.add({
+        type: "success",
+        title: `${toFaDigits(fresh.length)} درس جدید اضافه شد — اکنون ${toFaDigits(pool.courses.length + fresh.length)} درس از ${toFaDigits(pool.totalOfferings + result.totalOfferings)} ارائه`,
+      })
+    }
+    window.addEventListener("paste", onPaste)
+    return () => window.removeEventListener("paste", onPaste)
+  }, [hasAnyCourses, pool, setPool])
 
   if (!hasAnyCourses) {
     return <PoolImportEmptyState />

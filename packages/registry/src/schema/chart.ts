@@ -69,8 +69,8 @@ export type ElectiveGroup = z.infer<typeof electiveGroupSchema>
 export const chartDocSchema = z.object({
   $schema: z.string().optional(),
   type: z.literal("chart").optional(),
-  degree: slugSchema,
-  semester: chartSemesterSchema,
+  degree: slugSchema.optional(),
+  semester: chartSemesterSchema.optional(),
   isCompleted: z.boolean().default(false),
   terms: z.record(
     z.string().regex(/^[1-9][0-9]*$/),

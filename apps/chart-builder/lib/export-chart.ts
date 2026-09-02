@@ -11,9 +11,6 @@ import { groupYearDirs } from "./scope"
  */
 
 export interface ChartDocPayload {
-  type: "chart"
-  degree: string
-  semester: string
   isCompleted: boolean
   terms: Record<string, unknown>
   moaref: unknown[]
@@ -60,7 +57,7 @@ export function exportTargets(
   return targets
 }
 
-function buildDoc(chart: ChartState, semester?: string): ChartDocPayload {
+function buildDoc(chart: ChartState): ChartDocPayload {
   const terms: Record<string, unknown> = {}
   for (const [term, courses] of Object.entries(chart.terms)) {
     if (courses.length > 0) terms[term] = courses
@@ -80,9 +77,6 @@ function buildDoc(chart: ChartState, semester?: string): ChartDocPayload {
   }
 
   return {
-    type: "chart",
-    degree: chart.degree,
-    semester: semester ?? "MEHR",
     isCompleted: chart.isCompleted,
     terms,
     moaref: chart.moaref,
@@ -97,7 +91,7 @@ export function exportJson(chart: ChartState, scope: BuilderScope): string {
   const targets = exportTargets(chart, scope)
   const docs = targets.map((target) => ({
     target,
-    doc: buildDoc(chart, target.semester),
+    doc: buildDoc(chart),
   }))
 
   const [single] = docs

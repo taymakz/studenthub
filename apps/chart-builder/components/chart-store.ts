@@ -120,6 +120,7 @@ export const useChartStore = create<ChartStore>()((set) => ({
 
   clearCourses: () =>
     set((s) => ({
+      pool: { courses: [], totalOfferings: 0 },
       chart: {
         ...s.chart,
         terms: {},

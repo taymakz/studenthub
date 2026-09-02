@@ -235,6 +235,23 @@ export function buildRegistryIndex(): RegistryIndex {
               file.fileName,
             ].join("/")
 
+            // Clean legacy fields (type/degree/semester) on next build — file name + folder already declare them
+            try {
+              const absPath = join(registryRoot(), path)
+              const raw = readFileSync(absPath, "utf-8")
+              const data = JSON.parse(raw) as Record<string, unknown>
+              let changed = false
+              for (const key of ["type", "degree", "semester"] as const) {
+                if (key in data) {
+                  delete (data as Record<string, unknown>)[key]
+                  changed = true
+                }
+              }
+              if (changed) {
+                writeFileSync(absPath, `${JSON.stringify(data, null, 2)}\n`, "utf-8")
+              }
+            } catch {}
+
             charts.push({
               uniSlug,
               majorSlug,

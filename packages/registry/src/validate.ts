@@ -244,12 +244,12 @@ export function validateRegistry(): {
               `chart ${fileName}`
             )
             if (chart) {
-              if (chart.degree !== degreeSlug)
+              if (chart.degree != null && chart.degree !== degreeSlug)
                 problem(
                   join(yearPath, fileName),
                   `chart.degree "${chart.degree}" != folder "${degreeSlug}"`
                 )
-              if (chart.semester !== chartSemester)
+              if (chart.semester != null && chart.semester !== chartSemester)
                 problem(
                   join(yearPath, fileName),
                   `chart.semester "${chart.semester}" != file "${fileName}"`
