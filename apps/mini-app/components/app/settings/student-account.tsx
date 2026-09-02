@@ -187,6 +187,13 @@ export default function StudentAccount({
   const profile = meQuery.data?.data?.profile ?? null
   const user = meQuery.data?.data?.user ?? null
 
+  // Close drawers when profile changes (e.g., after setup wizard) to avoid stale open state when returning to settings
+  useEffect(() => {
+    setOpen(false)
+    setTermOpen(false)
+    setSemesterOpen(false)
+  }, [profile?.universitySlug, profile?.majorSlug, profile?.entryYearRange, profile?.termNumber, profile?.currentSemesterCode])
+
   const unisQuery = useQuery({
     queryKey: ["universities"],
     queryFn: async () => (await fetchUniversities()).data.universities,
@@ -224,15 +231,11 @@ export default function StudentAccount({
 
   const uniName =
     unisQuery.data?.find((u) => u.slug === profile?.universitySlug)?.name.fa ??
-    profile?.universitySlug ??
-    "—"
+    (unisQuery.isLoading ? "—" : "—")
   const major =
     majorsQuery.data?.find((m) => m.slug === profile?.majorSlug) ?? null
-  const majorName = major?.name.fa ?? profile?.majorSlug ?? "—"
-  const degreeName =
-    major?.degrees.find((d) => d.slug === profile?.degree)?.name.fa ??
-    profile?.degree ??
-    undefined
+  const majorName = major?.name.fa ?? (majorsQuery.isLoading ? "—" : "—")
+  const degreeName = major?.degrees.find((d) => d.slug === profile?.degree)?.name.fa
 
   const patchMut = useMutation({
     mutationFn: async (input: {
@@ -243,6 +246,10 @@ export default function StudentAccount({
       (await apiClient.patch<{ profile: unknown }>("/me/profile", input)).data,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["me"] })
+      // Make zustand store reactive — refresh profile in store
+      import("@/stores/profile-store").then(({ useProfileStore }) =>
+        useProfileStore.getState().refresh()
+      )
       setTermOpen(false)
       setSemesterOpen(false)
     },
@@ -314,20 +321,19 @@ export default function StudentAccount({
               <DrawerPopup variant="inset" showBar>
                 <DrawerHeader>
                   <DrawerTitle>انتخاب ترم</DrawerTitle>
-                  <DrawerDescription>
-                    ترم فعلی خود را انتخاب کنید (۱ تا ۱۲)
-                  </DrawerDescription>
+                  <DrawerDescription>ترم فعلی خود را انتخاب کنید</DrawerDescription>
                 </DrawerHeader>
                 <DrawerPanel className="p-0">
                   <TermNumberPicker
                     value={profile?.termNumber ?? null}
                     onSelect={(n) => patchMut.mutate({ termNumber: n })}
+                    disabled={patchMut.isPending}
+                    pendingValue={
+                      patchMut.isPending
+                        ? (patchMut.variables as { termNumber?: number })?.termNumber ?? null
+                        : null
+                    }
                   />
-                  {patchMut.isPending && (
-                    <p className="pb-4 text-center text-xs text-muted-foreground">
-                      در حال ذخیره…
-                    </p>
-                  )}
                 </DrawerPanel>
               </DrawerPopup>
             </Drawer>
