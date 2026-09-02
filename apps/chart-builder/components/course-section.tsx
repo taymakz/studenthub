@@ -84,12 +84,14 @@ export function useRequisiteCandidates(): ChartCourse[] {
     is a COURSE (opens the picker) or a minimum UNIT count (number dialog);
     an existing unit threshold re-opens the number dialog directly. */
 function RequisiteCell({
+  term,
   courseName,
   kind,
   value,
   candidates,
   onApply,
 }: {
+  term?: number
   courseName: string
   kind: RequisiteKind
   /** پیش‌نیاز may be a unit threshold; همنیاز is always course names. */
@@ -97,10 +99,11 @@ function RequisiteCell({
   candidates: ChartCourse[]
   onApply: (value: RequisiteValue) => void
 }) {
-  type OpenDialog = null | "choice" | "units" | "courses"
+  type OpenDialog = null | "choice" | "units" | "terms" | "courses"
   const [openDialog, setOpenDialog] = React.useState<OpenDialog>(null)
   const [draft, setDraft] = React.useState<string[]>([])
   const [unitsDraft, setUnitsDraft] = React.useState("")
+  const [termsDraft, setTermsDraft] = React.useState("")
 
   const isUnits = kind === "prerequisites" && typeof value === "number"
   // همنیاز (and course-based پیش‌نیاز) work on plain name lists.
@@ -124,6 +127,13 @@ function RequisiteCell({
     openPicker()
   }
 
+  const confirmTerms = () => {
+    const term = Number.parseInt(termsDraft, 10)
+    if (!Number.isFinite(term) || term <= 0) return
+    onApply({ term })
+    setOpenDialog(null)
+  }
+
   const confirmUnits = () => {
     const units = Number.parseInt(unitsDraft, 10)
     if (!Number.isFinite(units) || units <= 0) return
@@ -139,7 +149,15 @@ function RequisiteCell({
   return (
     <>
       <div className="flex flex-wrap items-center gap-1">
-        {isUnits && (
+        {(typeof value === "object" && value !== null && "term" in value) && (
+          <span className="group relative inline-flex">
+            <Badge variant="warning" className="max-w-40">
+              <span className="truncate">گذراندن {toFaDigits((value as { term: number }).term)} نیمسال</span>
+            </Badge>
+            <button type="button" onClick={() => onApply([])} aria-label="حذف شرط ترم" title="حذف شرط ترم" className="absolute inset-0 z-10 hidden items-center justify-center rounded-full border border-dashed border-primary bg-destructive text-[11px] font-medium text-white group-hover:inline-flex group-focus-visible:inline-flex">حذف</button>
+          </span>
+        )}
+        {isUnits && typeof value === "number" && (
           <span className="group relative inline-flex">
             <Badge variant="warning" className="max-w-40">
               <span className="truncate">
@@ -207,6 +225,7 @@ function RequisiteCell({
           </ResponsiveDialogHeader>
           <div className="flex flex-col gap-2 px-6 pb-6">
             <Button onClick={openPicker}>انتخاب درس</Button>
+            <Button variant="outline" onClick={() => { setUnitsDraft(""); setOpenDialog("terms") }}>تعداد ترم</Button>
             <Button
               variant="outline"
               onClick={() => {
@@ -222,6 +241,30 @@ function RequisiteCell({
               />
             </ResponsiveDialogDesktopOnly>
           </div>
+        </ResponsiveDialogPopup>
+      </ResponsiveDialog>
+
+      {/* Term-count variant: گذراندن X نیمسال */}
+      <ResponsiveDialog
+        open={openDialog === "terms"}
+        onOpenChange={(open) => {
+          if (!open) setOpenDialog(null)
+        }}
+      >
+        <ResponsiveDialogPopup className="sm:max-w-xs">
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle>حداقل نیمسال گذرانده‌شده</ResponsiveDialogTitle>
+            <ResponsiveDialogDescription>پیش‌نیاز این درس، گذراندن چند نیمسال است؟</ResponsiveDialogDescription>
+          </ResponsiveDialogHeader>
+          <form onSubmit={(e) => { e.preventDefault(); confirmTerms(); }} className="flex min-h-0 flex-1 flex-col gap-4">
+            <div className="px-6">
+              <Input dir="ltr" inputMode="numeric" value={termsDraft} onChange={(e) => setTermsDraft(e.target.value.replace(/\D/g, ""))} placeholder="مثلاً 5" autoFocus />
+            </div>
+            <ResponsiveDialogFooter>
+              <ResponsiveDialogDesktopOnly><ResponsiveDialogClose render={<Button variant="outline">انصراف</Button>} /></ResponsiveDialogDesktopOnly>
+              <Button type="submit" disabled={!termsDraft}>ثبت</Button>
+            </ResponsiveDialogFooter>
+          </form>
         </ResponsiveDialogPopup>
       </ResponsiveDialog>
 
@@ -309,6 +352,7 @@ export function CourseSection({
   searchable = false,
   showRequisites = false,
   candidates = [],
+  term,
   onRemove,
   onRemoveMany,
   onSetRequisites,
@@ -321,6 +365,7 @@ export function CourseSection({
   searchable?: boolean
   showRequisites?: boolean
   candidates?: ChartCourse[]
+  term?: number
   onRemove: (index: number) => void
   onRemoveMany: (names: string[]) => void
   onSetRequisites?: (
@@ -517,6 +562,7 @@ export function CourseSection({
                             <>
                               <TableCell>
                                 <RequisiteCell
+                                  term={term}
                                   courseName={course.name}
                                   kind="corequisites"
                                   value={course.corequisites}
@@ -528,6 +574,7 @@ export function CourseSection({
                               </TableCell>
                               <TableCell>
                                 <RequisiteCell
+                                  term={term}
                                   courseName={course.name}
                                   kind="prerequisites"
                                   value={course.prerequisites}

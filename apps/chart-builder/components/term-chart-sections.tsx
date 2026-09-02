@@ -10,6 +10,7 @@ import {
   CourseSection,
   useRequisiteCandidates,
 } from "@/components/course-section"
+import { requisiteCandidatesForTerm } from "@/lib/chart"
 import { ChartDocImport } from "@/components/chart-doc-import"
 import { CoursePickerDialog } from "@/components/course-picker-dialog"
 import { toastManager } from "@/components/toast"
@@ -31,7 +32,7 @@ export function TermChartSections() {
     removeUnknownMany,
   } = useChartStore()
 
-  const requisiteCandidates = useRequisiteCandidates()
+  const allRequisiteCandidates = useRequisiteCandidates()
 
   // A course already placed anywhere outside نامشخص can't be offered again;
   // نامشخص courses stay offerable so they can be picked into a real term.
@@ -105,6 +106,7 @@ export function TermChartSections() {
                 title={`ترم ${toFaDigits(term)}`}
                 emptyLabel="درسی اضافه نشده است."
                 courses={chart.terms[term] ?? []}
+                term={term}
                 headerAction={
                   <Button
                     size="sm"
@@ -115,7 +117,7 @@ export function TermChartSections() {
                   </Button>
                 }
                 showRequisites
-                candidates={requisiteCandidates}
+                candidates={requisiteCandidatesForTerm(chart, term, "")}
                 onRemove={(index) => removeCourseFromTerm(term, index)}
                 onRemoveMany={(names) => removeCoursesFromTerm(term, names)}
                 onSetRequisites={(index, kind, values) =>

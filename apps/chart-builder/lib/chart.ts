@@ -12,7 +12,7 @@ export type Semester = "MEHR" | "BAHMAN" | "SUMMER"
 
 /** A prerequisite is either a list of course names or a minimum
     passed-units threshold (e.g. 100). Corequisites are always courses. */
-export type RequisiteValue = string[] | number
+export type RequisiteValue = string[] | number | { term: number }
 
 export interface ChartCourse {
   name: string
@@ -124,6 +124,28 @@ export function placedCourseNames(chart: ChartState): Set<string> {
 }
 
 /** Courses available as prerequisites for a given course (everything else). */
+export function requisiteCandidatesForTerm(
+  chart: ChartState,
+  term: number,
+  excludeName: string
+): ChartCourse[] {
+  const seen = new Map<string, ChartCourse>()
+  const push = (course: ChartCourse) => {
+    if (course.name !== excludeName && !seen.has(course.name)) seen.set(course.name, course)
+  }
+  for (const [termKey, courses] of Object.entries(chart.terms)) {
+    const t = Number(termKey)
+    if (t > term) continue
+    for (const course of courses) push(course)
+  }
+  for (const course of chart.moaref) push(course)
+  for (const course of chart.unknown) push(course)
+  for (const group of chart.electives) {
+    for (const course of group.courses) push(course)
+  }
+  return [...seen.values()]
+}
+
 export function requisiteCandidates(
   chart: ChartState,
   excludeName: string

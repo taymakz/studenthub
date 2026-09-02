@@ -232,6 +232,26 @@ export function detectConflicts(
         arr.push(offering)
         preReqMap.set(key, arr)
       }
+    } else if (typeof pre === "object" && pre !== null && "term" in pre) {
+      const requiredTerm = (pre as { term: number }).term
+      // Get current term from opts (preferred) or fallback to profile store
+      let currentTerm: number | null = null
+      if (typeof (optsOrMoaref as any)?.termNumber === "number") currentTerm = (optsOrMoaref as any).termNumber
+      if (currentTerm == null && typeof (optsOrMoaref as any)?.profile?.termNumber === "number") currentTerm = (optsOrMoaref as any).profile.termNumber
+      // Fallback: try to read from profile store directly (for legacy calls)
+      if (currentTerm == null) {
+        try {
+          const { useProfileStore } = await import("@/stores/profile-store")
+          currentTerm = useProfileStore.getState().profile?.termNumber ?? null
+        } catch {}
+      }
+      const termSatisfied = currentTerm != null ? currentTerm > requiredTerm : false
+      if (!termSatisfied) {
+        const key = `گذراندن ${requiredTerm} نیمسال`
+        const arr = preReqMap.get(key) ?? []
+        arr.push(offering)
+        preReqMap.set(key, arr)
+      }
     }
 
     // Corequisites — must be taken together or already passed
@@ -250,12 +270,14 @@ export function detectConflicts(
   }
 
   for (const [name, courses] of preReqMap.entries()) {
-    const isArrayPreReq = !name.startsWith("حداقل")
+    const isArrayPreReq = !name.startsWith("حداقل") && !name.startsWith("گذراندن")
     out.push({
       id: `pre-${id++}`,
       reason: name.startsWith("حداقل")
         ? `برای این درس حداقل باید ${name.split(" ")[1]} واحد پاس کرده باشید. واحد پاس شده شما (${passedUnits})`
-        : `درس "${name}" به عنوان پیش‌نیاز پاس نشده یا در لیست مردودی نیست`,
+        : name.startsWith("گذراندن")
+          ? `برای این درس باید ${name} گذرانده باشید`
+          : `درس "${name}" به عنوان پیش‌نیاز پاس نشده یا در لیست مردودی نیست`,
       type: "pre_requisites",
       courses,
       preRequisiteName: name,
