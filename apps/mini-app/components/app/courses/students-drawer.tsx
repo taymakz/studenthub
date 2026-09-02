@@ -77,16 +77,18 @@ export function StudentsDrawer({
             </span>
           </div>
           <StudentsPanel
-            isMeLoading={isMeLoading}
-            visible={visible}
-            hasProfile={hasProfile}
-            isLoading={isLoading}
-            isError={isError}
+            state={{
+              isMeLoading,
+              visible,
+              hasProfile,
+              isLoading,
+              isError,
+              isForbidden,
+              hasNextPage: !!hasNextPage,
+              isFetchingNextPage,
+            }}
             error={error}
-            isForbidden={isForbidden}
             students={students}
-            hasNextPage={!!hasNextPage}
-            isFetchingNextPage={isFetchingNextPage}
             onNext={() => fetchNextPage()}
             onGo={goSettings}
           />
@@ -97,24 +99,27 @@ export function StudentsDrawer({
 }
 
 function StudentsPanel(props: {
-  isMeLoading: boolean
-  visible: boolean
-  hasProfile: boolean
-  isLoading: boolean
-  isError: boolean
+  state: {
+    isMeLoading: boolean
+    visible: boolean
+    hasProfile: boolean
+    isLoading: boolean
+    isError: boolean
+    isForbidden: boolean
+    hasNextPage: boolean
+    isFetchingNextPage: boolean
+  }
   error: unknown
-  isForbidden: boolean
   students: import("@/lib/api").CourseStudent[]
-  hasNextPage: boolean
-  isFetchingNextPage: boolean
   onNext: () => void
   onGo: () => void
 }) {
-  if (props.isMeLoading) return <StudentsLoading />
-  if (!props.visible) return <StudentsHidden onGo={props.onGo} />
-  if (!props.hasProfile) return <StudentsNoProfile onGo={props.onGo} />
-  if (props.isLoading) return <StudentsLoading />
-  if (props.isError) return <StudentsError message={(props.error as Error)?.message ?? "خطا در دریافت لیست"} isForbidden={props.isForbidden} />
+  const s = props.state
+  if (s.isMeLoading) return <StudentsLoading />
+  if (!s.visible) return <StudentsHidden onGo={props.onGo} />
+  if (!s.hasProfile) return <StudentsNoProfile onGo={props.onGo} />
+  if (s.isLoading) return <StudentsLoading />
+  if (s.isError) return <StudentsError message={(props.error as Error)?.message ?? "خطا در دریافت لیست"} isForbidden={s.isForbidden} />
   if (props.students.length === 0) return <StudentsEmpty />
-  return <StudentsList students={props.students} hasNextPage={props.hasNextPage} isFetchingNextPage={props.isFetchingNextPage} onNext={props.onNext} />
+  return <StudentsList students={props.students} hasNextPage={s.hasNextPage} isFetchingNextPage={s.isFetchingNextPage} onNext={props.onNext} />
 }
