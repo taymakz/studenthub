@@ -94,14 +94,20 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
   const redirectedRef = React.useRef(false)
   const prevPathnameRef = React.useRef(pathname)
 
-  if (prevPathnameRef.current !== pathname) {
-    prevPathnameRef.current = pathname
-    redirectedRef.current = false
-  }
+  // Reset the one-redirect-per-load allowance when the route actually changes.
+  // Ref writes live in an effect — render must stay pure.
+  React.useEffect(() => {
+    if (prevPathnameRef.current !== pathname) {
+      prevPathnameRef.current = pathname
+      redirectedRef.current = false
+    }
+  }, [pathname])
 
   const hydrated = useProfileStore((s) => s.hydrated)
   const pathnameRef = React.useRef(pathname)
-  pathnameRef.current = pathname
+  React.useEffect(() => {
+    pathnameRef.current = pathname
+  }, [pathname])
   const storeError = useProfileStore((s) => s.error)
   const profile = useProfileStore((s) => s.profile)
   const user = useProfileStore((s) => s.user)
