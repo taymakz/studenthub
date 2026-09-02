@@ -70,8 +70,9 @@ export function TermChartSections() {
 
   const confirmAddToTerm = () => {
     if (pickerTerm == null) return
-    const pickedNames = new Set(draft)
-    const picked = availableForTerms.filter((c) => pickedNames.has(c.name))
+    const picked = draft
+      .map((name) => availableForTerms.find((c) => c.name === name))
+      .filter((c): c is NonNullable<typeof c> => c != null)
     if (picked.length === 0) return
     addCoursesToTerm(pickerTerm, picked)
     // Placing a course into a term resolves it out of نامشخص.
@@ -117,7 +118,7 @@ export function TermChartSections() {
                   </Button>
                 }
                 showRequisites
-                candidates={requisiteCandidatesForTerm(chart, term, "")}
+                candidates={allRequisiteCandidates}
                 onRemove={(index) => removeCourseFromTerm(term, index)}
                 onRemoveMany={(names) => removeCoursesFromTerm(term, names)}
                 onSetRequisites={(index, kind, values) =>

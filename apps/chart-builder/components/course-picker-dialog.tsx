@@ -21,12 +21,13 @@ import { UnitsBadge } from "@/components/units-badge"
 import { courseUnits, type ChartCourse } from "@/lib/chart"
 import { toFaDigits } from "@/lib/jalali"
 
-/** Normalizes for forgiving Persian search: homoglyphs, ZWNJ, digits, spacing. */
+/** Normalizes for forgiving Persian search: homoglyphs, ZWNJ, punctuation, spacing. */
 function normalize(value: string): string {
   return value
     .replace(/\u0643/g, "\u06A9")
     .replace(/\u064A/g, "\u06CC")
     .replace(/[\u200c\u200d\u00a0]/g, " ")
+    .replace(/[-_()\[\]{}،,\/]/g, " ")
     .replace(/\s+/g, " ")
     .toLowerCase()
     .trim()
@@ -68,6 +69,19 @@ export function CoursePickerDialog({
     if (!next) setQuery("")
     onOpenChange(next)
   }
+
+  // Ctrl+Enter to confirm (also Cmd+Enter on mac)
+  React.useEffect(() => {
+    if (!open) return
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter" && selectedNames.length > 0) {
+        e.preventDefault()
+        onConfirm()
+      }
+    }
+    window.addEventListener("keydown", handler)
+    return () => window.removeEventListener("keydown", handler)
+  }, [open, selectedNames, onConfirm])
 
   const words = normalize(query)
     .split(/\s+/)

@@ -39,7 +39,7 @@ import {
   ResponsiveDialogTitle,
 } from "@workspace/ui/components/responsive-dialog"
 import type { ChartCourse, RequisiteValue } from "@/lib/chart"
-import { courseUnits, totalUnits } from "@/lib/chart"
+import { courseUnits, requisiteCandidatesForTerm, totalUnits } from "@/lib/chart"
 import { poolToChartCourse } from "@/lib/pool"
 import { toFaDigits } from "@/lib/jalali"
 
@@ -50,12 +50,13 @@ const KIND_LABELS: Record<RequisiteKind, string> = {
   corequisites: "همنیاز",
 }
 
-/** Forgiving Persian comparison for search: homoglyphs + ZWNJ + casing. */
+/** Forgiving Persian comparison for search: homoglyphs + ZWNJ + punctuation. */
 function normalize(value: string): string {
   return value
     .replace(/\u0643/g, "\u06A9")
     .replace(/\u064A/g, "\u06CC")
     .replace(/[\u200c\u200d\u00a0]/g, " ")
+    .replace(/[-_()\[\]{}،,\/]/g, " ")
     .replace(/\s+/g, " ")
     .toLowerCase()
     .trim()
@@ -105,19 +106,41 @@ function RequisiteCell({
   const [unitsDraft, setUnitsDraft] = React.useState("")
   const [termsDraft, setTermsDraft] = React.useState("")
 
+  // Ctrl+Enter to confirm units/terms dialogs
+  React.useEffect(() => {
+    if (openDialog !== "units" && openDialog !== "terms") return
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault()
+        if (openDialog === "units" && unitsDraft) confirmUnits()
+        if (openDialog === "terms" && termsDraft) confirmTerms()
+      }
+    }
+    window.addEventListener("keydown", handler)
+    return () => window.removeEventListener("keydown", handler)
+  }, [openDialog, unitsDraft, termsDraft])
+
   const isUnits = kind === "prerequisites" && typeof value === "number"
+  const isTerm = kind === "prerequisites" && typeof value === "object" && value !== null && "term" in value
   // همنیاز (and course-based پیش‌نیاز) work on plain name lists.
-  const names = typeof value === "number" ? [] : value
+  const names = Array.isArray(value) ? value : []
 
   const openPicker = () => {
     setDraft([])
     setOpenDialog("courses")
   }
 
+  const isFirstTerm = term === 1
   const plusClick = () => {
+    if (kind === "prerequisites" && isFirstTerm) return
     if (kind === "prerequisites" && typeof value === "number") {
       setUnitsDraft(String(value))
       setOpenDialog("units")
+      return
+    }
+    if (kind === "prerequisites" && typeof value === "object" && value !== null && "term" in value) {
+      setTermsDraft(String((value as { term: number }).term))
+      setOpenDialog("terms")
       return
     }
     if (kind === "prerequisites" && names.length === 0) {
@@ -128,9 +151,14 @@ function RequisiteCell({
   }
 
   const confirmTerms = () => {
-    const term = Number.parseInt(termsDraft, 10)
-    if (!Number.isFinite(term) || term <= 0) return
-    onApply({ term })
+    let termVal = Number.parseInt(termsDraft, 10)
+    if (!Number.isFinite(termVal) || termVal <= 0) return
+    if (term != null) {
+      const maxTerm = term - 1
+      if (termVal > maxTerm) termVal = maxTerm
+      if (termVal < 1) termVal = 1
+    }
+    onApply({ term: termVal })
     setOpenDialog(null)
   }
 
@@ -141,15 +169,18 @@ function RequisiteCell({
     setOpenDialog(null)
   }
 
-  // Single stable list in candidate order: applied + drafted rows highlight
-  // IN PLACE instead of being excluded/reordered the moment they're picked.
-  const pickable = candidates.filter((c) => c.name !== courseName)
+  // Filter candidates by term: prerequisites only previous (< term), corequisites current + previous (<= term)
+  const chartState = useChartStore((s) => s.chart)
+  const pickable = React.useMemo(() => {
+    if (term == null) return candidates.filter((c) => c.name !== courseName)
+    return requisiteCandidatesForTerm(chartState, term, courseName, kind)
+  }, [candidates, courseName, term, kind, chartState])
   const selectedNames = [...names, ...draft]
 
   return (
     <>
       <div className="flex flex-wrap items-center gap-1">
-        {(typeof value === "object" && value !== null && "term" in value) && (
+        {isTerm && (
           <span className="group relative inline-flex">
             <Badge variant="warning" className="max-w-40">
               <span className="truncate">گذراندن {toFaDigits((value as { term: number }).term)} نیمسال</span>
@@ -157,7 +188,7 @@ function RequisiteCell({
             <button type="button" onClick={() => onApply([])} aria-label="حذف شرط ترم" title="حذف شرط ترم" className="absolute inset-0 z-10 hidden items-center justify-center rounded-full border border-dashed border-primary bg-destructive text-[11px] font-medium text-white group-hover:inline-flex group-focus-visible:inline-flex">حذف</button>
           </span>
         )}
-        {isUnits && typeof value === "number" && (
+        {isUnits && (
           <span className="group relative inline-flex">
             <Badge variant="warning" className="max-w-40">
               <span className="truncate">
@@ -196,7 +227,7 @@ function RequisiteCell({
             </button>
           </span>
         ))}
-        {!isUnits && (
+        {!isUnits && !isTerm && !isFirstTerm && (
           <button
             type="button"
             onClick={plusClick}
@@ -258,7 +289,15 @@ function RequisiteCell({
           </ResponsiveDialogHeader>
           <form onSubmit={(e) => { e.preventDefault(); confirmTerms(); }} className="flex min-h-0 flex-1 flex-col gap-4">
             <div className="px-6">
-              <Input dir="ltr" inputMode="numeric" value={termsDraft} onChange={(e) => setTermsDraft(e.target.value.replace(/\D/g, ""))} placeholder="مثلاً 5" autoFocus />
+              <Input dir="ltr" inputMode="numeric" value={termsDraft} onChange={(e) => {
+                let v = e.target.value.replace(/\D/g, "")
+                if (term != null && v) {
+                  const n = Number(v)
+                  const maxTerm = term - 1
+                  if (n > maxTerm) v = String(maxTerm)
+                }
+                setTermsDraft(v)
+              }} placeholder="مثلاً 5" autoFocus />
             </div>
             <ResponsiveDialogFooter>
               <ResponsiveDialogDesktopOnly><ResponsiveDialogClose render={<Button variant="outline">انصراف</Button>} /></ResponsiveDialogDesktopOnly>

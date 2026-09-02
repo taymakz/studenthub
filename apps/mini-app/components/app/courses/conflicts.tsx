@@ -234,17 +234,7 @@ export function detectConflicts(
       }
     } else if (typeof pre === "object" && pre !== null && "term" in pre) {
       const requiredTerm = (pre as { term: number }).term
-      // Get current term from opts (preferred) or fallback to profile store
-      let currentTerm: number | null = null
-      if (typeof (optsOrMoaref as any)?.termNumber === "number") currentTerm = (optsOrMoaref as any).termNumber
-      if (currentTerm == null && typeof (optsOrMoaref as any)?.profile?.termNumber === "number") currentTerm = (optsOrMoaref as any).profile.termNumber
-      // Fallback: try to read from profile store directly (for legacy calls)
-      if (currentTerm == null) {
-        try {
-          const { useProfileStore } = await import("@/stores/profile-store")
-          currentTerm = useProfileStore.getState().profile?.termNumber ?? null
-        } catch {}
-      }
+      const currentTerm = typeof (optsOrMoaref as any)?.termNumber === "number" ? (optsOrMoaref as any).termNumber : null
       const termSatisfied = currentTerm != null ? currentTerm > requiredTerm : false
       if (!termSatisfied) {
         const key = `گذراندن ${requiredTerm} نیمسال`
