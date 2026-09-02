@@ -12,42 +12,42 @@ import {
   CourseTags,
 } from "./sections"
 
-export interface CourseCardProps {
-  offering: Offering
-  isNoted: boolean
-  isPassed: boolean
-  isNew: boolean
-  viewMode: "full" | "simple"
-  onSelect: (offering: Offering) => void
-  isActionLoading?: boolean
-  className?: string
+/** Visual state flags for a course card, grouped so the prop API stays small. */
+export interface CourseCardFlags {
+  noted: boolean
+  passed: boolean
+  new: boolean
+  actionLoading?: boolean
 }
 
 export function CourseCard({
   offering,
-  isNoted,
-  isPassed,
-  isNew,
   viewMode,
   onSelect,
-  isActionLoading,
+  flags,
   className,
-}: CourseCardProps) {
+}: {
+  offering: Offering
+  viewMode: "full" | "simple"
+  onSelect: (offering: Offering) => void
+  flags: CourseCardFlags
+  className?: string
+}) {
   const cls = cn(
-    "relative cursor-pointer rounded-md border bg-card px-4 pt-8 pb-4 text-sm",
+    "relative w-full cursor-pointer rounded-md border bg-card px-4 pt-8 pb-4 text-start text-sm",
     // Emil Kowalski: only animate transform and opacity for GPU acceleration
     "transition-transform duration-100 ease-out",
     // Active state feedback - scale(0.97) for responsive feel
     "active:scale-[0.98]",
     viewMode === "full" ? "hover:shadow-md" : "hover:bg-accent/40",
-    isActionLoading && "blur-[2px]",
+    flags.actionLoading && "blur-[2px]",
     className
   )
 
   if (viewMode === "simple") {
     return (
-      <div className={cls} onClick={() => onSelect(offering)}>
-        <CourseBadges isNoted={isNoted} isPassed={isPassed} />
+      <button type="button" className={cls} onClick={() => onSelect(offering)}>
+        <CourseBadges isNoted={flags.noted} isPassed={flags.passed} />
         <div className="mb-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-1">
             <p className="line-clamp-1 font-medium">{offering.courseName}</p>
@@ -69,20 +69,20 @@ export function CourseCard({
           <span className="ml-1">زمان تشکیل کلاس</span>
           <span>{offering.classSchedule || "ثبت نشده"}</span>
         </div>
-      </div>
+      </button>
     )
   }
 
   return (
-    <div className={cls} onClick={() => onSelect(offering)}>
-      <CourseBadges isNoted={isNoted} isPassed={isPassed} />
+    <button type="button" className={cls} onClick={() => onSelect(offering)}>
+      <CourseBadges isNoted={flags.noted} isPassed={flags.passed} />
       <div className="mb-2">
-        <CourseCardHeader offering={offering} isNew={isNew} />
+        <CourseCardHeader offering={offering} isNew={flags.new} />
       </div>
       <div className="mb-2">
         <CourseTable offering={offering} hideCopy />
       </div>
       <CourseTags offering={offering} />
-    </div>
+    </button>
   )
 }

@@ -8,7 +8,8 @@ import { cn } from "@workspace/ui/lib/utils"
 import type { Offering } from "@/lib/api"
 import { CourseCard } from "./course-card"
 import { CourseActionDrawer } from "./course-action-drawer"
-import { GptDrawer, loadGpt, gptToUnits, gptToLabel } from "@/components/app/profile/gpt-drawer"
+import { GptDrawer } from "@/components/app/profile/gpt-drawer"
+import { loadGpt, gptToUnits, gptToLabel } from "@/components/app/profile/gpt"
 import { useNotedSort } from "./noted/use-noted-sort"
 import { NotedExportDrawer } from "./noted/noted-export"
 import { ActionsDrawer, ConfirmAddPassed, ConfirmClear } from "./noted/noted-panels"
@@ -76,10 +77,11 @@ export function NotedDrawer({
             ) : (
               <>
                 {gptLabel && (
-                  <div
+                  <button
+                    type="button"
                     onClick={() => setGptOpen(true)}
                     className={cn(
-                      "mb-4 flex cursor-pointer items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors hover:opacity-80",
+                      "mb-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors hover:opacity-80",
                       overLimit
                         ? "border-destructive/30 bg-destructive/5 text-destructive"
                         : "border-success/30 bg-success/5 text-success"
@@ -95,7 +97,7 @@ export function NotedDrawer({
                     >
                       {totalUnits}/{availableUnits} واحد
                     </span>
-                  </div>
+                  </button>
                 )}
                 <div className="mb-6 flex gap-3">
                   <Button
@@ -137,11 +139,9 @@ export function NotedDrawer({
                     <div key={o.index} onClick={(e) => e.stopPropagation()}>
                       <CourseCard
                         offering={o}
-                        isNoted
-                        isPassed={false}
-                        isNew={false}
                         viewMode={viewMode}
                         onSelect={setSelected}
+                        flags={{ noted: true, passed: false, new: false }}
                       />
                     </div>
                   ))}

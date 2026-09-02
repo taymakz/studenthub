@@ -39,11 +39,13 @@ export function CoursesList({
         >
           <CourseCard
             offering={o}
-            isNoted={notedIndexes.has(o.index)}
-            isPassed={passedNames.has(o.courseName)}
-            isNew={newIndexes.has(o.index)}
             viewMode={viewMode}
             onSelect={onSelect}
+            flags={{
+              noted: notedIndexes.has(o.index),
+              passed: passedNames.has(o.courseName),
+              new: newIndexes.has(o.index),
+            }}
             className={borderFor(o)}
           />
         </div>
