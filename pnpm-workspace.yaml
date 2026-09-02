@@ -10,3 +10,4 @@ allowBuilds:
 
 minimumReleaseAgeExclude:
   - zod@4.5.4
+  - cn@0.2.3
