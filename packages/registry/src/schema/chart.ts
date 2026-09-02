@@ -16,8 +16,8 @@ export type ChartSemester = z.infer<typeof chartSemesterSchema>
  */
 export const chartCourseSchema = z.object({
   name: z.string().min(1).max(255),
-  theoreticalUnits: z.number().int().min(0).max(20),
-  practicalUnits: z.number().int().min(0).max(20),
+  theoreticalUnits: z.number().min(0).max(20),
+  practicalUnits: z.number().min(0).max(20),
   /** Prerequisites: course NAMES (string[]) or required passed units (number, e.g. 100) or required terms (e.g. { term: 5 } for گذراندن 5 نیمسال). */
   prerequisites: z
     .union([

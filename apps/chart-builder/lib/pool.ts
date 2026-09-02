@@ -49,6 +49,12 @@ function toInt(value: unknown): number {
   return /^\d+$/.test(normalized) ? Number(normalized) : 0
 }
 
+function toFloatUnits(value: unknown): number {
+  if (typeof value === "number") return Number.isFinite(value) && value >= 0 ? value : 0
+  const raw = clean(value).replace(/[,،\u066C\s]/g, "").replace(/[\u066B\u00B7]/g, ".")
+  return /^\d+(\.\d+)?$/.test(raw) ? Number(raw) : 0
+}
+
 /**
  * Tolerant JSON parse - strips comments/trailing commas and quotes unquoted
  * keys so half-edited pastes still load.
@@ -113,8 +119,8 @@ export function parsePoolInput(input: string): PoolParseResult {
       code: code || name,
       name: name || code,
       type: clean(o.courseType ?? o.course_type) || null,
-      theoreticalUnits: toInt(o.theoreticalUnits ?? o.theoretical_units),
-      practicalUnits: toInt(o.practicalUnits ?? o.practical_units),
+      theoreticalUnits: toFloatUnits(o.theoreticalUnits ?? o.theoretical_units),
+      practicalUnits: toFloatUnits(o.practicalUnits ?? o.practical_units),
       professor:
         clean(
           typeof o.professor === "object" && o.professor !== null
