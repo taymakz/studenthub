@@ -1,6 +1,7 @@
 "use client"
 
-import { EyeOff, Users } from "lucide-react"
+import { EyeOff } from "lucide-react"
+import { Virtuoso } from "react-virtuoso"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@workspace/ui/components/avatar"
 import { Button } from "@workspace/ui/components/button"
@@ -34,7 +35,7 @@ export function StudentsEmpty() {
   return (
     <div className="rounded-lg bg-muted/50 p-4 text-center">
       <p className="text-sm text-muted-foreground">هیچ دانشجویی با این شرایط یافت نشد.</p>
-      <p className="mt-1 text-xs text-muted-foreground">فقط دانشجویان هم‌دانشگاهی و هم‌رشته‌ای که نمایش را فعال کرده‌اند نمایش داده می‌شوند.</p>
+      <p className="mt-1 text-xs leading-5 text-muted-foreground">فقط دانشجویان هم‌دانشگاهی که این درس را در لیست خود ثبت کرده‌اند و نمایششان فعال است نمایش داده می‌شوند.</p>
     </div>
   )
 }
@@ -57,39 +58,63 @@ export function StudentsLoading() {
   )
 }
 
+function StudentRow({ student }: { student: CourseStudent }) {
+  return (
+    <div className="flex items-center gap-3 rounded-lg border bg-card p-3">
+      <Avatar size="sm">
+        {student.photoUrl ? <AvatarImage src={student.photoUrl} alt={student.firstName} /> : null}
+        <AvatarFallback>{(student.firstName?.[0] ?? "?") + (student.lastName?.[0] ?? "")}</AvatarFallback>
+      </Avatar>
+      <div className="min-w-0 flex-1">
+        <p className="truncate text-sm font-medium">{student.firstName} {student.lastName ?? ""}</p>
+        <p className="truncate text-xs text-muted-foreground" dir="ltr">
+          {student.username ? `@${student.username}` : `#${student.id}`}
+          {student.termNumber ? ` · ترم ${student.termNumber}` : ""}
+        </p>
+      </div>
+    </div>
+  )
+}
+
+/**
+ * Virtualized classmate list — same Virtuoso setup as the courses page, but
+ * scrolling is driven by the DrawerPanel's ScrollArea viewport (the
+ * noted-list drawer's scroll behavior) via `customScrollParent`. Spacing
+ * uses padding on the item wrapper, never margins — Virtuoso measures
+ * content boxes.
+ */
 export function StudentsList({
   students,
-  hasNextPage,
+  scrollParent,
   isFetchingNextPage,
-  onNext,
+  onLoadMore,
 }: {
   students: CourseStudent[]
-  hasNextPage: boolean
+  scrollParent: HTMLDivElement | null
   isFetchingNextPage: boolean
-  onNext: () => void
+  onLoadMore: () => void
 }) {
   return (
-    <div className="space-y-2">
-      <p className="text-xs text-muted-foreground">{students.length} دانشجو</p>
-      <div className="max-h-[50vh] space-y-2 overflow-y-auto pr-1">
-        {students.map((s) => (
-          <div key={s.id} className="flex items-center gap-3 rounded-lg border bg-card p-3">
-            <Avatar size="sm">
-              {s.photoUrl ? <AvatarImage src={s.photoUrl} alt={s.firstName} /> : null}
-              <AvatarFallback>{(s.firstName?.[0] ?? "?") + (s.lastName?.[0] ?? "")}</AvatarFallback>
-            </Avatar>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">{s.firstName} {s.lastName ?? ""}</p>
-              <p className="truncate text-xs text-muted-foreground" dir="ltr">
-                {s.username ? `@${s.username}` : `#${s.id}`}
-                {s.termNumber ? ` · ترم ${s.termNumber}` : ""}
-              </p>
+    <div>
+      <p className="pb-2 text-xs text-muted-foreground">{students.length} دانشجو</p>
+      {scrollParent ? (
+        <Virtuoso
+          customScrollParent={scrollParent}
+          data={students}
+          computeItemKey={(_, s) => s.id}
+          overscan={6}
+          endReached={onLoadMore}
+          itemContent={(_, s) => (
+            <div className="pb-2">
+              <StudentRow student={s} />
             </div>
-          </div>
-        ))}
-      </div>
-      {hasNextPage && (
-        <Button variant="outline" size="sm" className="w-full" loading={isFetchingNextPage} onClick={onNext}>بارگذاری بیشتر</Button>
+          )}
+        />
+      ) : null}
+      {isFetchingNextPage && (
+        <div className="flex justify-center py-2">
+          <Spinner />
+        </div>
       )}
     </div>
   )
