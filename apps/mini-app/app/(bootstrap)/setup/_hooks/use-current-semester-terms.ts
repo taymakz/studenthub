@@ -11,7 +11,7 @@ export function useCurrentSemesterTerms(universitySlug: string | undefined, majo
     enabled: Boolean(universitySlug && majorSlug),
   })
 
-  const terms = [...(query.data ?? [])].sort((a, b) => a.termCode.localeCompare(b.termCode))
+  const terms = (query.data ?? []).toSorted((a, b) => a.termCode.localeCompare(b.termCode))
 
   return { query, terms }
 }

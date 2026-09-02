@@ -26,7 +26,7 @@ export function useCourseDetailDerived(offering: Offering | null) {
 
   let canEditNoted = false
   if (termCode && terms.length > 0) {
-    const sorted = [...terms].sort((a, b) => b.termCode.localeCompare(a.termCode))
+    const sorted = terms.toSorted((a, b) => b.termCode.localeCompare(a.termCode))
     canEditNoted = new Set(sorted.slice(0, 2).map((t) => t.termCode)).has(termCode)
   }
 

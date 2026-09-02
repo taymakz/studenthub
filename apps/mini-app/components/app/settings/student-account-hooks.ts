@@ -13,7 +13,7 @@ export function useStudentAccountData(open: boolean) {
   const unisQuery = useQuery({ queryKey: ["universities"], queryFn: async () => (await fetchUniversities()).data.universities, enabled: open })
   const majorsQuery = useQuery({ queryKey: ["majors", profile?.universitySlug], queryFn: async () => (await fetchMajors(profile!.universitySlug!)).data.majors, enabled: open && Boolean(profile?.universitySlug) })
   const termsQuery = useQuery({ queryKey: ["offering-terms", profile?.universitySlug, profile?.majorSlug], queryFn: async () => (await fetchOfferingTerms(profile!.universitySlug!, profile!.majorSlug!)).data.terms, enabled: open && Boolean(profile?.universitySlug && profile?.majorSlug) })
-  const terms = [...(termsQuery.data ?? [])].sort((a, b) => a.termCode.localeCompare(b.termCode))
+  const terms = (termsQuery.data ?? []).toSorted((a, b) => a.termCode.localeCompare(b.termCode))
   const newerCode = findNewerSemesterCode(profile?.currentSemesterCode, terms.map((t) => t.termCode))
   return { meQuery, profile, user, unisQuery, majorsQuery, termsQuery, terms, newerCode }
 }

@@ -64,7 +64,7 @@ function canEditTermNoted(
   terms: ReturnType<typeof useProfileStore.getState>["terms"]
 ): boolean {
   if (!termCode || terms.length === 0) return false
-  const sorted = [...terms].sort((a, b) => b.termCode.localeCompare(a.termCode))
+  const sorted = terms.toSorted((a, b) => b.termCode.localeCompare(a.termCode))
   const lastTwo = new Set(sorted.slice(0, 2).map((t) => t.termCode))
   return lastTwo.has(termCode)
 }

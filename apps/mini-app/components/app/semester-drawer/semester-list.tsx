@@ -24,7 +24,7 @@ export function SemesterList({
 }) {
   if (isLoading) return <p className="py-6 text-center text-sm text-muted-foreground">در حال بارگذاری…</p>
   if (terms.length === 0) return <p className="py-6 text-center text-sm text-muted-foreground">نیم‌سالی یافت نشد</p>
-  const sorted = [...terms].sort((a, b) => b.termCode.localeCompare(a.termCode))
+  const sorted = terms.toSorted((a, b) => b.termCode.localeCompare(a.termCode))
   return (
     <>
       {sorted.map((t) => (

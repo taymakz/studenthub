@@ -13,7 +13,7 @@ export function useSemesterData(open: boolean) {
     queryFn: async () => (await fetchOfferingTerms(profile!.universitySlug!, profile!.majorSlug!)).data.terms,
     enabled: Boolean(profile?.universitySlug && profile?.majorSlug) && open,
   })
-  const terms = [...(termsQuery.data ?? [])].sort((a, b) => a.termCode.localeCompare(b.termCode))
+  const terms = (termsQuery.data ?? []).toSorted((a, b) => a.termCode.localeCompare(b.termCode))
   const newerCode = findNewerSemesterCode(profile?.currentSemesterCode, terms.map((t) => t.termCode))
   return { profile, termsQuery, terms, newerCode }
 }

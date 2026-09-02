@@ -306,8 +306,8 @@ export function CurrentSemesterStep({
     <>
       <OptionGrid
         columns={2}
-        options={[...terms]
-          .sort((a, b) => b.termCode.localeCompare(a.termCode))
+        options={terms
+          .toSorted((a, b) => b.termCode.localeCompare(a.termCode))
           .map((t) => ({ value: t.termCode, label: `${t.termCode} ${SEMESTER_LABEL[t.semester as keyof typeof SEMESTER_LABEL]}` }))}
         value={selected}
         onSelect={onSelect}
