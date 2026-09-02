@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useRef, useState } from "react"
+import { useRef, useState } from "react"
 
 import {
   Drawer,
@@ -27,6 +27,23 @@ import { ThemeDrawer } from "./schedule/schedule-panels"
 import { exportImage, ExportUploadCanceled } from "@/lib/export-image"
 import { toastManager } from "@workspace/ui/components/toast"
 
+/** Group by exam date, chronological, «تاریخ نامشخص» last (old project order). */
+function groupByExamDate(notedOfferings: Offering[]) {
+  const groupMap = new Map<string, Offering[]>()
+  for (const o of notedOfferings) {
+    const date = extractDate(o.examSchedule) ?? "تاریخ نامشخص"
+    groupMap.set(date, [...(groupMap.get(date) ?? []), o])
+  }
+  return [...groupMap.entries()]
+    .map(([date, items]) => ({ date, items }))
+    .filter((g) => g.items.length > 0)
+    .sort((a, b) => {
+      if (a.date === "تاریخ نامشخص") return 1
+      if (b.date === "تاریخ نامشخص") return -1
+      return a.date.localeCompare(b.date)
+    })
+}
+
 export function ExamSchedule() {
   const [open, setOpen] = useState(false)
   const { notedOfferings, isLoading, enabled } = useNotedOfferings()
@@ -45,22 +62,7 @@ export function ExamSchedule() {
   } | null>(null)
   const cancelRef = useRef<(() => void) | null>(null)
 
-  // Group by exam date, chronological, «تاریخ نامشخص» last (old project order).
-  const groups = useMemo(() => {
-    const map = new Map<string, typeof notedOfferings>()
-    for (const o of notedOfferings) {
-      const date = extractDate(o.examSchedule) ?? "تاریخ نامشخص"
-      map.set(date, [...(map.get(date) ?? []), o])
-    }
-    return [...map.entries()]
-      .map(([date, items]) => ({ date, items }))
-      .filter((g) => g.items.length > 0)
-      .sort((a, b) => {
-        if (a.date === "تاریخ نامشخص") return 1
-        if (b.date === "تاریخ نامشخص") return -1
-        return a.date.localeCompare(b.date)
-      })
-  }, [notedOfferings])
+  const groups = groupByExamDate(notedOfferings)
 
   const isNoted = (o: Offering) => noted.some((n) => !n.isDeleted && n.courseIndex === o.index)
 

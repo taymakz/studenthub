@@ -1,7 +1,5 @@
 "use client"
 
-import { useMemo } from "react"
-
 import type { Offering } from "@/lib/api"
 
 import { detectConflicts } from "../conflicts"
@@ -18,16 +16,12 @@ export function useCoursesConflicts(opts: {
   const { notedOfferings, moarefNames, chartCourses, passedNames, failedNames, isLastTerm, termNumber } =
     opts
 
-  return useMemo(
-    () =>
-      detectConflicts(notedOfferings, {
-        moarefNames,
-        chartCourses: chartCourses ?? [],
-        passedNames,
-        failedNames: failedNames ?? new Set<string>(),
-        isLastTerm: isLastTerm ?? false,
-        termNumber: termNumber ?? null,
-      }),
-    [notedOfferings, moarefNames, chartCourses, passedNames, failedNames, isLastTerm, termNumber]
-  )
+  return detectConflicts(notedOfferings, {
+    moarefNames,
+    chartCourses: chartCourses ?? [],
+    passedNames,
+    failedNames: failedNames ?? new Set<string>(),
+    isLastTerm: isLastTerm ?? false,
+    termNumber: termNumber ?? null,
+  })
 }

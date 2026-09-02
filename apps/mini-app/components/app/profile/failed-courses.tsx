@@ -25,14 +25,11 @@ export function FailedCourses() {
   const { pool, isLoading, isError, complete } = useProfileChart()
   const failed = useProfileStore((s) => s.failed)
   const passed = useProfileStore((s) => s.passed)
-  const failedNames = useMemo(() => failed.map((f) => f.courseName), [failed])
-  const passedNames = useMemo(
-    () => new Set(passed.map((p) => p.courseName)),
-    [passed]
-  )
+  const failedNames = failed.map((f) => f.courseName)
+  const passedNames = new Set(passed.map((p) => p.courseName))
   const store = useProfileStore.getState
 
-  const [selected, setSelected] = useState<string[]>([])
+  const [selected, setSelected] = useState<string[]>(failedNames)
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -42,27 +39,25 @@ export function FailedCourses() {
     selectedRef.current = selected
   }, [selected])
 
-  useEffect(() => {
-    // Keep the local selection in sync with the store so that failed courses added
-    // elsewhere (e.g. adding a failed pre-req from the courses conflict drawer) are
-    // reflected reactively here — instead of being seeded only once at hydration.
-
-
+  // Keep the local selection in sync with the store so that failed courses
+  // added elsewhere (e.g. adding a failed pre-req from the courses conflict
+  // drawer) are reflected reactively here. Render-phase adjustment per
+  // react.dev "you might not need an effect" — no setState-in-effect.
+  const [prevFailedNames, setPrevFailedNames] = useState(failedNames)
+  if (prevFailedNames !== failedNames) {
+    setPrevFailedNames(failedNames)
     setSelected(failedNames)
-  }, [failedNames])
+  }
 
-  const toggle = useCallback(
-    (name: string) => {
-      const cur = selectedRef.current
-      const next = cur.includes(name)
-        ? cur.filter((n) => n !== name)
-        : [...cur, name]
-      setSelected(next)
-      if (debounceRef.current) clearTimeout(debounceRef.current)
-      debounceRef.current = setTimeout(() => store().setFailed(next), 1200)
-    },
-    [store]
-  )
+  const toggle = (name: string) => {
+    const cur = selectedRef.current
+    const next = cur.includes(name)
+      ? cur.filter((n) => n !== name)
+      : [...cur, name]
+    setSelected(next)
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => store().setFailed(next), 1200)
+  }
 
   useEffect(() => {
     return () => {
@@ -70,38 +65,32 @@ export function FailedCourses() {
     }
   }, [])
 
-  const flush = useCallback(() => {
+  const flush = () => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
     store().setFailed(selectedRef.current)
-  }, [store])
+  }
 
   // Exclude passed courses from the failed pool (like the old widget).
-  const failedPool = useMemo(
-    () => pool.filter((c) => !passedNames.has(c.name)),
-    [pool, passedNames]
-  )
+  const failedPool = pool.filter((c) => !passedNames.has(c.name))
 
-  const failedNamesSet = useMemo(() => new Set(selected), [selected])
+  const failedNamesSet = new Set(selected)
 
-  const filtered = useMemo(() => {
+  const filtered = (() => {
     const term = search.trim().toLowerCase()
     if (!term) return failedPool
     const words = term.split(/\s+/)
     return failedPool.filter((c) =>
       words.every((w) => c.name.toLowerCase().includes(w))
     )
-  }, [failedPool, search])
+  })()
 
-  const terms = useMemo(() => uniqueTerms(filtered), [filtered])
-  const moaref = useMemo(() => filtered.filter((c) => c.isMoaref), [filtered])
-  const unknown = useMemo(() => filtered.filter((c) => c.isUnknown), [filtered])
-  const termCourses = useCallback(
-    (term: number) =>
-      filtered.filter(
-        (c) => !c.isMoaref && !c.isUnknown && c.termNumber === term
-      ),
-    [filtered]
-  )
+  const terms = uniqueTerms(filtered)
+  const moaref = filtered.filter((c) => c.isMoaref)
+  const unknown = filtered.filter((c) => c.isUnknown)
+  const termCourses = (term: number) =>
+    filtered.filter(
+      (c) => !c.isMoaref && !c.isUnknown && c.termNumber === term
+    )
 
   if (!complete || isError) return null
   if (isLoading) {

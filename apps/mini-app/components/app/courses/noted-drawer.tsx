@@ -42,10 +42,14 @@ export function NotedDrawer({
   const [gptOpen, setGptOpen] = useState(false)
   const [gpt, setGpt] = useState<10 | 12 | 20 | null>(null)
 
-  useEffect(() => {
-    if (!open) return
-    setGpt(loadGpt())
-  }, [open])
+  // Re-read the stored GPT whenever the drawer opens — render-phase
+  // adjustment (react.dev "you might not need an effect") instead of a
+  // setState-in-effect that causes an extra render after paint.
+  const [prevOpen, setPrevOpen] = useState(open)
+  if (open !== prevOpen) {
+    setPrevOpen(open)
+    if (open) setGpt(loadGpt())
+  }
 
   const availableUnits = gptToUnits(gpt)
   const overLimit = availableUnits != null && totalUnits > availableUnits

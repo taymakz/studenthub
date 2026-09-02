@@ -14,21 +14,18 @@ export function useUniversityData(uniSearch: string) {
     queryFn: async () => (await fetchUniversities()).data.universities,
   })
 
-  const universities = React.useMemo(() => unisQuery.data ?? [], [unisQuery.data])
-  const filteredUnis = React.useMemo(
-    () => universities.filter((u) => matchesQuery(uniSearch, [u.name?.fa, u.location?.fa, u.slug])),
-    [universities, uniSearch]
-  )
+  const universities = unisQuery.data ?? []
+  const filteredUnis = universities.filter((u) => matchesQuery(uniSearch, [u.name?.fa, u.location?.fa, u.slug]))
 
   const [uniPage, setUniPage] = React.useState({ query: uniSearch, count: LIST_PAGE_SIZE })
   if (uniPage.query !== uniSearch) {
     setUniPage({ query: uniSearch, count: LIST_PAGE_SIZE })
   }
-  const visibleUnis = React.useMemo(() => filteredUnis.slice(0, uniPage.count), [filteredUnis, uniPage.count])
+  const visibleUnis = filteredUnis.slice(0, uniPage.count)
 
-  const loadMoreUnis = React.useCallback(() => {
+  const loadMoreUnis = () => {
     setUniPage((p) => (p.count < filteredUnis.length ? { ...p, count: p.count + LIST_PAGE_SIZE } : p))
-  }, [filteredUnis.length])
+  }
 
   return { unisQuery, universities, filteredUnis, visibleUnis, loadMoreUnis }
 }

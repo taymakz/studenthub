@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 
 import {
   Drawer,
@@ -21,6 +21,7 @@ import { ToolButton } from "./tool-card"
 import { CalculatorGradeIcon } from "./tool-icons"
 import { useNotedOfferings } from "./use-noted-offerings"
 import { GptDrawer, loadGpt, saveGpt } from "./gpt-drawer"
+import type { Offering } from "@/lib/api"
 
 interface Row {
   id: number
@@ -67,6 +68,53 @@ function loadRows(): Row[] {
   }
 }
 
+/** Average + allowed-units + tone derived from the valid rows. Module-scope:
+    keeps the ternary chains out of the React component. */
+function computeAverageStats(rows: Row[]) {
+  const validRows = rows.filter((r) => validGrade(r.unit, r.grade))
+  const totalUnits = validRows.reduce(
+    (s, r) => s + Number(toEn(r.unit) || 0),
+    0
+  )
+  const weighted = validRows.reduce(
+    (s, r) => s + Number(toEn(r.unit) || 0) * Number(toEn(r.grade) || 0),
+    0
+  )
+  const average =
+    totalUnits <= 0 ? 0 : Number.parseFloat((weighted / totalUnits).toFixed(2))
+  const availableUnit =
+    average === 0 ? 0 : average < 12 ? 14 : average < 17 ? 20 : average <= 20 ? 24 : 0
+  const avgTone = average === 0
+    ? ""
+    : average < 12
+      ? "text-warning border-warning/20 bg-warning/5"
+      : average < 17
+        ? "text-blue-500 border-blue-500/20 bg-blue-500/5"
+        : "text-success border-success/20 bg-success/5"
+  return { average, availableUnit, avgTone }
+}
+
+/** Merge noted offerings into the calculator rows (update units or append). */
+function mergeNotedIntoRows(rows: Row[], notedOfferings: Offering[]): Row[] {
+  const base = rows.filter((r) => r.name.trim() !== "" || r.unit || r.grade)
+  const next = [...base]
+  for (const o of notedOfferings) {
+    const units = (o.theoreticalUnits ?? 0) + (o.practicalUnits ?? 0)
+    const existing = next.find((r) => r.name === o.courseName)
+    if (existing) {
+      existing.unit = String(units)
+    } else {
+      next.push({
+        id: Date.now() + next.length,
+        name: o.courseName,
+        unit: String(units),
+        grade: "",
+      })
+    }
+  }
+  return next
+}
+
 export function GradeCalculator() {
   const [open, setOpen] = useState(false)
   const [gptOpen, setGptOpen] = useState(false)
@@ -89,38 +137,7 @@ export function GradeCalculator() {
     saveGpt(next)
   }
 
-  const validRows = useMemo(
-    () => rows.filter((r) => validGrade(r.unit, r.grade)),
-    [rows]
-  )
-
-  const average = useMemo(() => {
-    const totalUnits = validRows.reduce(
-      (s, r) => s + Number(toEn(r.unit) || 0),
-      0
-    )
-    const weighted = validRows.reduce(
-      (s, r) => s + Number(toEn(r.unit) || 0) * Number(toEn(r.grade) || 0),
-      0
-    )
-    if (totalUnits <= 0) return 0
-    return Number.parseFloat((weighted / totalUnits).toFixed(2))
-  }, [validRows])
-
-  const availableUnit = useMemo(() => {
-    if (average === 0) return 0
-    if (average < 12) return 14
-    if (average < 17) return 20
-    if (average <= 20) return 24
-    return 0
-  }, [average])
-
-  const avgTone = useMemo(() => {
-    if (average === 0) return ""
-    if (average < 12) return "text-warning border-warning/20 bg-warning/5"
-    if (average < 17) return "text-blue-500 border-blue-500/20 bg-blue-500/5"
-    return "text-success border-success/20 bg-success/5"
-  }, [average])
+  const { average, availableUnit, avgTone } = computeAverageStats(rows)
 
   const addRow = () =>
     persistRows([...rows, { id: Date.now(), name: "", unit: "", grade: "" }])
@@ -135,23 +152,7 @@ export function GradeCalculator() {
     persistRows(rows.map((r) => (r.id === id ? { ...r, [field]: value } : r)))
 
   const addAllInNotedList = () => {
-    const base = rows.filter((r) => r.name.trim() !== "" || r.unit || r.grade)
-    const next = [...base]
-    for (const o of notedOfferings) {
-      const units = (o.theoreticalUnits ?? 0) + (o.practicalUnits ?? 0)
-      const existing = next.find((r) => r.name === o.courseName)
-      if (existing) {
-        existing.unit = String(units)
-      } else {
-        next.push({
-          id: Date.now() + next.length,
-          name: o.courseName,
-          unit: String(units),
-          grade: "",
-        })
-      }
-    }
-    persistRows(next)
+    persistRows(mergeNotedIntoRows(rows, notedOfferings))
     setActionsOpen(false)
   }
 

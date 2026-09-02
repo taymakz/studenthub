@@ -109,7 +109,6 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
   const banned = useProfileStore((s) => s.banned)
   const booted = hydrated && !storeError
 
-  useBootstrapSafetyTimeoutWithVisible(visible, setVisible, router, pathnameRef)
   useBootstrapHydrate()
 
   const { webAuthChecked, needsWebAuth, setNeedsWebAuth } =
@@ -150,9 +149,16 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
     setVisible,
   })
 
-  React.useEffect(() => {
-    if (showWebLogin) setVisible(true)
-  }, [showWebLogin])
+  // While the web-login gate is up the splash is paused — derive the pause
+  // at the call site instead of syncing showWebLogin into `visible` via an
+  // effect (avoids a cascading extra render on every gate flip).
+  useBootstrapSafetyTimeoutWithVisible(
+    visible,
+    showWebLogin,
+    setVisible,
+    router,
+    pathnameRef
+  )
 
   useBootstrapStaleToken(hasStaleWebToken, setNeedsWebAuth)
 

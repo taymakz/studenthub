@@ -49,6 +49,7 @@ export function SetupSteps({
   onSelectTerm,
   onDoubleClickTerm,
   currentSemesterTerms,
+  selectedCurrentSemester,
   onSelectCurrentSemester,
   onDoubleClickCurrentSemester,
   currentSemesterLoading,
@@ -98,6 +99,7 @@ export function SetupSteps({
   onSelectTerm: (n: number) => void
   onDoubleClickTerm: (n: number) => void
   currentSemesterTerms: Array<{ termCode: string; semester: string }>
+  selectedCurrentSemester?: string
   onSelectCurrentSemester: (v: string) => void
   onDoubleClickCurrentSemester: (v: string) => void
   currentSemesterLoading: boolean
@@ -151,7 +153,7 @@ export function SetupSteps({
     return <TermStep degree={degreeForTerm} selected={data.termNumber} onSelect={onSelectTerm} onDoubleClick={onDoubleClickTerm} />
   }
   if (step === "CurrentSemester") {
-    return <CurrentSemesterStep terms={currentSemesterTerms} selected={data.currentSemesterCode} onSelect={onSelectCurrentSemester} onDoubleClick={onDoubleClickCurrentSemester} isLoading={currentSemesterLoading} />
+    return <CurrentSemesterStep terms={currentSemesterTerms} selected={selectedCurrentSemester} onSelect={onSelectCurrentSemester} onDoubleClick={onDoubleClickCurrentSemester} isLoading={currentSemesterLoading} />
   }
   if (step === "IsLastTerm") {
     return <IsLastTermStep selected={data.isLastTerm} onSelect={onSelectIsLastTerm} />

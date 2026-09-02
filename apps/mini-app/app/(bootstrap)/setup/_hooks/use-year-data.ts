@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { useQuery } from "@tanstack/react-query"
 
 import { fetchChartYearDirs } from "@/lib/api"
@@ -23,16 +22,12 @@ export function useYearData(universitySlug: string | undefined, majorSlug: strin
     enabled: Boolean(universitySlug) && Boolean(majorSlug) && Boolean(degree),
   })
 
-  const yearOptions = React.useMemo(() => {
-    if (!yearDirsQuery.data) return []
-    const out: Array<{ range: string; label: string }> = []
-    for (const d of yearDirsQuery.data) {
-      const match = /^\[(\d{4})-(\d{4})\]$/.exec(d.dirName)
-      if (match) out.push({ range: d.dirName, label: `${match[1]} تا ${match[2]}` })
-      else if (/^\d{4}$/.test(d.dirName)) out.push({ range: d.dirName, label: d.dirName })
-    }
-    return out
-  }, [yearDirsQuery.data])
+  const yearOptions: Array<{ range: string; label: string }> = []
+  for (const d of yearDirsQuery.data ?? []) {
+    const match = /^\[(\d{4})-(\d{4})\]$/.exec(d.dirName)
+    if (match) yearOptions.push({ range: d.dirName, label: `${match[1]} تا ${match[2]}` })
+    else if (/^\d{4}$/.test(d.dirName)) yearOptions.push({ range: d.dirName, label: d.dirName })
+  }
 
   return { yearDirsQuery, yearOptions }
 }
@@ -41,18 +36,16 @@ export function useAvailableSemesters(
   yearDirs: Array<{ dirName: string; semesters: string[] }> | undefined,
   entryYearRange: string | undefined
 ) {
-  return React.useMemo(() => {
-    const chosen = yearDirs?.find((d) => d.dirName === entryYearRange)
-    if (!chosen) return [] as Array<"MEHR" | "BAHMAN" | "SUMMER">
-    const sems = new Set<"MEHR" | "BAHMAN" | "SUMMER">()
-    for (const s of chosen.semesters) {
-      if (s === "MEHR" || s === "BAHMAN") {
-        sems.add("MEHR")
-        sems.add("BAHMAN")
-      } else if (s === "SUMMER") {
-        sems.add("SUMMER")
-      }
+  const chosen = yearDirs?.find((d) => d.dirName === entryYearRange)
+  if (!chosen) return [] as Array<"MEHR" | "BAHMAN" | "SUMMER">
+  const sems = new Set<"MEHR" | "BAHMAN" | "SUMMER">()
+  for (const s of chosen.semesters) {
+    if (s === "MEHR" || s === "BAHMAN") {
+      sems.add("MEHR")
+      sems.add("BAHMAN")
+    } else if (s === "SUMMER") {
+      sems.add("SUMMER")
     }
-    return [...sems]
-  }, [yearDirs, entryYearRange])
+  }
+  return [...sems]
 }

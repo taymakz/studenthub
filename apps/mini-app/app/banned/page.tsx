@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useMounted } from "@/hooks/use-mounted"
 
 import { getBannedReason } from "@/lib/request"
 import { useProfileStore } from "@/stores/profile-store"
@@ -12,8 +12,7 @@ import { useProfileStore } from "@/stores/profile-store"
  */
 export default function BannedPage() {
   const storeReason = useProfileStore((s) => s.bannedReason)
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  const mounted = useMounted()
 
   if (!mounted) return null
 

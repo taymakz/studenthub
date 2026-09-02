@@ -21,11 +21,8 @@ export function useMajorData(universitySlug: string | undefined, majorSearch: st
     enabled: Boolean(universitySlug),
   })
 
-  const allMajors = React.useMemo(() => dedupeMajors(majorsQuery.data ?? []), [majorsQuery.data])
-  const filteredMajors = React.useMemo(
-    () => allMajors.filter((m) => matchesQuery(majorSearch, [m.name?.fa, m.slug])),
-    [allMajors, majorSearch]
-  )
+  const allMajors = dedupeMajors(majorsQuery.data ?? [])
+  const filteredMajors = allMajors.filter((m) => matchesQuery(majorSearch, [m.name?.fa, m.slug]))
 
   const [majorPage, setMajorPage] = React.useState({
     query: majorSearch,
@@ -35,15 +32,15 @@ export function useMajorData(universitySlug: string | undefined, majorSearch: st
   if (majorPage.query !== majorSearch || majorPage.uni !== (universitySlug ?? "")) {
     setMajorPage({ query: majorSearch, uni: universitySlug ?? "", count: LIST_PAGE_SIZE })
   }
-  const visibleMajors = React.useMemo(() => filteredMajors.slice(0, majorPage.count), [filteredMajors, majorPage.count])
+  const visibleMajors = filteredMajors.slice(0, majorPage.count)
 
-  const loadMoreMajors = React.useCallback(() => {
+  const loadMoreMajors = () => {
     setMajorPage((p) => (p.count < filteredMajors.length ? { ...p, count: p.count + LIST_PAGE_SIZE } : p))
-  }, [filteredMajors.length])
+  }
 
   return { majorsQuery, allMajors, filteredMajors, visibleMajors, loadMoreMajors }
 }
 
 export function useSelectedMajor(majors: MajorIndexEntry[] | undefined, majorSlug: string | undefined) {
-  return React.useMemo(() => majors?.find((m) => m.slug === majorSlug), [majors, majorSlug])
+  return majors?.find((m) => m.slug === majorSlug)
 }

@@ -1,7 +1,6 @@
 "use client"
 
 import { useMutation, useQuery } from "@tanstack/react-query"
-import * as React from "react"
 
 import { toastManager } from "@workspace/ui/components/toast"
 
@@ -75,7 +74,7 @@ export function useChartDrawerHandlers(
   isUnavailable: boolean,
   requestMutate: () => void
 ) {
-  const handleGetFile = React.useCallback(() => {
+  const handleGetFile = () => {
     if (isUnavailable) {
       toastManager.add({
         type: "error",
@@ -86,7 +85,7 @@ export function useChartDrawerHandlers(
       return
     }
     requestMutate()
-  }, [isUnavailable, requestMutate])
+  }
 
   return { handleGetFile }
 }

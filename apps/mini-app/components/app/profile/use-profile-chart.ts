@@ -1,7 +1,5 @@
 "use client"
 
-import { useMemo } from "react"
-
 import { useProfileStore } from "@/stores/profile-store"
 import { flattenChart, type ChartCourseItem } from "@/lib/chart"
 import { isProfileComplete as completeCheck, type MeProfile } from "@/lib/api"
@@ -23,7 +21,7 @@ export function useProfileChart() {
   const error = useProfileStore((s) => s.error)
   const complete = isProfileComplete(profile)
 
-  const pool = useMemo(() => flattenChart(chart), [chart]) as ChartCourseItem[]
+  const pool = flattenChart(chart) as ChartCourseItem[]
 
   return {
     profile,

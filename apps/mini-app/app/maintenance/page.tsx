@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react"
 import { useRouter } from "next/navigation"
 
+import { useMounted } from "@/hooks/use-mounted"
 import { getMaintenanceCanBypass, getMaintenanceReason } from "@/lib/request"
 import { useProfileStore } from "@/stores/profile-store"
 
@@ -20,8 +21,7 @@ export default function MaintenancePage() {
   const maintenanceCanBypass = useProfileStore((s) => s.maintenanceCanBypass)
   const [bypassing, setBypassing] = useState(false)
   const [checking, setChecking] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  const mounted = useMounted()
 
   // If this page is ever reached via hard refresh without going through
   // TopRedirect (e.g. direct link), ensure we actually probe /me — the store

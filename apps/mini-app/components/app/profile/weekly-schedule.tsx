@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useRef, useState } from "react"
+import { useRef, useState } from "react"
 
 import {
   Drawer,
@@ -47,11 +47,7 @@ export function WeeklySchedule() {
   } | null>(null)
   const cancelRef = useRef<(() => void) | null>(null)
 
-  const groups = useMemo(
-    () =>
-      groupByWeekday(notedOfferings, (o) => extractWeekday(o.classSchedule)),
-    [notedOfferings]
-  )
+  const groups = groupByWeekday(notedOfferings, (o) => extractWeekday(o.classSchedule))
 
   const isNoted = (o: Offering) => noted.some((n) => !n.isDeleted && n.courseIndex === o.index)
   const description = useWeeklyDescription(groups)

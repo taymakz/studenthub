@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, m } from "motion/react"
 
 import { Card } from "@workspace/ui/components/card"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@workspace/ui/components/carousel"
@@ -53,9 +53,9 @@ export function CourseChanges() {
 
       <div className="min-h-30">
         <AnimatePresence mode="wait" initial={false}>
-          <motion.div key={tab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.1 }}>
+          <m.div key={tab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.1 }}>
             <TabContent tab={tab} added={added} updated={updated} removed={removed} setSelected={setSelected} setSelectedChanges={setSelectedChanges} />
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       </div>
 

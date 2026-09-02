@@ -1,13 +1,13 @@
 "use client"
 
-import { motion } from "motion/react"
+import { m } from "motion/react"
 
 import { InitialLoading } from "@/components/app/initial-loading"
 import { useProfileStore } from "@/stores/profile-store"
 
 export function BootstrapErrorView() {
   return (
-    <motion.div
+    <m.div
       key="bootstrap-error"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
@@ -25,13 +25,13 @@ export function BootstrapErrorView() {
       >
         تلاش مجدد
       </button>
-    </motion.div>
+    </m.div>
   )
 }
 
 export function BootstrapSplashView() {
   return (
-    <motion.div
+    <m.div
       key="bootstrap-splash"
       initial={{ opacity: 1 }}
       animate={{ opacity: 1 }}
@@ -40,6 +40,6 @@ export function BootstrapSplashView() {
       className="fixed inset-0 z-50"
     >
       <InitialLoading />
-    </motion.div>
+    </m.div>
   )
 }

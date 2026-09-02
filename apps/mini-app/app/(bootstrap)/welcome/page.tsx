@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, m } from "motion/react"
 
 import { DEBUG, INTRO_STORAGE_KEY } from "@/constants"
 import { cn } from "@workspace/ui/lib/utils"
@@ -98,7 +98,7 @@ export default function WelcomePage() {
       {/* Slides viewport */}
       <main className="relative min-h-0 flex-1">
         <AnimatePresence initial={false} custom={direction}>
-          <motion.div
+          <m.div
             key={index}
             className="absolute inset-0 px-6 will-change-transform"
             custom={direction}
@@ -109,7 +109,7 @@ export default function WelcomePage() {
             transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
           >
             {slides[index]}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       </main>
 

@@ -60,10 +60,14 @@ interface GptDrawerProps {
 export function GptDrawer({ open, onOpenChange }: GptDrawerProps) {
   const [gpt, setGpt] = useState<Gpt | null>(null)
 
-  useEffect(() => {
-    if (!open) return
-    setGpt(loadGpt())
-  }, [open])
+  // Re-read localStorage whenever the drawer opens: render-phase adjustment
+  // per react.dev "you might not need an effect" — no effect, no cascading
+  // setState-after-paint.
+  const [prevOpen, setPrevOpen] = useState(open)
+  if (open !== prevOpen) {
+    setPrevOpen(open)
+    if (open) setGpt(loadGpt())
+  }
 
   const selectedGpt = GPT_OPTIONS.find((o) => o.value === gpt)
 

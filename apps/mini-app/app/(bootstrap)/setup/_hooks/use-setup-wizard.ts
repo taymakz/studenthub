@@ -50,11 +50,6 @@ export function useSetupWizard() {
   const isSetupComplete = isProfileComplete(profile ?? null)
 
   React.useEffect(() => {
-    setStepIndex(0)
-    setDirection(1)
-  }, [])
-
-  React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior })
   }, [stepIndex])
 
@@ -63,15 +58,19 @@ export function useSetupWizard() {
     data.majorSlug
   )
 
-  React.useEffect(() => {
-    if (step === "CurrentSemester" && !data.currentSemesterCode && currentSemesterTerms.length > 0) {
-      const codes = currentSemesterTerms.map((t) => t.termCode)
-      const preferred = [...codes].sort((a, b) => a.localeCompare(b)).at(-1)!
-      setData((p) => ({ ...p, currentSemesterCode: preferred }))
-    }
-  }, [step, currentSemesterTerms, data.currentSemesterCode])
+  // Derived (not synced into state): when the user reaches the
+  // CurrentSemester step without picking one, preselect the latest term.
+  // Consumers read `effectiveCurrentSemesterCode`; explicit user choice
+  // always wins. Avoids a setState-in-effect cascading render.
+  const effectiveCurrentSemesterCode =
+    data.currentSemesterCode ??
+    (currentSemesterTerms.length > 0
+      ? [...currentSemesterTerms.map((t) => t.termCode)]
+          .sort((a, b) => a.localeCompare(b))
+          .at(-1)
+      : undefined)
 
-  const canGoForward = React.useCallback((): boolean => {
+  const canGoForward = (): boolean => {
     switch (step) {
       case "University":
         return Boolean(data.university)
@@ -94,18 +93,15 @@ export function useSetupWizard() {
       default:
         return false
     }
-  }, [step, data])
+  }
 
-  const moveSteps = React.useCallback(
-    (delta: number) => {
-      if (delta > 0 && !canGoForward()) return
-      setDirection(delta < 0 ? -1 : 1)
-      setStepIndex((i) => Math.min(Math.max(i + delta, 0), STEPS.length - 1))
-    },
-    [canGoForward]
-  )
+  const moveSteps = (delta: number) => {
+    if (delta > 0 && !canGoForward()) return
+    setDirection(delta < 0 ? -1 : 1)
+    setStepIndex((i) => Math.min(Math.max(i + delta, 0), STEPS.length - 1))
+  }
 
-  const goBack = React.useCallback(() => {
+  const goBack = () => {
     if (stepIndex === 0) {
       if (isSetupComplete) router.replace("/profile")
       return
@@ -144,12 +140,12 @@ export function useSetupWizard() {
       return next
     })
     moveSteps(-1)
-  }, [stepIndex, isSetupComplete, router, moveSteps])
+  }
 
-  const goForward = React.useCallback(() => {
+  const goForward = () => {
     if (!canGoForward() || isLastStep) return
     moveSteps(1)
-  }, [canGoForward, isLastStep, moveSteps])
+  }
 
   const submitMut = useMutation({
     mutationFn: async () => {
@@ -157,13 +153,7 @@ export function useSetupWizard() {
         throw new Error("لطفا همه گزینه‌ها را کامل کنید")
       }
       const termNumber = data.termNumber ?? undefined
-      const currentSemesterCode =
-        data.currentSemesterCode ??
-        (() => {
-          const codes = currentSemesterTerms.map((t) => t.termCode)
-          if (codes.length === 0) return undefined
-          return [...codes].sort((a, b) => a.localeCompare(b)).at(-1)
-        })()
+      const currentSemesterCode = data.currentSemesterCode ?? effectiveCurrentSemesterCode
       return updateProfile({
         universitySlug: data.university.slug,
         majorSlug: data.majorSlug,
@@ -183,20 +173,20 @@ export function useSetupWizard() {
     },
   })
 
-  const submit = React.useCallback(() => {
+  const submit = () => {
     if (!canGoForward()) return
     setSaving(true)
     submitMut.mutate(undefined, { onSettled: () => setSaving(false) })
-  }, [canGoForward, submitMut])
+  }
 
-  const selectAndMaybeAdvance = React.useCallback((patch: Partial<WizardData>) => {
+  const selectAndMaybeAdvance = (patch: Partial<WizardData>) => {
     setData((prev) => ({ ...prev, ...patch }))
-  }, [])
+  }
 
-  const advanceOnDoubleTap = React.useCallback(() => {
+  const advanceOnDoubleTap = () => {
     if (isLastStep) submit()
     else moveSteps(1)
-  }, [isLastStep, submit, moveSteps])
+  }
 
   return {
     step,
@@ -217,5 +207,6 @@ export function useSetupWizard() {
     advanceOnDoubleTap,
     currentSemesterTerms,
     currentSemesterTermsQuery,
+    effectiveCurrentSemesterCode,
   }
 }

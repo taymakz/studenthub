@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useEffect, useRef } from "react"
+import { useEffect, useRef } from "react"
 import { Loader2, ShieldCheck } from "lucide-react"
 
 export function useLegacyWidget(botUsername: string, containerRef: React.RefObject<HTMLDivElement | null>, setError: (s: string) => void) {
@@ -40,7 +40,7 @@ export function TelegramConfigState({ loading, error, hasAny, botUsername, clien
 }
 
 export function useNewLogin(clientId: string, handleAuth: (d: Record<string, unknown>) => void, setError: (s: string) => void) {
-  return useCallback(() => {
+  return () => {
     const cid = Number(clientId)
     if (!clientId || Number.isNaN(cid) || cid <= 0) { setError("شناسه کلاینت تلگرام تنظیم نشده است"); return }
     const w = window as unknown as { Telegram?: { Login?: { auth: (opts: Record<string, unknown>, cb: (data: Record<string, unknown>) => void) => void } } }
@@ -60,5 +60,5 @@ export function useNewLogin(clientId: string, handleAuth: (d: Record<string, unk
     }
     s.onerror = () => setError("بارگذاری لاگین تلگرام ناموفق بود")
     document.head.appendChild(s)
-  }, [clientId, handleAuth, setError])
+  }
 }

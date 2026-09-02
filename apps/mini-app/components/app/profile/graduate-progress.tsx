@@ -1,6 +1,6 @@
 "use client"
 
-import { useCallback, useMemo, useState } from "react"
+import { useState } from "react"
 
 import { Input } from "@workspace/ui/components/input"
 import { Badge } from "@workspace/ui/components/badge"
@@ -30,7 +30,7 @@ export function GraduateProgress() {
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
 
-  const total = useMemo(() => totalRequiredUnits(pool), [pool])
+  const total = totalRequiredUnits(pool)
   const remaining = Math.max(0, total - passed.units)
   const pct = total > 0 ? Math.min(100, Math.max(0, (passed.units / total) * 100)) : 0
   const barMax = 200
@@ -39,17 +39,14 @@ export function GraduateProgress() {
   const displayRemaining = isChartIncomplete ? "؟" : remaining
   const displayPct = isChartIncomplete ? Math.min(100, (displayPassed / barMax) * 100) : pct
 
-  const filtered = useMemo(() => {
-    const term = search.trim().toLowerCase()
-    if (!term) return pool
-    const words = term.split(/\s+/)
-    return pool.filter((c) => words.every((w) => c.name.toLowerCase().includes(w)))
-  }, [pool, search])
+  const term = search.trim().toLowerCase()
+  const words = term.split(/\s+/)
+  const filtered = term ? pool.filter((c) => words.every((w) => c.name.toLowerCase().includes(w))) : pool
 
-  const terms = useMemo(() => uniqueTerms(filtered), [filtered])
-  const moaref = useMemo(() => filtered.filter((c) => c.isMoaref), [filtered])
-  const unknown = useMemo(() => filtered.filter((c) => c.isUnknown), [filtered])
-  const termCourses = useCallback((term: number) => filtered.filter((c) => !c.isMoaref && !c.isUnknown && c.termNumber === term), [filtered])
+  const terms = uniqueTerms(filtered)
+  const moaref = filtered.filter((c) => c.isMoaref)
+  const unknown = filtered.filter((c) => c.isUnknown)
+  const termCourses = (t: number) => filtered.filter((c) => !c.isMoaref && !c.isUnknown && c.termNumber === t)
 
   if (!complete || isError) return null
   if (isLoading) return <GraduateSkeleton />

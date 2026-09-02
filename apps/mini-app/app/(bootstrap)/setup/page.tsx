@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, m } from "motion/react"
 import { ArrowRight, Loader2 } from "lucide-react"
 
 import { useSelectedMajor } from "./_hooks/use-major-data"
@@ -36,25 +36,22 @@ export default function SetupPage() {
   const { yearDirsQuery, yearOptions } = useYearData(data.university?.slug, data.majorSlug, data.degree)
   const availableSemesters = useAvailableSemesters(yearDirsQuery.data, data.entryYearRange)
 
-  const wrappedMove = React.useCallback(
-    (delta: number) => {
-      moveSteps(delta)
-      setUniSearch("")
-      setMajorSearch("")
-    },
-    [moveSteps]
-  )
+  const wrappedMove = (delta: number) => {
+    moveSteps(delta)
+    setUniSearch("")
+    setMajorSearch("")
+  }
 
-  const handleGoBack = React.useCallback(() => {
+  const handleGoBack = () => {
     goBack()
     setUniSearch("")
     setMajorSearch("")
-  }, [goBack])
+  }
 
-  const handleGoForward = React.useCallback(() => {
+  const handleGoForward = () => {
     if (!canGoForward() || isLastStep) return
     wrappedMove(1)
-  }, [canGoForward, isLastStep, wrappedMove])
+  }
 
   return (
     <div className="mx-auto flex min-h-dvh w-full max-w-screen-sm flex-col overflow-x-clip px-4 safe-top-padding pb-4">
@@ -74,12 +71,12 @@ export default function SetupPage() {
       </div>
 
       <div className="mb-6 h-1 overflow-hidden rounded-full bg-muted">
-        <motion.div initial={false} className="h-full rounded-full bg-primary" animate={{ width: `${(stepIndex / STEPS.length) * 100}%` }} transition={{ duration: 0.35 }} />
+        <m.div initial={false} className="h-full rounded-full bg-primary" animate={{ width: `${(stepIndex / STEPS.length) * 100}%` }} transition={{ duration: 0.35 }} />
       </div>
 
       <div className="relative overflow-hidden">
         <AnimatePresence mode="popLayout" custom={direction} initial={false}>
-          <motion.div
+          <m.div
             key={step}
             custom={direction}
             variants={{
@@ -170,6 +167,7 @@ export default function SetupPage() {
                 setTimeout(() => wrappedMove(1), 120)
               }}
               currentSemesterTerms={wizard.currentSemesterTerms}
+              selectedCurrentSemester={wizard.effectiveCurrentSemesterCode}
               onSelectCurrentSemester={(v) => wizard.selectAndMaybeAdvance({ currentSemesterCode: v })}
               onDoubleClickCurrentSemester={(v) => {
                 wizard.selectAndMaybeAdvance({ currentSemesterCode: v })
@@ -181,7 +179,7 @@ export default function SetupPage() {
                 setTimeout(() => submit(), 120)
               }}
             />
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       </div>
 

@@ -1,7 +1,5 @@
 "use client"
 
-import { useMemo } from "react"
-
 import { useProfileStore } from "@/stores/profile-store"
 
 /**
@@ -22,14 +20,8 @@ export function useNotedOfferings() {
     profile?.currentSemesterCode
   )
 
-  const activeIndexes = useMemo(
-    () => new Set(noted.filter((n) => !n.isDeleted).map((n) => n.courseIndex)),
-    [noted]
-  )
-  const notedOfferings = useMemo(
-    () => offerings.filter((o) => activeIndexes.has(o.index)),
-    [offerings, activeIndexes]
-  )
+  const activeIndexes = new Set(noted.filter((n) => !n.isDeleted).map((n) => n.courseIndex))
+  const notedOfferings = offerings.filter((o) => activeIndexes.has(o.index))
 
   return {
     notedOfferings,

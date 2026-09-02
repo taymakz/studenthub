@@ -12,7 +12,6 @@ export function useTelegramConfig() {
 
   useEffect(() => {
     let cancelled = false
-    setConfigLoading(true)
     void fetchTelegramConfig()
       .then((cfg) => {
         if (cancelled) return

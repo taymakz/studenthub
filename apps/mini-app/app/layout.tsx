@@ -11,6 +11,7 @@ import { ThemeProvider } from "@/providers/theme-provider"
 import { ToastProvider } from "@workspace/ui/components/toast"
 import { cn } from "@workspace/ui/lib/utils"
 import { TopRedirect } from "@/components/app/top-redirect"
+import { MotionProvider } from "@/providers/motion-provider"
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
@@ -138,7 +139,11 @@ export default function RootLayout({
           <SDKLaunchParamsProvider>
             <ThemeProvider>
               <TanstackQueryProvider>
-                <ToastProvider position="top-center">{children}</ToastProvider>
+                <MotionProvider>
+                  <ToastProvider position="top-center">
+                    {children}
+                  </ToastProvider>
+                </MotionProvider>
               </TanstackQueryProvider>
             </ThemeProvider>
           </SDKLaunchParamsProvider>

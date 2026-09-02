@@ -92,7 +92,23 @@ export default function StudentAccount({ children }: { children?: React.ReactEle
   const router = useRouter()
   useEffect(() => { const h = () => { setOpen(true); setSemesterOpen(true) }; window.addEventListener("open-semester-drawer", h); return () => window.removeEventListener("open-semester-drawer", h) }, [])
   const { profile, user, unisQuery, majorsQuery, terms, newerCode } = useStudentAccountData(open)
-  useEffect(() => { setOpen(false); setTermOpen(false); setSemesterOpen(false) }, [profile?.universitySlug, profile?.majorSlug, profile?.entryYearRange, profile?.termNumber, profile?.currentSemesterCode])
+  // Close the pickers when the underlying profile identity changes (e.g. a
+  // patch from another surface refreshed /me). Render-phase adjustment per
+  // react.dev "you might not need an effect" — no setState-in-effect.
+  const profileIdentity = [
+    profile?.universitySlug,
+    profile?.majorSlug,
+    profile?.entryYearRange,
+    profile?.termNumber,
+    profile?.currentSemesterCode,
+  ].join("|")
+  const [prevIdentity, setPrevIdentity] = useState(profileIdentity)
+  if (prevIdentity !== profileIdentity) {
+    setPrevIdentity(profileIdentity)
+    setOpen(false)
+    setTermOpen(false)
+    setSemesterOpen(false)
+  }
   const selectedTerm = terms.find((t) => t.termCode === profile?.currentSemesterCode)
   const newerTerm = newerCode ? terms.find((t) => t.termCode === newerCode) : null
   const patchMut = useStudentPatch(() => { setTermOpen(false); setSemesterOpen(false) })

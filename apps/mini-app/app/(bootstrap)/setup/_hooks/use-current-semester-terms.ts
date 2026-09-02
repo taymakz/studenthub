@@ -1,6 +1,5 @@
 "use client"
 
-import * as React from "react"
 import { useQuery } from "@tanstack/react-query"
 
 import { fetchOfferingTerms } from "@/lib/api"
@@ -12,10 +11,7 @@ export function useCurrentSemesterTerms(universitySlug: string | undefined, majo
     enabled: Boolean(universitySlug && majorSlug),
   })
 
-  const terms = React.useMemo(
-    () => [...(query.data ?? [])].sort((a, b) => a.termCode.localeCompare(b.termCode)),
-    [query.data]
-  )
+  const terms = [...(query.data ?? [])].sort((a, b) => a.termCode.localeCompare(b.termCode))
 
   return { query, terms }
 }

@@ -32,12 +32,16 @@ export function useBootstrapSafetyTimeout(
 // actual safety timeout with setVisible
 export function useBootstrapSafetyTimeoutWithVisible(
   visible: boolean,
+  gated: boolean,
   setVisible: (v: boolean) => void,
   router: { replace: (url: string) => void },
   pathnameRef: React.MutableRefObject<string>
 ) {
   React.useEffect(() => {
-    if (visible) return
+    // `gated` covers full-screen gates (e.g. the web-login widget) — the
+    // splash is intentionally paused there, so the timeout must not fire
+    // and force-dismiss it mid-gate. Derived at the call site, no setState.
+    if (visible || gated) return
     const t = setTimeout(() => {
       if (!visible) {
         setVisible(true)
@@ -45,5 +49,5 @@ export function useBootstrapSafetyTimeoutWithVisible(
       }
     }, 12_000)
     return () => clearTimeout(t)
-  }, [visible, setVisible, router, pathnameRef])
+  }, [visible, gated, setVisible, router, pathnameRef])
 }

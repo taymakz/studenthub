@@ -1,6 +1,5 @@
 "use client"
 
-import { useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 
 import { fetchProfessorVotes, fetchProfessors, fetchVote } from "@/lib/api"
@@ -12,10 +11,7 @@ export function useProfessorSlug(uni: string, major: string, professorName: stri
     queryFn: async () => (await fetchProfessors(uni, major)).data.professors,
     enabled: open,
   })
-  const slug = useMemo(
-    () => slugQuery.data?.find((p) => p.name === professorName)?.slug ?? null,
-    [slugQuery.data, professorName]
-  )
+  const slug = slugQuery.data?.find((p) => p.name === professorName)?.slug ?? null
   return { slugQuery, slug }
 }
 
@@ -38,15 +34,11 @@ export function useOwnVote(slug: string | null, open: boolean) {
 
 export function useProfessorCourses(professorName: string, currentCourseIndex?: string | null) {
   const otherOfferings = useProfileStore((s) => s.offerings)
-  return useMemo(
-    () =>
-      otherOfferings.filter((o) => {
-        const name =
-          typeof o.professor === "string"
-            ? o.professor
-            : (o.professor as { fa?: string } | null)?.fa
-        return name === professorName && o.index !== currentCourseIndex
-      }),
-    [otherOfferings, professorName, currentCourseIndex]
-  )
+  return otherOfferings.filter((o) => {
+    const name =
+      typeof o.professor === "string"
+        ? o.professor
+        : (o.professor as { fa?: string } | null)?.fa
+    return name === professorName && o.index !== currentCourseIndex
+  })
 }
