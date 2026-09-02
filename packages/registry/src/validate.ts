@@ -314,12 +314,12 @@ export function validateRegistry(): {
               "offerings new.json"
             )
             if (doc) {
-              if (doc.year !== Number(yearName))
+              if (doc.year != null && doc.year !== Number(yearName))
                 problem(
                   newPath,
                   `doc.year "${doc.year}" != folder "${yearName}"`
                 )
-              if (doc.semester !== semester)
+              if (doc.semester != null && doc.semester !== semester)
                 problem(
                   newPath,
                   `doc.semester "${doc.semester}" != folder "${semName}"`
@@ -336,12 +336,12 @@ export function validateRegistry(): {
               "offerings old.json"
             )
             if (prev) {
-              if (prev.year !== Number(yearName))
+              if (prev.year != null && prev.year !== Number(yearName))
                 problem(
                   oldPath,
                   `doc.year "${prev.year}" != folder "${yearName}"`
                 )
-              if (prev.semester !== semester)
+              if (prev.semester != null && prev.semester !== semester)
                 problem(
                   oldPath,
                   `doc.semester "${prev.semester}" != folder "${semName}"`
