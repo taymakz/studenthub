@@ -1,5 +1,7 @@
 "use client"
 
+import * as React from "react"
+
 import { Badge } from "@workspace/ui/components/badge"
 
 import { PoolImportEmptyState } from "@/components/pool-import"
