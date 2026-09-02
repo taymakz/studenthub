@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useSpring } from "motion/react"
+import { m, useSpring } from "motion/react"
 import { useEffect } from "react"
 import { type SpringConfig, useChartConfig } from "../chart-config-context"
 import { chartCssVars } from "../chart-context"
@@ -128,7 +128,7 @@ function TooltipIndicatorInner({
   if (dashed) {
     const strokeWidth = Math.max(1, pixelWidth)
     return animate ? (
-      <motion.line
+      <m.line
         stroke={indicatorFill}
         strokeDasharray={strokeDasharray}
         strokeWidth={strokeWidth}
@@ -152,7 +152,7 @@ function TooltipIndicatorInner({
 
   if (!fadeSides.any) {
     return animate ? (
-      <motion.rect
+      <m.rect
         fill={indicatorFill}
         height={height}
         width={pixelWidth}
@@ -186,7 +186,7 @@ function TooltipIndicatorInner({
         </linearGradient>
       </defs>
       {animate ? (
-        <motion.rect
+        <m.rect
           fill={`url(#${gradientId})`}
           height={height}
           width={pixelWidth}

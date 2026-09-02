@@ -21,18 +21,39 @@ import { useProfileStore } from "@/stores/profile-store"
 import { useProfileChart } from "./use-profile-chart"
 import { FailedSkeleton } from "./section-skeleton"
 
+function CourseChip({
+  c,
+  isFailed,
+  onToggle,
+}: {
+  c: ChartCourseItem
+  isFailed: boolean
+  onToggle: (name: string) => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onToggle(c.name)}
+      className={cn(
+        "cursor-pointer rounded-md border px-3 py-2 text-start text-sm font-medium transition-all duration-300",
+        isFailed && "border-warning bg-warning/10 text-warning"
+      )}
+    >
+      <p>{c.name}</p>
+      <p className="text-muted-foreground">{c.units} واحد</p>
+    </button>
+  )
+}
+
 export function FailedCourses() {
   const { pool, isLoading, isError, complete } = useProfileChart()
   const failed = useProfileStore((s) => s.failed)
   const passed = useProfileStore((s) => s.passed)
-  const failedNames = useMemo(() => failed.map((f) => f.courseName), [failed])
-  const passedNames = useMemo(
-    () => new Set(passed.map((p) => p.courseName)),
-    [passed]
-  )
+  const failedNames = failed.map((f) => f.courseName)
+  const passedNames = new Set(passed.map((p) => p.courseName))
   const store = useProfileStore.getState
 
-  const [selected, setSelected] = useState<string[]>([])
+  const [selected, setSelected] = useState<string[]>(failedNames)
   const [search, setSearch] = useState("")
   const [open, setOpen] = useState(false)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
@@ -42,27 +63,25 @@ export function FailedCourses() {
     selectedRef.current = selected
   }, [selected])
 
-  useEffect(() => {
-    // Keep the local selection in sync with the store so that failed courses added
-    // elsewhere (e.g. adding a failed pre-req from the courses conflict drawer) are
-    // reflected reactively here — instead of being seeded only once at hydration.
-
-
+  // Keep the local selection in sync with the store so that failed courses
+  // added elsewhere (e.g. adding a failed pre-req from the courses conflict
+  // drawer) are reflected reactively here. Render-phase adjustment per
+  // react.dev "you might not need an effect" — no setState-in-effect.
+  const [prevFailedNames, setPrevFailedNames] = useState(failedNames)
+  if (prevFailedNames !== failedNames) {
+    setPrevFailedNames(failedNames)
     setSelected(failedNames)
-  }, [failedNames])
+  }
 
-  const toggle = useCallback(
-    (name: string) => {
-      const cur = selectedRef.current
-      const next = cur.includes(name)
-        ? cur.filter((n) => n !== name)
-        : [...cur, name]
-      setSelected(next)
-      if (debounceRef.current) clearTimeout(debounceRef.current)
-      debounceRef.current = setTimeout(() => store().setFailed(next), 1200)
-    },
-    [store]
-  )
+  const toggle = (name: string) => {
+    const cur = selectedRef.current
+    const next = cur.includes(name)
+      ? cur.filter((n) => n !== name)
+      : [...cur, name]
+    setSelected(next)
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(() => store().setFailed(next), 1200)
+  }
 
   useEffect(() => {
     return () => {
@@ -70,59 +89,36 @@ export function FailedCourses() {
     }
   }, [])
 
-  const flush = useCallback(() => {
+  const flush = () => {
     if (debounceRef.current) clearTimeout(debounceRef.current)
     store().setFailed(selectedRef.current)
-  }, [store])
+  }
 
   // Exclude passed courses from the failed pool (like the old widget).
-  const failedPool = useMemo(
-    () => pool.filter((c) => !passedNames.has(c.name)),
-    [pool, passedNames]
-  )
+  const failedPool = pool.filter((c) => !passedNames.has(c.name))
 
-  const failedNamesSet = useMemo(() => new Set(selected), [selected])
+  const failedNamesSet = new Set(selected)
 
-  const filtered = useMemo(() => {
+  const filtered = (() => {
     const term = search.trim().toLowerCase()
     if (!term) return failedPool
     const words = term.split(/\s+/)
     return failedPool.filter((c) =>
       words.every((w) => c.name.toLowerCase().includes(w))
     )
-  }, [failedPool, search])
+  })()
 
-  const terms = useMemo(() => uniqueTerms(filtered), [filtered])
-  const moaref = useMemo(() => filtered.filter((c) => c.isMoaref), [filtered])
-  const unknown = useMemo(() => filtered.filter((c) => c.isUnknown), [filtered])
-  const termCourses = useCallback(
-    (term: number) =>
-      filtered.filter(
-        (c) => !c.isMoaref && !c.isUnknown && c.termNumber === term
-      ),
-    [filtered]
-  )
+  const terms = uniqueTerms(filtered)
+  const moaref = filtered.filter((c) => c.isMoaref)
+  const unknown = filtered.filter((c) => c.isUnknown)
+  const termCourses = (term: number) =>
+    filtered.filter(
+      (c) => !c.isMoaref && !c.isUnknown && c.termNumber === term
+    )
 
   if (!complete || isError) return null
   if (isLoading) {
     return <FailedSkeleton />
-  }
-
-  const CourseChip = ({ c }: { c: ChartCourseItem }) => {
-    const isFailed = failedNamesSet.has(c.name)
-    return (
-      <button
-        type="button"
-        onClick={() => toggle(c.name)}
-        className={cn(
-          "cursor-pointer rounded-md border px-3 py-2 text-start text-sm font-medium transition-all duration-300",
-          isFailed && "border-warning bg-warning/10 text-warning"
-        )}
-      >
-        <p>{c.name}</p>
-        <p className="text-muted-foreground">{c.units} واحد</p>
-      </button>
-    )
   }
 
   return (
@@ -191,7 +187,12 @@ export function FailedCourses() {
                     </h3>
                     <div className="flex flex-wrap gap-2 rounded-md border bg-card p-2">
                       {termCourses(term).map((c) => (
-                        <CourseChip key={`${term}-${c.name}`} c={c} />
+                        <CourseChip
+                          key={`${term}-${c.name}`}
+                          c={c}
+                          isFailed={failedNamesSet.has(c.name)}
+                          onToggle={toggle}
+                        />
                       ))}
                     </div>
                   </div>
@@ -203,7 +204,12 @@ export function FailedCourses() {
                     </h3>
                     <div className="flex flex-wrap gap-2 rounded-md border bg-card p-2">
                       {moaref.map((c) => (
-                        <CourseChip key={`m-${c.name}`} c={c} />
+                        <CourseChip
+                          key={`m-${c.name}`}
+                          c={c}
+                          isFailed={failedNamesSet.has(c.name)}
+                          onToggle={toggle}
+                        />
                       ))}
                     </div>
                   </div>
@@ -215,7 +221,12 @@ export function FailedCourses() {
                     </h3>
                     <div className="flex flex-wrap gap-2 rounded-md border bg-card p-2">
                       {unknown.map((c) => (
-                        <CourseChip key={`u-${c.name}`} c={c} />
+                        <CourseChip
+                          key={`u-${c.name}`}
+                          c={c}
+                          isFailed={failedNamesSet.has(c.name)}
+                          onToggle={toggle}
+                        />
                       ))}
                     </div>
                   </div>

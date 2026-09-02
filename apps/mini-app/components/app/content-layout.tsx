@@ -1,7 +1,7 @@
 "use client"
 
 import { useRef } from "react"
-import { motion, useScroll, useTransform } from "motion/react"
+import { m, useScroll, useTransform } from "motion/react"
 import { cn } from "@workspace/ui/lib/utils"
 
 /**
@@ -40,20 +40,20 @@ export default function ContentLayout({
       )}
     >
       {/* Thumb */}
-      <motion.div
+      <m.div
         className="sticky top-0 z-10 flex w-full items-center justify-center bg-secondary py-2.5"
         style={{
           borderTopLeftRadius: borderRadius,
           borderTopRightRadius: borderRadius,
         }}
       >
-        <motion.span
+        <m.span
           className="block h-1 rounded-full bg-foreground/50"
           style={{
             width: spanWidth,
           }}
         />
-      </motion.div>
+      </m.div>
       {children}
     </div>
   )

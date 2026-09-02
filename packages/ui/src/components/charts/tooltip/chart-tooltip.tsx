@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useSpring } from "motion/react"
+import { m, useSpring } from "motion/react"
 import { memo, useEffect, useMemo, useState } from "react"
 import { createPortal } from "react-dom"
 import {
@@ -415,7 +415,7 @@ function DatePillTrackerInner({
   }, [animatedX, visible])
 
   return (
-    <motion.div
+    <m.div
       className="pointer-events-none absolute z-50"
       style={{
         left: discreteInteraction ? xWithMargin : animatedX,
@@ -428,7 +428,7 @@ function DatePillTrackerInner({
         labels={labels}
         visible={visible}
       />
-    </motion.div>
+    </m.div>
   )
 }
 

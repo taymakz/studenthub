@@ -55,6 +55,20 @@ export function extractDate(
 
 /* ─── Persian date math (jalaali-js core, trimmed) — for «چند روز مونده» ─── */
 
+// Built once — constructing an Intl formatter per call is expensive.
+const PERSIAN_DATE_PARTS_FORMATTER = new Intl.DateTimeFormat(
+  "en-US-u-ca-persian",
+  { year: "numeric", month: "numeric", day: "numeric" }
+)
+const PERSIAN_LONG_DATE_FORMATTER = new Intl.DateTimeFormat(
+  "fa-IR-u-ca-persian",
+  { weekday: "long", month: "long", day: "numeric" }
+)
+const PERSIAN_WEEKDAY_FORMATTER = new Intl.DateTimeFormat(
+  "en-US-u-ca-persian",
+  { weekday: "long" }
+)
+
 function div(a: number, b: number): number {
   return ~~(a / b)
 }
@@ -108,11 +122,7 @@ function j2d(jy: number, jm: number, jd: number): number {
 
 /** Today's Persian date as "YYYY/MM/DD" (Latin digits). */
 export function getCurrentDatePersian(): string {
-  const parts = new Intl.DateTimeFormat("en-US-u-ca-persian", {
-    year: "numeric",
-    month: "numeric",
-    day: "numeric",
-  }).formatToParts(new Date())
+  const parts = PERSIAN_DATE_PARTS_FORMATTER.formatToParts(new Date())
   const get = (t: string) => parts.find((p) => p.type === t)?.value ?? "1"
   const y = get("year").replace(/\D/g, "")
   const m = get("month").replace(/\D/g, "")
@@ -152,11 +162,7 @@ export function formatPersianDateLong(dateStr: string): string | null {
   const jdn = j2d(jy, jm, jd)
   const jsDate = new Date((jdn - 2440587.5) * 86_400_000)
   // Format back as Persian calendar (weekday + month + day)
-  return new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-  }).format(jsDate)
+  return PERSIAN_LONG_DATE_FORMATTER.format(jsDate)
 }
 
 /** Weekday name N days from today (N=0 → today's weekday) - synced with extension canonical. */
@@ -171,10 +177,8 @@ export function persianWeekDayFromDays(days: number): string | null {
     "جمعه",
   ]
   const today = getCurrentDatePersian()
-  // Jan 1 2025 was a دوشنبه in the Persian calendar anchor — derive today's index instead:
-  const fmt = new Intl.DateTimeFormat("en-US-u-ca-persian", {
-    weekday: "long",
-  }).format(new Date())
+  // Derive today's weekday index from the Persian calendar directly:
+  const fmt = PERSIAN_WEEKDAY_FORMATTER.format(new Date())
   const norm = fmt.replace(/[\s\u200c]/g, "")
   const todayIdx = order.findIndex((d) => d.replace(/[\s\u200c]/g, "") === norm)
   if (todayIdx < 0) return null

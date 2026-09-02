@@ -1,5 +1,4 @@
 "use client"
-/* eslint-disable react-hooks/exhaustive-deps */
 
 import { useEffect, useRef } from "react"
 
@@ -33,67 +32,43 @@ export default function Snowfall({
   const canvasContainerRef = useRef<HTMLDivElement>(null)
   const contextRef = useRef<CanvasRenderingContext2D | null>(null)
   const snowflakesRef = useRef<Snowflake[]>([])
-  const animationFrameRef = useRef<number | undefined>(undefined)
 
-  const createSnowflake = (
-    canvasWidth: number,
-    canvasHeight: number
-  ): Snowflake => {
-    return {
-      x: Math.random() * canvasWidth,
-      y: Math.random() * canvasHeight,
-      size: Math.random() * (maxRadius - minRadius) + minRadius,
-      alpha: Math.random() * 0.5 + 0.5,
-      dx: (Math.random() - 0.5) * 0.5,
-      dy: Math.random() * 0.25 + speed,
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    contextRef.current = canvas.getContext("2d")
+
+    const resizeCanvas = () => {
+      const container = canvasContainerRef.current
+      const context = contextRef.current
+      if (!container || !context) return
+
+      const pixelRatio = window.devicePixelRatio || 1
+      const width = container.offsetWidth
+      const height = container.offsetHeight
+
+      canvas.width = width * pixelRatio
+      canvas.height = height * pixelRatio
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      context.scale(pixelRatio, pixelRatio)
+
+      // Recreate snowflakes
+      snowflakesRef.current = []
+      for (let i = 0; i < quantity; i++) {
+        snowflakesRef.current.push({
+          x: Math.random() * width,
+          y: Math.random() * height,
+          size: Math.random() * (maxRadius - minRadius) + minRadius,
+          alpha: Math.random() * 0.5 + 0.5,
+          dx: (Math.random() - 0.5) * 0.5,
+          dy: Math.random() * 0.25 + speed,
+        })
+      }
     }
-  }
 
-  const resizeCanvas = () => {
-    if (
-      !canvasContainerRef.current ||
-      !canvasRef.current ||
-      !contextRef.current
-    )
-      return
-
-    const pixelRatio = window.devicePixelRatio || 1
-    const width = canvasContainerRef.current.offsetWidth
-    const height = canvasContainerRef.current.offsetHeight
-
-    canvasRef.current.width = width * pixelRatio
-    canvasRef.current.height = height * pixelRatio
-    canvasRef.current.style.width = `${width}px`
-    canvasRef.current.style.height = `${height}px`
-    contextRef.current.scale(pixelRatio, pixelRatio)
-
-    // Recreate snowflakes
-    snowflakesRef.current = []
-    for (let i = 0; i < quantity; i++) {
-      snowflakesRef.current.push(createSnowflake(width, height))
-    }
-  }
-
-  const drawSnowflake = (
-    snowflake: Snowflake,
-    r: number,
-    g: number,
-    b: number
-  ) => {
-    if (!contextRef.current) return
-
-    const { x, y, size, alpha } = snowflake
-    contextRef.current.beginPath()
-    contextRef.current.arc(x, y, size, 0, Math.PI * 2)
-    contextRef.current.fillStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`
-    contextRef.current.fill()
-  }
-
-  const animate = () => {
-    if (!contextRef.current || !canvasRef.current) return
-
-    const width = canvasRef.current.width / (window.devicePixelRatio || 1)
-    const height = canvasRef.current.height / (window.devicePixelRatio || 1)
+    resizeCanvas()
 
     const cleanHex = color.replace(/^#/, "").padStart(6, "0")
     const bigint = parseInt(cleanHex, 16)
@@ -101,36 +76,43 @@ export default function Snowfall({
     const g = (bigint >> 8) & 255
     const b = bigint & 255
 
-    contextRef.current.clearRect(0, 0, width, height)
+    let animationFrame: number | undefined
 
-    snowflakesRef.current.forEach((snowflake) => {
-      snowflake.x += snowflake.dx
-      snowflake.y += snowflake.dy
+    const animate = () => {
+      const context = contextRef.current
+      if (!context || !canvasRef.current) return
 
-      if (snowflake.y > height) {
-        snowflake.y = -snowflake.size
-        snowflake.x = Math.random() * width
-      }
+      const width = canvasRef.current.width / (window.devicePixelRatio || 1)
+      const height = canvasRef.current.height / (window.devicePixelRatio || 1)
 
-      drawSnowflake(snowflake, r, g, b)
-    })
+      context.clearRect(0, 0, width, height)
 
-    animationFrameRef.current = requestAnimationFrame(animate)
-  }
+      snowflakesRef.current.forEach((snowflake) => {
+        snowflake.x += snowflake.dx
+        snowflake.y += snowflake.dy
 
-  useEffect(() => {
-    if (!canvasRef.current) return
+        if (snowflake.y > height) {
+          snowflake.y = -snowflake.size
+          snowflake.x = Math.random() * width
+        }
 
-    contextRef.current = canvasRef.current.getContext("2d")
-    resizeCanvas()
+        context.beginPath()
+        context.arc(snowflake.x, snowflake.y, snowflake.size, 0, Math.PI * 2)
+        context.fillStyle = `rgba(${r}, ${g}, ${b}, ${snowflake.alpha})`
+        context.fill()
+      })
+
+      animationFrame = requestAnimationFrame(animate)
+    }
+
     animate()
 
     window.addEventListener("resize", resizeCanvas)
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
+      if (animationFrame !== undefined) {
+        cancelAnimationFrame(animationFrame)
       }
     }
   }, [color, quantity, speed, maxRadius, minRadius])

@@ -8,17 +8,19 @@ const SEMESTER_ORDER: Record<Semester, 1 | 2 | 3> = {
   SUMMER: 3,
 }
 
+// Built once — constructing an Intl formatter per call is expensive.
+const JALALI_PARTS_FORMATTER = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
+  year: "numeric",
+  month: "numeric",
+  numberingSystem: "latn",
+})
+
 export function formatTermCode(year: number, semester: Semester): string {
   return `${String(year).slice(-3)}${SEMESTER_ORDER[semester]}`
 }
 
 export function getCurrentJalali(): { year: number; month: number } {
-  const fmt = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
-    year: "numeric",
-    month: "numeric",
-    numberingSystem: "latn",
-  })
-  const parts = fmt.formatToParts(new Date())
+  const parts = JALALI_PARTS_FORMATTER.formatToParts(new Date())
   const year = Number(parts.find((p) => p.type === "year")?.value ?? "1404")
   const month = Number(parts.find((p) => p.type === "month")?.value ?? "1")
   return { year, month }
@@ -58,10 +60,12 @@ export function findNewerSemesterCode(
 ): string | null {
   if (!selectedCode || availableCodes.length === 0) return null
   const selected = Number(selectedCode)
-  const newer = availableCodes
-    .map(Number)
-    .filter((n) => Number.isFinite(n) && n > selected)
-    .sort((a, b) => a - b)
+  const newer: number[] = []
+  for (const code of availableCodes) {
+    const n = Number(code)
+    if (Number.isFinite(n) && n > selected) newer.push(n)
+  }
+  newer.sort((a, b) => a - b)
   return newer.length > 0 ? String(newer[newer.length - 1]) : null
 }
 

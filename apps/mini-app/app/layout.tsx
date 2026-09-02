@@ -10,7 +10,7 @@ import { SDKLaunchParamsProvider } from "@/providers/launch-params"
 import { ThemeProvider } from "@/providers/theme-provider"
 import { ToastProvider } from "@workspace/ui/components/toast"
 import { cn } from "@workspace/ui/lib/utils"
-import { TopRedirect } from "@/components/app/top-redirect"
+import { MotionProvider } from "@/providers/motion-provider"
 
 const vazirmatn = Vazirmatn({
   subsets: ["arabic"],
@@ -20,7 +20,21 @@ const vazirmatn = Vazirmatn({
   display: "swap",
 })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://student-hub.ir"
+const FALLBACK_SITE_URL = "https://student-hub.ir"
+
+/** Safe wrapper: a malformed NEXT_PUBLIC_SITE_URL would otherwise make
+    `new URL` throw at module init and crash EVERY route (root layout). */
+function safeSiteUrl(raw: string): URL {
+  try {
+    return new URL(raw)
+  } catch {
+    return new URL(FALLBACK_SITE_URL)
+  }
+}
+
+const siteUrl = safeSiteUrl(
+  process.env.NEXT_PUBLIC_SITE_URL ?? FALLBACK_SITE_URL
+)
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -133,12 +147,15 @@ export default function RootLayout({
             Iranian filtering. beforeInteractive guarantees it exists before
             SDKProvider's init(). */}
         <Script src="/telegram.js" strategy="beforeInteractive" />
-        <TopRedirect />
         <SDKProvider>
           <SDKLaunchParamsProvider>
             <ThemeProvider>
               <TanstackQueryProvider>
-                <ToastProvider position="top-center">{children}</ToastProvider>
+                <MotionProvider>
+                  <ToastProvider position="top-center">
+                    {children}
+                  </ToastProvider>
+                </MotionProvider>
               </TanstackQueryProvider>
             </ThemeProvider>
           </SDKLaunchParamsProvider>

@@ -525,22 +525,18 @@ export function saveVote(input: VoteInput) {
 /* ─── Course students (همکلاسی‌ها) ──────────────────────────────── */
 
 export interface CourseStudent {
-  id: number
   firstName: string
   lastName: string | null
-  username: string | null
   photoUrl: string | null
-  visibleInCourseLists: boolean
-  termNumber: number | null
-  gender: "MALE" | "FEMALE" | null
-  createdAt: string
 }
 
 export function fetchCourseStudents(params?: {
+  courseIndex?: string
   page?: number
   limit?: number
 }) {
   const qs = new URLSearchParams()
+  if (params?.courseIndex) qs.set("courseIndex", params.courseIndex)
   if (params?.page) qs.set("page", String(params.page))
   if (params?.limit) qs.set("limit", String(params.limit))
   const q = qs.toString()

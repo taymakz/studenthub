@@ -31,13 +31,16 @@ export async function loginWithWidget(
     cache: "no-store",
     credentials: "include",
   })
+  if (!res.ok) {
+    const err = (await res.json().catch(() => null)) as { message?: string } | null
+    throw new Error(err?.message ?? "احراز هویت ناموفق بود")
+  }
   const json = (await res.json().catch(() => null)) as {
     success?: boolean
     data?: { token?: string }
-    message?: string
   } | null
-  if (!res.ok || !json?.success || !json?.data?.token) {
-    throw new Error(json?.message ?? "احراز هویت ناموفق بود")
+  if (!json?.success || !json?.data?.token) {
+    throw new Error("احراز هویت ناموفق بود")
   }
   const token = json.data.token
   setWebToken(token)
@@ -52,6 +55,7 @@ export async function fetchTelegramConfig(): Promise<{
     cache: "no-store",
     credentials: "include",
   })
+  if (!res.ok) return { botUsername: "", clientId: "" }
   const json = (await res.json().catch(() => null)) as {
     success?: boolean
     data?: { botUsername?: string; clientId?: string }

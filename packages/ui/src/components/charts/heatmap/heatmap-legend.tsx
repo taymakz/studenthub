@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "motion/react"
+import { m } from "motion/react"
 import { memo, useCallback } from "react"
 import { cn } from "@/lib/utils"
 import {
@@ -179,7 +179,7 @@ export const HeatmapLegend = memo(function HeatmapLegend({
             const style = levelStyles[level]
 
             return (
-              <motion.span
+              <m.span
                 animate={{
                   opacity: hoverStyle.opacity,
                   scale: hoverStyle.scale,
@@ -201,7 +201,7 @@ export const HeatmapLegend = memo(function HeatmapLegend({
                   level={level}
                   style={style}
                 />
-              </motion.span>
+              </m.span>
             )
           })}
         </div>

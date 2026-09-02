@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { CloudRain, Snowflake, X, CircleCheck, Sparkles } from "lucide-react"
+import { CloudRain, Snowflake, X, Sparkles } from "lucide-react"
 
 import {
   Drawer,
@@ -13,7 +13,7 @@ import {
   DrawerTrigger,
 } from "@workspace/ui/components/drawer"
 
-import { SettingsRow } from "@/components/app/theme/settings-row"
+import { SettingsRow, SettingsOptionRow } from "@/components/app/theme/settings-row"
 import { useUIEffect } from "@/hooks/use-ui-effect"
 
 export default function Effects() {
@@ -48,27 +48,16 @@ export default function Effects() {
               { value: "snow" as const, label: "برف", Icon: Snowflake },
               { value: "rain" as const, label: "باران", Icon: CloudRain },
             ].map(({ value, label, Icon }) => (
-              <button
+              <SettingsOptionRow
                 key={value}
-                type="button"
-                onClick={() => {
+                icon={Icon}
+                label={label}
+                selected={effect === value}
+                onSelect={() => {
                   setEffect(value)
                   setOpen(false)
                 }}
-                className="flex items-center px-4 py-5 text-start hover:bg-muted/50"
-              >
-                <span className="flex w-full items-center justify-between">
-                  <span className="flex items-center gap-2">
-                    <Icon className="size-5 opacity-80" />
-                    <p className="text-sm">{label}</p>
-                  </span>
-                  {effect === value ? (
-                    <CircleCheck className="size-5 text-success" />
-                  ) : (
-                    <span className="text-sm opacity-80">انتخاب</span>
-                  )}
-                </span>
-              </button>
+              />
             ))}
           </div>
         </DrawerPanel>

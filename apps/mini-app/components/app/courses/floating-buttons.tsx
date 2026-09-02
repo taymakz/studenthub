@@ -60,14 +60,13 @@ export function FloatingButtons({
           className="fixed bottom-22 z-20 transition-transform duration-150 ease-out"
           style={{
             right: "1.5rem",
-            willChange: "transform",
           }}
         >
-          <div
-            className="relative flex h-10 cursor-pointer items-center gap-2 rounded-xl border bg-background px-2 transition-all duration-150 ease-out"
+          <button
+            type="button"
+            className="relative flex h-10 w-full cursor-pointer items-center gap-2 rounded-xl border bg-background px-2 text-start transition-[width] duration-150 ease-out"
             style={{
               width: isScrollingDown ? "42px" : "105px",
-              willChange: "width",
             }}
             onClick={onOpenNoted}
           >
@@ -81,7 +80,7 @@ export function FloatingButtons({
                 لیست من
               </span>
             )}
-          </div>
+          </button>
         </div>
       )}
 
@@ -91,14 +90,13 @@ export function FloatingButtons({
           className="fixed bottom-34 z-20 transition-transform duration-150 ease-out"
           style={{
             right: "1.5rem",
-            willChange: "transform",
           }}
         >
-          <div
-            className="relative flex h-10 cursor-pointer items-center gap-2 rounded-xl border bg-background px-2 transition-all duration-150 ease-out"
+          <button
+            type="button"
+            className="relative flex h-10 w-full cursor-pointer items-center gap-2 rounded-xl border bg-background px-2 text-start transition-[width] duration-150 ease-out"
             style={{
               width: isScrollingDown ? "42px" : "105px",
-              willChange: "width",
             }}
             onClick={onOpenConflicts}
           >
@@ -116,20 +114,21 @@ export function FloatingButtons({
                 تداخلات
               </span>
             )}
-          </div>
+          </button>
         </div>
       )}
 
       {/* Scroll to Top Button - CSS transition for smooth feel */}
       <div
-        className="fixed bottom-22 left-4 z-20 transition-all duration-200 ease-out"
+        className="fixed bottom-22 left-4 z-20 transition-[transform,opacity] duration-200 ease-out"
         style={{
           transform: showScrollTop ? "scale(1)" : "scale(0)",
           opacity: showScrollTop ? 1 : 0,
-          willChange: "transform, opacity",
         }}
       >
         <button
+          type="button"
+          aria-label="بازگشت به بالای صفحه"
           className="flex size-12 cursor-pointer items-center justify-center rounded-full border bg-background shadow-lg transition-transform duration-100 ease-out hover:bg-accent active:scale-95"
           onClick={() => window.scrollTo({ top: 0, behavior: "instant" })}
         >

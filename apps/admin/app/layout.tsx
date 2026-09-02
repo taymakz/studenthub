@@ -4,6 +4,7 @@ import { Vazirmatn } from "next/font/google"
 
 import "./globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { MotionProvider } from "@/components/motion-provider"
 import { DirectionProvider } from "@workspace/ui/components/direction"
 import { NuqsAdapter } from "nuqs/adapters/next/app"
 
@@ -62,17 +63,19 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: sidebarStateScript }} />
       </head>
       <body>
-        <NuqsAdapter>
-          <QueryProvider>
-            <AuthProvider>
-              <ThemeProvider>
-                <DirectionProvider direction="rtl">
-                  {children}
-                </DirectionProvider>
-              </ThemeProvider>
-            </AuthProvider>
-          </QueryProvider>
-        </NuqsAdapter>
+        <MotionProvider>
+          <NuqsAdapter>
+            <QueryProvider>
+              <AuthProvider>
+                <ThemeProvider>
+                  <DirectionProvider direction="rtl">
+                    {children}
+                  </DirectionProvider>
+                </ThemeProvider>
+              </AuthProvider>
+            </QueryProvider>
+          </NuqsAdapter>
+        </MotionProvider>
       </body>
     </html>
   )

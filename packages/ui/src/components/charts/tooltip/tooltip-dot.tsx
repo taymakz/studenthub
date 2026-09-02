@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, useSpring, useTransform } from "motion/react"
+import { m, useSpring, useTransform } from "motion/react"
 import { type SpringConfig, useChartConfig } from "../chart-config-context"
 import { chartCssVars } from "../chart-context"
 
@@ -66,7 +66,7 @@ function AnimatedRingDot({
   animatedY.set(y)
 
   return (
-    <motion.rect
+    <m.rect
       fill={fill}
       height={side}
       rx={rx}
@@ -160,7 +160,7 @@ export function TooltipDot({
   }
 
   return (
-    <motion.circle
+    <m.circle
       cx={animatedX}
       cy={animatedY}
       fill={fill}

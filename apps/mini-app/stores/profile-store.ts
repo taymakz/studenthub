@@ -1,6 +1,7 @@
 "use client"
 
 import { create } from "zustand"
+import { useShallow } from "zustand/react/shallow"
 
 import {
   addNoted,
@@ -662,25 +663,33 @@ export const useProfileStore = create<ProfileStore>((set, get) => ({
   },
 }))
 
-/** Convenience selectors used by widgets. */
+/** Convenience selectors used by widgets. The selectors build collections, so
+    they are wrapped in useShallow — Zustand v5 compares the snapshot contents
+    instead of the (always-fresh) Set reference. */
 export function useProfilePassedNames() {
-  return useProfileStore((s) => new Set(s.passed.map((p) => p.courseName)))
+  return useProfileStore(
+    useShallow((s) => new Set(s.passed.map((p) => p.courseName)))
+  )
 }
 export function useProfileFailedNames() {
-  return useProfileStore((s) => new Set(s.failed.map((f) => f.courseName)))
+  return useProfileStore(
+    useShallow((s) => new Set(s.failed.map((f) => f.courseName)))
+  )
 }
 export function useProfileNotedIndexes() {
-  return useProfileStore((s) => {
-    const termCode = s.termCode
-    const parsed = termCode ? parseTermCode(termCode) : null
-    const year = parsed?.year != null ? String(parsed.year) : null
-    const semester = parsed?.semester ?? null
-    return new Set(
-      s.noted
-        .filter(
-          (n) => !n.isDeleted && n.year === year && n.semester === semester
-        )
-        .map((n) => n.courseIndex)
-    )
-  })
+  return useProfileStore(
+    useShallow((s) => {
+      const termCode = s.termCode
+      const parsed = termCode ? parseTermCode(termCode) : null
+      const year = parsed?.year != null ? String(parsed.year) : null
+      const semester = parsed?.semester ?? null
+      const indexes = new Set<string>()
+      for (const n of s.noted) {
+        if (!n.isDeleted && n.year === year && n.semester === semester) {
+          indexes.add(n.courseIndex)
+        }
+      }
+      return indexes
+    })
+  )
 }

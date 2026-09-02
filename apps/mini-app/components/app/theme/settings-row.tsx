@@ -1,4 +1,4 @@
-import { ChevronLeft } from "lucide-react"
+import { ChevronLeft, CircleCheck } from "lucide-react"
 
 import { cn } from "@workspace/ui/lib/utils"
 
@@ -41,6 +41,42 @@ export function SettingsRow({
         </span>
       </span>
       <ChevronLeft className="size-5 shrink-0 text-muted-foreground" />
+    </button>
+  )
+}
+
+/**
+ * Picker row for settings drawers (theme, effects, …): icon + label on the
+ * right, a check mark for the selected value or a muted «انتخاب» hint.
+ */
+export function SettingsOptionRow({
+  icon: Icon,
+  label,
+  selected,
+  onSelect,
+}: {
+  icon: React.ComponentType<{ className?: string }>
+  label: string
+  selected: boolean
+  onSelect: () => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      className="flex w-full cursor-pointer flex-row items-center px-4 py-5 text-start transition-colors hover:bg-muted/50 active:bg-muted"
+    >
+      <span className="flex w-full items-center justify-between">
+        <span className="flex items-center gap-2">
+          <Icon className="size-5 opacity-80" />
+          <p className="text-sm">{label}</p>
+        </span>
+        {selected ? (
+          <CircleCheck className="size-5 text-success" />
+        ) : (
+          <span className="text-sm opacity-80">انتخاب</span>
+        )}
+      </span>
     </button>
   )
 }

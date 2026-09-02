@@ -1,10 +1,37 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
+import { useMounted } from "@/hooks/use-mounted"
 import { getMaintenanceCanBypass, getMaintenanceReason } from "@/lib/request"
 import { useProfileStore } from "@/stores/profile-store"
+
+/** Re-probe /me and leave the page if maintenance cleared. Module-scope:
+    try/finally + navigation stay out of the Compiler's component graph. */
+async function runMaintenanceCheck(
+  router: { refresh: () => void },
+  onDone: () => void
+) {
+  try {
+    await useProfileStore.getState().refresh()
+    const s = useProfileStore.getState()
+    // If maintenance cleared (or bypass now valid), leave the page.
+    // Use hard navigation so AppBootstrap re-gates from "/".
+    if (!s.maintenance) {
+      // Clear any stale session flag that might keep us here
+      try {
+        sessionStorage.removeItem("sh_maintenance_reason")
+      } catch {}
+      window.location.assign("/")
+      return
+    }
+    // Still in maintenance — force a full revalidation of the route as well
+    router.refresh()
+  } finally {
+    onDone()
+  }
+}
 
 /**
  * Standalone maintenance route. AppBootstrap redirects here via client-side
@@ -20,12 +47,11 @@ export default function MaintenancePage() {
   const maintenanceCanBypass = useProfileStore((s) => s.maintenanceCanBypass)
   const [bypassing, setBypassing] = useState(false)
   const [checking, setChecking] = useState(false)
-  const [mounted, setMounted] = useState(false)
-  useEffect(() => setMounted(true), [])
+  const mounted = useMounted()
 
-  // If this page is ever reached via hard refresh without going through
-  // TopRedirect (e.g. direct link), ensure we actually probe /me — the store
-  // starts unhydrated and would otherwise show stale sessionStorage forever.
+  // If this page is ever reached via hard refresh (e.g. direct link), ensure
+  // we actually probe /me — the store starts unhydrated and would otherwise
+  // show stale sessionStorage forever.
   useEffect(() => {
     if (!hydrated && !checking) {
       void useProfileStore.getState().refresh()
@@ -54,28 +80,11 @@ export default function MaintenancePage() {
     window.location.assign("/")
   }
 
-  const handleCheckAgain = useCallback(async () => {
+  const handleCheckAgain = () => {
     if (checking) return
     setChecking(true)
-    try {
-      await useProfileStore.getState().refresh()
-      const s = useProfileStore.getState()
-      // If maintenance cleared (or bypass now valid), leave the page.
-      // Use hard navigation so TopRedirect + AppBootstrap re-gate from "/".
-      if (!s.maintenance) {
-        // Clear any stale session flag that might keep us here
-        try {
-          sessionStorage.removeItem("sh_maintenance_reason")
-        } catch {}
-        window.location.assign("/")
-        return
-      }
-      // Still in maintenance — force a full revalidation of the route as well
-      router.refresh()
-    } finally {
-      setChecking(false)
-    }
-  }, [checking, router])
+    void runMaintenanceCheck(router, () => setChecking(false))
+  }
 
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-background px-6 py-16">

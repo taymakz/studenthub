@@ -1,7 +1,7 @@
 "use client"
 
 import type { Variants } from "motion/react"
-import { motion } from "motion/react"
+import { m } from "motion/react"
 import { memo } from "react"
 import { DEFAULT_CHART_ENTER_TRANSITION } from "./animation"
 
@@ -167,7 +167,7 @@ export function SeriesPointMarker({
 
   return (
     <g transform={`translate(${cx}, ${cy})`}>
-      <motion.g
+      <m.g
         animate="visible"
         initial="hidden"
         key={`${dataKey}-${index}-${revealEpoch}`}
@@ -182,7 +182,7 @@ export function SeriesPointMarker({
           stroke={stroke}
           strokeWidth={strokeWidth}
         />
-      </motion.g>
+      </m.g>
     </g>
   )
 }

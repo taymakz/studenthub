@@ -57,7 +57,8 @@ function Chip({
   children: React.ReactNode
 }) {
   return (
-    <div
+    <button
+      type="button"
       className={cn(
         "flex h-8 cursor-pointer items-center justify-center rounded-md border px-3 font-medium transition-all duration-300",
         active && "bg-primary text-primary-foreground"
@@ -65,7 +66,7 @@ function Chip({
       onClick={onClick}
     >
       {children}
-    </div>
+    </button>
   )
 }
 
@@ -160,6 +161,12 @@ export function FilterDrawer({
 
   const units = options.units.length ? options.units : ["1", "2", "3", "4", "6"]
 
+  // Constant-time lookups inside the loops below.
+  const selectedProfessors = new Set(filters.professors)
+  const selectedUnits = new Set(filters.units)
+  const selectedChartTerms = new Set(filters.chartTerms)
+  const selectedDays = new Set(filters.days)
+
   return (
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerPopup variant="inset" showBar>
@@ -207,17 +214,18 @@ export function FilterDrawer({
                       )}
                       <div className="grid grid-cols-2 gap-2">
                         {searchedProfessors.map((item) => (
-                          <div
+                          <button
+                            type="button"
                             key={item}
                             className={cn(
-                              "cursor-pointer rounded-md border px-3 py-2 text-sm transition-all duration-300",
-                              filters.professors.includes(item) &&
+                              "w-full cursor-pointer rounded-md border px-3 py-2 text-start text-sm transition-all duration-300",
+                              selectedProfessors.has(item) &&
                                 "bg-primary text-primary-foreground"
                             )}
                             onClick={() => toggle("professors", item)}
                           >
                             {item || "بدون نام"}
-                          </div>
+                          </button>
                         ))}
                       </div>
                     </div>
@@ -234,7 +242,7 @@ export function FilterDrawer({
               {units.map((v) => (
                 <Chip
                   key={v}
-                  active={filters.units.includes(v)}
+                  active={selectedUnits.has(v)}
                   onClick={() => toggle("units", v)}
                 >
                   {v}
@@ -251,7 +259,7 @@ export function FilterDrawer({
                 {options.chartTerms.map((t) => (
                   <Chip
                     key={t}
-                    active={filters.chartTerms.includes(t)}
+                    active={selectedChartTerms.has(t)}
                     onClick={() => toggle("chartTerms", t)}
                   >
                     {t}
@@ -268,7 +276,7 @@ export function FilterDrawer({
               {DAYS.map((d) => (
                 <Chip
                   key={d}
-                  active={filters.days.includes(d)}
+                  active={selectedDays.has(d)}
                   onClick={() => toggle("days", d)}
                 >
                   {d}

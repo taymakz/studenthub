@@ -1,31 +1,18 @@
 "use client"
 
-import { useEffect, useMemo, useState } from "react"
-import { Copy, Check, Eye, PencilLine, Trash2 } from "lucide-react"
-
-import {
-  Drawer,
-  DrawerPopup,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerDescription,
-  DrawerPanel,
-} from "@workspace/ui/components/drawer"
+import { useEffect, useState } from "react"
 import { Button } from "@workspace/ui/components/button"
-import { toastManager } from "@workspace/ui/components/toast"
+import { Drawer, DrawerPopup, DrawerHeader, DrawerTitle, DrawerDescription, DrawerPanel } from "@workspace/ui/components/drawer"
 import { cn } from "@workspace/ui/lib/utils"
 
 import type { Offering } from "@/lib/api"
 import { CourseCard } from "./course-card"
 import { CourseActionDrawer } from "./course-action-drawer"
-import { extractWeekday } from "@/components/app/profile/schedule-util"
-import { courseLine, escapeHtml } from "./sections"
-import {
-  GptDrawer,
-  loadGpt,
-  gptToUnits,
-  gptToLabel,
-} from "@/components/app/profile/gpt-drawer"
+import { GptDrawer } from "@/components/app/profile/gpt-drawer"
+import { loadGpt, gptToUnits, gptToLabel } from "@/components/app/profile/gpt"
+import { useNotedSort } from "./noted/use-noted-sort"
+import { NotedExportDrawer } from "./noted/noted-export"
+import { ActionsDrawer, ConfirmAddPassed, ConfirmClear } from "./noted/noted-panels"
 
 export function NotedDrawer({
   open,
@@ -56,34 +43,19 @@ export function NotedDrawer({
   const [gptOpen, setGptOpen] = useState(false)
   const [gpt, setGpt] = useState<10 | 12 | 20 | null>(null)
 
-  useEffect(() => {
-    if (!open) return
-    setGpt(loadGpt())
-  }, [open])
+  // Re-read the stored GPT whenever the drawer opens — render-phase
+  // adjustment (react.dev "you might not need an effect") instead of a
+  // setState-in-effect that causes an extra render after paint.
+  const [prevOpen, setPrevOpen] = useState(open)
+  if (open !== prevOpen) {
+    setPrevOpen(open)
+    if (open) setGpt(loadGpt())
+  }
 
   const availableUnits = gptToUnits(gpt)
   const overLimit = availableUnits != null && totalUnits > availableUnits
   const gptLabel = gptToLabel(gpt)
-
-  const sorted = useMemo(() => {
-    const order = [
-      "شنبه",
-      "یکشنبه",
-      "دوشنبه",
-      "سه‌شنبه",
-      "چهارشنبه",
-      "پنجشنبه",
-      "جمعه",
-    ]
-    return [...notedOfferings].sort((a, b) => {
-      const da = order.indexOf(extractWeekday(a.classSchedule) ?? "")
-      const db = order.indexOf(extractWeekday(b.classSchedule) ?? "")
-      return (
-        (da < 0 ? 99 : da) - (db < 0 ? 99 : db) ||
-        (a.classSchedule ?? "").localeCompare(b.classSchedule ?? "")
-      )
-    })
-  }, [notedOfferings])
+  const sorted = useNotedSort(notedOfferings)
 
   return (
     <>
@@ -105,10 +77,11 @@ export function NotedDrawer({
             ) : (
               <>
                 {gptLabel && (
-                  <div
+                  <button
+                    type="button"
                     onClick={() => setGptOpen(true)}
                     className={cn(
-                      "mb-4 flex cursor-pointer items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors hover:opacity-80",
+                      "mb-4 flex w-full cursor-pointer items-center justify-center gap-2 rounded-md border px-3 py-2 text-sm transition-colors hover:opacity-80",
                       overLimit
                         ? "border-destructive/30 bg-destructive/5 text-destructive"
                         : "border-success/30 bg-success/5 text-success"
@@ -124,7 +97,7 @@ export function NotedDrawer({
                     >
                       {totalUnits}/{availableUnits} واحد
                     </span>
-                  </div>
+                  </button>
                 )}
                 <div className="mb-6 flex gap-3">
                   <Button
@@ -166,11 +139,9 @@ export function NotedDrawer({
                     <div key={o.index} onClick={(e) => e.stopPropagation()}>
                       <CourseCard
                         offering={o}
-                        isNoted
-                        isPassed={false}
-                        isNew={false}
                         viewMode={viewMode}
                         onSelect={setSelected}
+                        flags={{ noted: true, passed: false, new: false }}
                       />
                     </div>
                   ))}
@@ -201,299 +172,10 @@ export function NotedDrawer({
         }}
       />
 
-      {/* عملیات (nested inset) */}
-      <Drawer open={actionsOpen} onOpenChange={setActionsOpen}>
-        <DrawerPopup variant="inset" showBar>
-          <DrawerHeader className="text-center">
-            <DrawerTitle>عملیات</DrawerTitle>
-            <DrawerDescription>
-              عملیات های مدیریت لیست یادداشت ها
-            </DrawerDescription>
-          </DrawerHeader>
-          <DrawerPanel className="space-y-2 p-4">
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => {
-                setActionsOpen(false)
-                setExportOpen(true)
-              }}
-            >
-              خروجی
-            </Button>
-            <Button
-              variant="success"
-              className="w-full"
-              onClick={() => {
-                setActionsOpen(false)
-                setAddPassedOpen(true)
-              }}
-            >
-              افزودن به دروس پاس شده
-            </Button>
-            <Button
-              variant="destructive"
-              className="w-full"
-              onClick={() => {
-                setActionsOpen(false)
-                setClearListOpen(true)
-              }}
-            >
-              حذف همه
-            </Button>
-          </DrawerPanel>
-        </DrawerPopup>
-      </Drawer>
-
-      {/* Export Drawer */}
-      <ExportDrawer
-        open={exportOpen}
-        onOpenChange={setExportOpen}
-        offerings={sorted}
-      />
-
-      {/* Add All to Passed Confirmation */}
-      <Drawer open={addPassedOpen} onOpenChange={setAddPassedOpen}>
-        <DrawerPopup variant="inset" showBar>
-          <DrawerHeader className="text-center">
-            <DrawerTitle>افزودن به دروس پاس شده</DrawerTitle>
-            <DrawerDescription>
-              {sorted.length} درس به لیست دروس پاس شده اضافه می‌شود
-            </DrawerDescription>
-          </DrawerHeader>
-          <DrawerPanel className="p-4">
-            <div className="flex gap-4">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => setAddPassedOpen(false)}
-              >
-                انصراف
-              </Button>
-              <Button
-                variant="success"
-                className="flex-1"
-                onClick={() => {
-                  onAddAllToPassed()
-                  setAddPassedOpen(false)
-                  toastManager.add({
-                    type: "success",
-                    title: "افزوده شد به دروس پاس شده",
-                    data: { variant: "x" },
-                  })
-                }}
-              >
-                افزودن
-              </Button>
-            </div>
-          </DrawerPanel>
-        </DrawerPopup>
-      </Drawer>
-
-      {/* Clear List Confirmation */}
-      <Drawer open={clearListOpen} onOpenChange={setClearListOpen}>
-        <DrawerPopup variant="inset" showBar>
-          <DrawerHeader className="text-center">
-            <DrawerTitle>پاک کردن لیست یادداشت</DrawerTitle>
-            <DrawerDescription>
-              آیا می‌خواهید همه دروس از لیست یادداشت حذف شوند؟
-            </DrawerDescription>
-          </DrawerHeader>
-          <DrawerPanel className="p-4">
-            <div className="flex gap-4">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => setClearListOpen(false)}
-              >
-                انصراف
-              </Button>
-              <Button
-                variant="destructive"
-                className="flex-1"
-                onClick={() => {
-                  onClearNoted()
-                  setClearListOpen(false)
-                  toastManager.add({
-                    type: "success",
-                    title: "لیست یادداشت پاک شد",
-                    data: { variant: "x" },
-                  })
-                }}
-              >
-                حذف شود
-              </Button>
-            </div>
-          </DrawerPanel>
-        </DrawerPopup>
-      </Drawer>
-    </>
-  )
-}
-
-// Export Drawer Component
-function ExportDrawer({
-  open,
-  onOpenChange,
-  offerings,
-}: {
-  open: boolean
-  onOpenChange: (open: boolean) => void
-  offerings: Offering[]
-}) {
-  const [copiedFull, setCopiedFull] = useState(false)
-  const [copiedNameUnit, setCopiedNameUnit] = useState(false)
-  const [copiedCode, setCopiedCode] = useState(false)
-  const [previewType, setPreviewType] = useState<
-    "full" | "nameUnit" | "code" | null
-  >(null)
-
-  const getFullText = () =>
-    offerings.map((o) => courseLine(o, "full")).join("\n\n")
-  const getNameUnitText = () =>
-    offerings.map((o) => courseLine(o, "nameUnit")).join("\n")
-  const getCodeText = () =>
-    offerings.map((o) => courseLine(o, "code")).join(", ")
-
-  const getPreviewContent = (type: "full" | "nameUnit" | "code") => {
-    let content = ""
-    switch (type) {
-      case "full":
-        content = getFullText()
-        break
-      case "nameUnit":
-        content = getNameUnitText()
-        break
-      case "code":
-        content = getCodeText()
-        break
-    }
-    return escapeHtml(content).replace(/\n/g, "<br>")
-  }
-
-  return (
-    <>
-      <Drawer open={open && !previewType} onOpenChange={onOpenChange}>
-        <DrawerPopup variant="inset" showBar>
-          <DrawerHeader className="text-center">
-            <DrawerTitle>عملیات خروجی</DrawerTitle>
-            <DrawerDescription>
-              از این بخش می‌توانید تمامی اطلاعات لیست خود را با فرمت دلخواه
-              خروجی بگیرید
-            </DrawerDescription>
-          </DrawerHeader>
-          <DrawerPanel className="space-y-2 p-4">
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => {
-                  navigator.clipboard.writeText(getFullText())
-                  setCopiedFull(true)
-                  setTimeout(() => setCopiedFull(false), 2000)
-                }}
-              >
-                {copiedFull ? (
-                  <Check className="size-4" />
-                ) : (
-                  <Copy className="size-4" />
-                )}
-                <span>{copiedFull ? "کپی شد!" : "کل جزئیات همه"}</span>
-              </Button>
-              <Button
-                variant="blue-subtle"
-                className="text-sm"
-                onClick={() => setPreviewType("full")}
-              >
-                <Eye className="size-4" />
-                پیش نمایش
-              </Button>
-            </div>
-
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => {
-                  navigator.clipboard.writeText(getNameUnitText())
-                  setCopiedNameUnit(true)
-                  setTimeout(() => setCopiedNameUnit(false), 2000)
-                }}
-              >
-                {copiedNameUnit ? (
-                  <Check className="size-4" />
-                ) : (
-                  <Copy className="size-4" />
-                )}
-                <span>
-                  {copiedNameUnit ? "کپی شد!" : "اسم همه + واحد + کد درس"}
-                </span>
-              </Button>
-              <Button
-                variant="blue-subtle"
-                className="text-sm"
-                onClick={() => setPreviewType("nameUnit")}
-              >
-                <Eye className="size-4" />
-                پیش نمایش
-              </Button>
-            </div>
-
-            <div className="flex gap-2">
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => {
-                  navigator.clipboard.writeText(getCodeText())
-                  setCopiedCode(true)
-                  setTimeout(() => setCopiedCode(false), 2000)
-                }}
-              >
-                {copiedCode ? (
-                  <Check className="size-4" />
-                ) : (
-                  <Copy className="size-4" />
-                )}
-                <span>{copiedCode ? "کپی شد!" : "کد درس همه"}</span>
-              </Button>
-              <Button
-                variant="blue-subtle"
-                className="text-sm"
-                onClick={() => setPreviewType("code")}
-              >
-                <Eye className="size-4" />
-                پیش نمایش
-              </Button>
-            </div>
-          </DrawerPanel>
-        </DrawerPopup>
-      </Drawer>
-
-      {/* Preview Drawer */}
-      <Drawer open={!!previewType} onOpenChange={() => setPreviewType(null)}>
-        <DrawerPopup variant="inset" showBar>
-          <DrawerHeader className="text-center">
-            <DrawerTitle>
-              پیش نمایش{" "}
-              {previewType === "full"
-                ? "کل جزئیات"
-                : previewType === "nameUnit"
-                  ? "اسم واحد و کد درس"
-                  : "کد دروس"}
-            </DrawerTitle>
-            <DrawerDescription>متن زیر کپی میشود</DrawerDescription>
-          </DrawerHeader>
-          <DrawerPanel className="p-4">
-            <div className="rounded-md bg-card p-4">
-              <div
-                dangerouslySetInnerHTML={{
-                  __html: previewType ? getPreviewContent(previewType) : "",
-                }}
-              />
-            </div>
-          </DrawerPanel>
-        </DrawerPopup>
-      </Drawer>
+      <ActionsDrawer open={actionsOpen} onOpenChange={setActionsOpen} onExport={()=>setExportOpen(true)} onAddPassed={()=>setAddPassedOpen(true)} onClear={()=>setClearListOpen(true)} />
+      <NotedExportDrawer open={exportOpen} onOpenChange={setExportOpen} offerings={sorted} />
+      <ConfirmAddPassed open={addPassedOpen} onOpenChange={setAddPassedOpen} count={sorted.length} onConfirm={onAddAllToPassed} />
+      <ConfirmClear open={clearListOpen} onOpenChange={setClearListOpen} onConfirm={onClearNoted} />
     </>
   )
 }

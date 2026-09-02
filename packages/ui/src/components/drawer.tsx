@@ -519,10 +519,16 @@ function DrawerPanel({
   scrollable = true,
   allowSelection = true,
   render,
+  viewportRef,
   ...props
 }: useRender.ComponentProps<"div"> & {
   scrollable?: boolean
   allowSelection?: boolean
+  /**
+   * Ref to the internal ScrollArea's scrollable viewport element — lets
+   * consumers drive a virtualizer (react-virtuoso's `customScrollParent`).
+   */
+  viewportRef?: React.Ref<HTMLDivElement>
 }) {
   const defaultProps = {
     className: cn(
@@ -546,7 +552,12 @@ function DrawerPanel({
     // `min-height: auto` on flex items) and the popup grows to fit
     // everything instead of scrolling internally.
     return (
-      <ScrollArea className="min-h-0 flex-1 touch-auto">{content}</ScrollArea>
+      <ScrollArea
+        className="min-h-0 flex-1 touch-auto"
+        viewportRef={viewportRef}
+      >
+        {content}
+      </ScrollArea>
     )
   }
 

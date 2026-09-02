@@ -19,6 +19,29 @@ import { SettingsRow } from "@/components/app/theme/settings-row"
 import { buildApiUrl } from "@/lib/request"
 import { clearWebToken } from "@/lib/auth/web-token"
 
+/** Detect whether we run inside Telegram Mini App. Module-scope so the
+    dynamic import + nested fallbacks stay out of the Compiler's graph. */
+async function detectIsTMA(): Promise<boolean> {
+  try {
+    const { isTMA: check } = await import("@tma.js/bridge")
+    // Prefer complete mode for reliable detection (100ms), fallback to simple
+    try {
+      return await (check as unknown as (
+        mode: string,
+        opts?: { timeout: number }
+      ) => Promise<boolean>)("complete", { timeout: 120 })
+    } catch {
+      try {
+        return (check as unknown as () => boolean)()
+      } catch {
+        return false
+      }
+    }
+  } catch {
+    return false
+  }
+}
+
 export default function LogoutRow() {
   const [open, setOpen] = useState(false)
   const [isTMA, setIsTMA] = useState<boolean | null>(null)
@@ -26,25 +49,9 @@ export default function LogoutRow() {
 
   useEffect(() => {
     let cancelled = false
-    void (async () => {
-      try {
-        const { isTMA: check } = await import("@tma.js/bridge")
-        // Prefer complete mode for reliable detection (100ms), fallback to simple
-        let inside = false
-        try {
-          inside = await (check as unknown as (mode: string, opts?: { timeout: number }) => Promise<boolean>)("complete", { timeout: 120 })
-        } catch {
-          try {
-            inside = (check as unknown as () => boolean)()
-          } catch {
-            inside = false
-          }
-        }
-        if (!cancelled) setIsTMA(inside)
-      } catch {
-        if (!cancelled) setIsTMA(false)
-      }
-    })()
+    void detectIsTMA().then((inside) => {
+      if (!cancelled) setIsTMA(inside)
+    })
     return () => {
       cancelled = true
     }

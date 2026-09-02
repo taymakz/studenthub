@@ -1,5 +1,4 @@
 "use client"
-/* eslint-disable react-hooks/exhaustive-deps */
 
 import { useEffect, useRef } from "react"
 
@@ -32,69 +31,42 @@ export default function Rain({
   const canvasContainerRef = useRef<HTMLDivElement>(null)
   const contextRef = useRef<CanvasRenderingContext2D | null>(null)
   const raindropsRef = useRef<Raindrop[]>([])
-  const animationFrameRef = useRef<number | undefined>(undefined)
 
-  const createRaindrop = (
-    canvasWidth: number,
-    canvasHeight: number
-  ): Raindrop => {
-    return {
-      x: Math.random() * canvasWidth,
-      y: Math.random() * canvasHeight - canvasHeight,
-      length: Math.random() * (maxLength - minLength) + minLength,
-      alpha: Math.random() * 0.3 + 0.3,
-      speed: Math.random() * speed + speed,
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    contextRef.current = canvas.getContext("2d")
+
+    const resizeCanvas = () => {
+      const container = canvasContainerRef.current
+      const context = contextRef.current
+      if (!container || !context) return
+
+      const pixelRatio = window.devicePixelRatio || 1
+      const width = container.offsetWidth
+      const height = container.offsetHeight
+
+      canvas.width = width * pixelRatio
+      canvas.height = height * pixelRatio
+      canvas.style.width = `${width}px`
+      canvas.style.height = `${height}px`
+      context.scale(pixelRatio, pixelRatio)
+
+      // Recreate raindrops
+      raindropsRef.current = []
+      for (let i = 0; i < quantity; i++) {
+        raindropsRef.current.push({
+          x: Math.random() * width,
+          y: Math.random() * height - height,
+          length: Math.random() * (maxLength - minLength) + minLength,
+          alpha: Math.random() * 0.3 + 0.3,
+          speed: Math.random() * speed + speed,
+        })
+      }
     }
-  }
 
-  const resizeCanvas = () => {
-    if (
-      !canvasContainerRef.current ||
-      !canvasRef.current ||
-      !contextRef.current
-    )
-      return
-
-    const pixelRatio = window.devicePixelRatio || 1
-    const width = canvasContainerRef.current.offsetWidth
-    const height = canvasContainerRef.current.offsetHeight
-
-    canvasRef.current.width = width * pixelRatio
-    canvasRef.current.height = height * pixelRatio
-    canvasRef.current.style.width = `${width}px`
-    canvasRef.current.style.height = `${height}px`
-    contextRef.current.scale(pixelRatio, pixelRatio)
-
-    // Recreate raindrops
-    raindropsRef.current = []
-    for (let i = 0; i < quantity; i++) {
-      raindropsRef.current.push(createRaindrop(width, height))
-    }
-  }
-
-  const drawRaindrop = (
-    raindrop: Raindrop,
-    r: number,
-    g: number,
-    b: number
-  ) => {
-    if (!contextRef.current) return
-
-    const { x, y, length, alpha } = raindrop
-
-    contextRef.current.beginPath()
-    contextRef.current.moveTo(x, y)
-    contextRef.current.lineTo(x, y + length)
-    contextRef.current.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`
-    contextRef.current.lineWidth = 1
-    contextRef.current.stroke()
-  }
-
-  const animate = () => {
-    if (!contextRef.current || !canvasRef.current) return
-
-    const width = canvasRef.current.width / (window.devicePixelRatio || 1)
-    const height = canvasRef.current.height / (window.devicePixelRatio || 1)
+    resizeCanvas()
 
     const cleanHex = color.replace(/^#/, "").padStart(6, "0")
     const bigint = parseInt(cleanHex, 16)
@@ -102,35 +74,44 @@ export default function Rain({
     const g = (bigint >> 8) & 255
     const b = bigint & 255
 
-    contextRef.current.clearRect(0, 0, width, height)
+    let animationFrame: number | undefined
 
-    raindropsRef.current.forEach((raindrop) => {
-      raindrop.y += raindrop.speed
+    const animate = () => {
+      const context = contextRef.current
+      if (!context || !canvasRef.current) return
 
-      if (raindrop.y > height) {
-        raindrop.y = -raindrop.length
-        raindrop.x = Math.random() * width
-      }
+      const width = canvasRef.current.width / (window.devicePixelRatio || 1)
+      const height = canvasRef.current.height / (window.devicePixelRatio || 1)
 
-      drawRaindrop(raindrop, r, g, b)
-    })
+      context.clearRect(0, 0, width, height)
 
-    animationFrameRef.current = requestAnimationFrame(animate)
-  }
+      raindropsRef.current.forEach((raindrop) => {
+        raindrop.y += raindrop.speed
 
-  useEffect(() => {
-    if (!canvasRef.current) return
+        if (raindrop.y > height) {
+          raindrop.y = -raindrop.length
+          raindrop.x = Math.random() * width
+        }
 
-    contextRef.current = canvasRef.current.getContext("2d")
-    resizeCanvas()
+        context.beginPath()
+        context.moveTo(raindrop.x, raindrop.y)
+        context.lineTo(raindrop.x, raindrop.y + raindrop.length)
+        context.strokeStyle = `rgba(${r}, ${g}, ${b}, ${raindrop.alpha})`
+        context.lineWidth = 1
+        context.stroke()
+      })
+
+      animationFrame = requestAnimationFrame(animate)
+    }
+
     animate()
 
     window.addEventListener("resize", resizeCanvas)
 
     return () => {
       window.removeEventListener("resize", resizeCanvas)
-      if (animationFrameRef.current) {
-        cancelAnimationFrame(animationFrameRef.current)
+      if (animationFrame !== undefined) {
+        cancelAnimationFrame(animationFrame)
       }
     }
   }, [color, quantity, speed, maxLength, minLength])

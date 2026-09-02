@@ -20,6 +20,20 @@ import { SettingsRow } from "@/components/app/theme/settings-row"
 import { submitFeedback } from "@/lib/api"
 import type { FeedbackKind } from "@/lib/api"
 
+/** Network call with the try/catch hoisted to module scope so the Compiler
+    can optimize the component. Returns success. */
+async function trySubmitFeedback(
+  kind: FeedbackKind,
+  message: string
+): Promise<boolean> {
+  try {
+    await submitFeedback({ kind, message })
+    return true
+  } catch {
+    return false
+  }
+}
+
 const KINDS: {
   id: FeedbackKind
   label: string
@@ -62,8 +76,8 @@ export default function Feedback() {
   const handleSend = async () => {
     if (!canSend) return
     setSending(true)
-    try {
-      await submitFeedback({ kind, message: message.trim() })
+    const ok = await trySubmitFeedback(kind, message.trim())
+    if (ok) {
       toastManager.add({
         type: "success",
         title: "بازخورد شما ثبت شد",
@@ -72,16 +86,15 @@ export default function Feedback() {
       })
       setMessage("")
       setOpen(false)
-    } catch {
+    } else {
       toastManager.add({
         type: "error",
         title: "ارسال نشد",
         description: "لطفاً چند لحظه بعد دوباره تلاش کنید.",
         data: { hideClose: false },
       })
-    } finally {
-      setSending(false)
     }
+    setSending(false)
   }
 
   const placeholder =

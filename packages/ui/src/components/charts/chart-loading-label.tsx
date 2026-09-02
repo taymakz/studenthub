@@ -1,6 +1,6 @@
 "use client"
 
-import { motion } from "motion/react"
+import { m } from "motion/react"
 import { cn } from "@/lib/utils"
 import { ShimmeringText } from "@/components/shimmering-text"
 import {
@@ -27,7 +27,7 @@ export function ChartLoadingLabel({
   }
 
   return (
-    <motion.div
+    <m.div
       animate={{
         y: exiting ? LOADING_LABEL_EXIT_Y_PX : 0,
         opacity: exiting ? 0 : 1,
@@ -49,7 +49,7 @@ export function ChartLoadingLabel({
         className="text-xs font-medium [--color:var(--muted-foreground)] [--shimmering-color:color-mix(in_oklch,var(--foreground)_55%,transparent)]"
         text={text}
       />
-    </motion.div>
+    </m.div>
   )
 }
 

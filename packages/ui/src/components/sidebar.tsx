@@ -6,7 +6,7 @@ import { mergeProps } from "@base-ui/react/merge-props"
 import { useRender } from "@base-ui/react/use-render"
 import { cva } from "class-variance-authority"
 import { PanelLeftIcon } from "lucide-react"
-import { motion } from "motion/react"
+import { m } from "motion/react"
 
 import { useSidebarPeekStore } from "@workspace/ui/components/sidebar-peek-store"
 
@@ -241,7 +241,7 @@ function Sidebar({
           edge) and carries the gap paddings; the visual card is an inner
           element, so the surrounding gaps never trigger a close and the
           slide-out hides everything completely. */}
-      <motion.div
+      <m.div
         data-slot="sidebar-container"
         data-side={side}
         initial={false}
@@ -302,7 +302,7 @@ function Sidebar({
         >
           {children}
         </div>
-      </motion.div>
+      </m.div>
     </div>
   )
 }

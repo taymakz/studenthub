@@ -2,9 +2,10 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, m } from "motion/react"
 
 import { DEBUG, INTRO_STORAGE_KEY } from "@/constants"
+import { cloudStorageSet } from "@/lib/tma-storage"
 import { cn } from "@workspace/ui/lib/utils"
 
 import { WelcomeSlide } from "./_components/welcome-slide"
@@ -29,6 +30,21 @@ const slides = [
   <ThemeSettingsSlide key="theme" />,
 ]
 
+/** Stable per-slide identity for the pagination dots (never use the index:
+    a key reassignment on reorder/filter would hand React state to the wrong
+    dot). Order mirrors `slides`. */
+const SLIDE_KEYS = [
+  "welcome",
+  "opensource",
+  "courses",
+  "notes",
+  "conflicts",
+  "notifications",
+  "schedule",
+  "more",
+  "theme",
+] as const
+
 /**
  * Intro slider - the rewrite of the old Swiper introduce flow: full-height
  * slides, clickable dots, single CTA that flips the intro flag (localStorage +
@@ -42,12 +58,12 @@ export default function WelcomePage() {
   const [finishing, setFinishing] = React.useState(false)
   const isLast = index === slides.length - 1
 
-  const paginate = React.useCallback((delta: number) => {
+  const paginate = (delta: number) => {
     setState(([current]) => [
       Math.min(Math.max(current + delta, 0), slides.length - 1),
       delta,
     ])
-  }, [])
+  }
 
   // RTL swipe + fade (multi-step pattern): forward (dir=1) — next slide
   // enters from the LEFT edge while the current one slides off to the RIGHT;
@@ -75,7 +91,6 @@ export default function WelcomePage() {
       /* storage blocked - gate re-shows next launch */
     }
     try {
-      const { cloudStorageSet } = await import("@/lib/tma-storage")
       // Hang-proof + non-blocking: localStorage above already marked the
       // intro complete; cloud mirror must never delay navigation (the raw
       // SDK setItem can pend forever without a Telegram bridge response).
@@ -98,9 +113,9 @@ export default function WelcomePage() {
       {/* Slides viewport */}
       <main className="relative min-h-0 flex-1">
         <AnimatePresence initial={false} custom={direction}>
-          <motion.div
+          <m.div
             key={index}
-            className="absolute inset-0 px-6 will-change-transform"
+            className="absolute inset-0 px-6"
             custom={direction}
             variants={variants}
             initial="enter"
@@ -109,15 +124,15 @@ export default function WelcomePage() {
             transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
           >
             {slides[index]}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
       </main>
 
       {/* Pagination dots — visual 6px, hit target ≥44px on mobile */}
       <div className="max-w-screen-xs mx-auto flex w-full items-center justify-center pb-4">
-        {slides.map((_, i) => (
+        {SLIDE_KEYS.map((slideKey, i) => (
           <button
-            key={i}
+            key={slideKey}
             aria-label={`اسلاید ${i + 1}`}
             onClick={() => setState([i, i > index ? 1 : -1])}
             className="flex min-h-11 touch-manipulation items-center justify-center px-0.5"

@@ -964,37 +964,49 @@ export const meRoutes = new Hono<AppEnv>()
       .where(eq(universityProfiles.userId, user.id))
       .limit(1)
 
-    if (!profile?.universitySlug || !profile?.majorSlug) {
+    if (!profile?.universitySlug) {
       return badRequest(c, "ابتدا پروفایل دانشگاهی خود را کامل کنید")
+    }
+
+    // The drawer is per-offering: classmates are those who pinned THIS exact
+    // offering index (شماره) in their noted list.
+    const courseIndex = c.req.query("courseIndex")
+    if (!courseIndex) {
+      return badRequest(c, "شناسه درس ارسال نشده است")
     }
 
     const { page, limit, offset } = parsePagination(c)
 
-    // Same university + major, visible, not banned, not self
+    // Same university only (major-agnostic), pinned this offering index in
+    // their noted list, visible, not banned, not self
     const where = and(
       eq(universityProfiles.universitySlug, profile.universitySlug),
-      eq(universityProfiles.majorSlug, profile.majorSlug),
       eq(users.visibleInCourseLists, true),
       eq(users.banned, false),
       sql`${users.id} != ${user.id}`
     )
 
+    // Privacy: classmates expose only a name and avatar — nothing else.
     const rows = await db
-      .select({
-        id: users.id,
+      .selectDistinct({
         firstName: users.firstName,
         lastName: users.lastName,
-        username: users.telegramUsername,
         photoUrl: users.photoUrl,
-        visibleInCourseLists: users.visibleInCourseLists,
-        termNumber: universityProfiles.termNumber,
-        gender: universityProfiles.gender,
-        createdAt: users.createdAt,
       })
       .from(users)
       .innerJoin(universityProfiles, eq(users.id, universityProfiles.userId))
+      .innerJoin(
+        notedCourses,
+        and(
+          eq(notedCourses.userId, users.id),
+          eq(notedCourses.courseIndex, courseIndex),
+          eq(notedCourses.universitySlug, profile.universitySlug),
+          eq(notedCourses.isDeleted, false)
+        )
+      )
       .where(where)
-      .orderBy(desc(users.createdAt))
+      // DISTINCT requires ordering by selected columns — alphabetical it is.
+      .orderBy(users.lastName, users.firstName)
       .limit(limit + 1)
       .offset(offset)
 

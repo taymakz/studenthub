@@ -1,6 +1,5 @@
 "use client"
 
-import { useCallback, useMemo } from "react"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { fetchMajors, fetchNoted, fetchUniversities } from "@/lib/api"
@@ -8,6 +7,67 @@ import { flattenChart } from "@/lib/chart"
 import { parseTermCode } from "@/lib/term"
 
 import { useProfileStore } from "@/stores/profile-store"
+
+type ChartRequisiteCourse = {
+  name: string
+  prerequisites: string[] | number
+  corequisites: string[]
+}
+
+/** Flattens every chart bucket (terms/moaref/unknown/electives) into one
+    prerequisite-relevant list. Module-scope: keeps branchy derivation out of
+    the React hook. */
+function collectChartCourses(
+  chart: ReturnType<typeof useProfileStore.getState>["chart"]
+): ChartRequisiteCourse[] {
+  const out: ChartRequisiteCourse[] = []
+  if (!chart) return out
+  const push = (c: {
+    name: string
+    prerequisites?: unknown
+    corequisites?: unknown
+  }) =>
+    out.push({
+      name: c.name,
+      prerequisites: (c.prerequisites as string[] | number) ?? [],
+      corequisites: (c.corequisites as string[]) ?? [],
+    })
+  for (const courses of Object.values(chart.terms ?? {})) {
+    for (const c of courses) push(c)
+  }
+  for (const c of chart.moaref ?? []) push(c)
+  for (const c of chart.unknown ?? []) push(c)
+  for (const group of Object.values(chart.electives ?? {})) {
+    for (const c of group.courses ?? []) push(c)
+  }
+  return out
+}
+
+/** Noted rows belonging to the given نیم سال term code. */
+function notedForTermCode(
+  noted: ReturnType<typeof useProfileStore.getState>["noted"],
+  termCode: string | null
+) {
+  const parsedTerm = termCode ? parseTermCode(termCode) : null
+  if (!parsedTerm) return []
+  return noted.filter(
+    (n) =>
+      !n.isDeleted &&
+      n.year === String(parsedTerm.year) &&
+      n.semester === parsedTerm.semester
+  )
+}
+
+/** Noting is only allowed on the two most recent نیم سال terms. */
+function canEditTermNoted(
+  termCode: string | null,
+  terms: ReturnType<typeof useProfileStore.getState>["terms"]
+): boolean {
+  if (!termCode || terms.length === 0) return false
+  const sorted = terms.toSorted((a, b) => b.termCode.localeCompare(a.termCode))
+  const lastTwo = new Set(sorted.slice(0, 2).map((t) => t.termCode))
+  return lastTwo.has(termCode)
+}
 
 /**
  * Courses-tab data, read from the app-wide profile store (hydrated from ONE
@@ -44,14 +104,8 @@ export function useCoursesData() {
     queryFn: async () => (await fetchMajors(uni!)).data.majors,
     enabled: Boolean(uni),
   })
-  const uniName = useMemo(
-    () => unisQuery.data?.find((u) => u.slug === uni)?.name.fa ?? uni,
-    [unisQuery.data, uni]
-  )
-  const majorEntry = useMemo(
-    () => majorsQuery.data?.find((m) => m.slug === major) ?? null,
-    [majorsQuery.data, major]
-  )
+  const uniName = unisQuery.data?.find((u) => u.slug === uni)?.name.fa ?? uni
+  const majorEntry = majorsQuery.data?.find((m) => m.slug === major) ?? null
   const majorName = majorEntry?.name.fa ?? major
   const degreeName = majorEntry?.degrees.find((d) => d.slug === profile?.degree)
     ?.name.fa
@@ -60,127 +114,36 @@ export function useCoursesData() {
     terms.find((t) => t.termCode === termCode)?.label ?? null
   const scrapedAt = changes?.scrapedAt ?? null
 
-  const newIndexes = useMemo(
-    () => new Set((changes?.detail?.added ?? []).map((o) => o.index)),
-    [changes]
-  )
-  const chartPool = useMemo(() => flattenChart(chart), [chart])
-  const moarefNames = useMemo(
-    () => new Set(chartPool.filter((c) => c.isMoaref).map((c) => c.name)),
-    [chartPool]
-  )
-  const termByCourseName = useMemo(() => {
-    const m = new Map<string, number | undefined>()
-    for (const c of chartPool) m.set(c.name, c.termNumber)
-    return m
-  }, [chartPool])
+  const newIndexes = new Set((changes?.detail?.added ?? []).map((o) => o.index))
+  const chartPool = flattenChart(chart)
+  const moarefNames = new Set<string>()
+  for (const c of chartPool) {
+    if (c.isMoaref) moarefNames.add(c.name)
+  }
+  const termByCourseName = new Map<string, number | undefined>()
+  for (const c of chartPool) termByCourseName.set(c.name, c.termNumber)
 
-  const chartCourseNames = useMemo(
-    () => new Set(chartPool.map((c) => c.name)),
-    [chartPool]
-  )
-  const passedNames = useMemo(
-    () => new Set(passed.map((p) => p.courseName)),
-    [passed]
-  )
-  const failedNames = useMemo(
-    () => new Set(failed.map((f) => f.courseName)),
-    [failed]
-  )
-  const chartCourses = useMemo(() => {
-    if (!chart)
-      return [] as Array<{
-        name: string
-        prerequisites: string[] | number
-        corequisites: string[]
-      }>
-    const out: Array<{
-      name: string
-      prerequisites: string[] | number
-      corequisites: string[]
-    }> = []
-    for (const courses of Object.values(chart.terms ?? {})) {
-      for (const c of courses)
-        out.push({
-          name: c.name,
-          prerequisites: c.prerequisites ?? [],
-          corequisites: c.corequisites ?? [],
-        })
-    }
-    for (const c of chart.moaref ?? [])
-      out.push({
-        name: c.name,
-        prerequisites: c.prerequisites ?? [],
-        corequisites: c.corequisites ?? [],
-      })
-    for (const c of chart.unknown ?? [])
-      out.push({
-        name: c.name,
-        prerequisites: c.prerequisites ?? [],
-        corequisites: c.corequisites ?? [],
-      })
-    for (const group of Object.values(chart.electives ?? {})) {
-      for (const c of group.courses ?? [])
-        out.push({
-          name: c.name,
-          prerequisites: c.prerequisites ?? [],
-          corequisites: c.corequisites ?? [],
-        })
-    }
-    return out
-  }, [chart])
+  const chartCourseNames = new Set(chartPool.map((c) => c.name))
+  const passedNames = new Set(passed.map((p) => p.courseName))
+  const failedNames = new Set(failed.map((f) => f.courseName))
+  const chartCourses = collectChartCourses(chart)
 
   // Instant noted handling — no refetch, just zustand (background sync in store)
-  const instantToggleNote = useCallback(
-    (courseIndex: string) => store().toggleNote(courseIndex),
-    [store]
-  )
-  const instantTogglePassed = useCallback(
-    (courseName: string) => store().togglePassed(courseName),
-    [store]
-  )
-  const instantToggleFailed = useCallback(
-    (courseName: string) => store().toggleFailed(courseName),
-    [store]
-  )
+  const instantToggleNote = (courseIndex: string) => store().toggleNote(courseIndex)
+  const instantTogglePassed = (courseName: string) => store().togglePassed(courseName)
+  const instantToggleFailed = (courseName: string) => store().toggleFailed(courseName)
 
   // Term-specific noted: zustand only (instant UI, background sync in store) — no extra fetch
-  const parsedTerm = termCode ? parseTermCode(termCode) : null
-  const notedForTerm = useMemo(() => {
-    if (!parsedTerm) return []
-    return noted.filter(
-      (n) =>
-        !n.isDeleted &&
-        n.year === String(parsedTerm.year) &&
-        n.semester === parsedTerm.semester
-    )
-  }, [noted, parsedTerm])
+  const notedForTerm = notedForTermCode(noted, termCode)
 
-  const notedIndexes = useMemo(
-    () => new Set(notedForTerm.map((n) => n.courseIndex)),
-    [notedForTerm]
-  )
-  const notedOfferings = useMemo(
-    () => offerings.filter((o) => notedIndexes.has(o.index)),
-    [offerings, notedIndexes]
-  )
-  const totalNotedUnits = useMemo(
-    () =>
-      notedOfferings.reduce(
-        (s, o) => s + (o.theoreticalUnits ?? 0) + (o.practicalUnits ?? 0),
-        0
-      ),
-    [notedOfferings]
+  const notedIndexes = new Set(notedForTerm.map((n) => n.courseIndex))
+  const notedOfferings = offerings.filter((o) => notedIndexes.has(o.index))
+  const totalNotedUnits = notedOfferings.reduce(
+    (s, o) => s + (o.theoreticalUnits ?? 0) + (o.practicalUnits ?? 0),
+    0
   )
 
-  const canEditNoted = useMemo(() => {
-    if (!termCode || terms.length === 0) return false
-    const sorted = [...terms].sort((a, b) =>
-      b.termCode.localeCompare(a.termCode)
-    )
-    const lastTwo = new Set(sorted.slice(0, 2).map((t) => t.termCode))
-    return lastTwo.has(termCode)
-  }, [termCode, terms])
+  const canEditNoted = canEditTermNoted(termCode, terms)
 
   return {
     profile,

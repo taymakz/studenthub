@@ -1,7 +1,7 @@
 "use client"
 
 import { CheckIcon, LoaderCircleIcon } from "lucide-react"
-import { motion, useReducedMotion } from "motion/react"
+import { m, useReducedMotion } from "motion/react"
 import * as React from "react"
 
 import { cn } from "@workspace/ui/lib/utils"
@@ -147,7 +147,7 @@ function ReceiptPrinterOutput({
       )}
       {...props}
     >
-      <motion.div
+      <m.div
         animate={{
           y: isPrinting
             ? [
@@ -179,7 +179,7 @@ function ReceiptPrinterOutput({
         }}
       >
         {children}
-      </motion.div>
+      </m.div>
     </div>
   )
 }

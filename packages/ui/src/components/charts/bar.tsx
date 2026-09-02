@@ -2,7 +2,7 @@
 
 import type { scaleBand } from "@visx/scale"
 import type { Transition } from "motion/react"
-import { motion } from "motion/react"
+import { m } from "motion/react"
 import { memo, useId, useMemo } from "react"
 import { barDepthAndRise, barDepthMaxDepth } from "./bar-depth-geometry"
 import {
@@ -132,7 +132,7 @@ function AnimatedBar({
 
   if (animationType === "fade") {
     return (
-      <motion.rect
+      <m.rect
         animate={{
           opacity: isFaded ? fadedOpacity : 1,
           filter: "blur(0px)",
@@ -163,7 +163,7 @@ function AnimatedBar({
       opacity={isFaded ? fadedOpacity : 1}
       style={{ transition: "opacity 0.15s ease-in-out" }}
     >
-      <motion.rect
+      <m.rect
         animate={target}
         fill={fill}
         initial={initial}

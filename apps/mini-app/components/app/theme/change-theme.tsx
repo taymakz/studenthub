@@ -3,7 +3,7 @@
 import { useState } from "react"
 import { flushSync } from "react-dom"
 import { useTheme } from "next-themes"
-import { CircleCheck, MonitorSmartphone, Sun, Moon } from "lucide-react"
+import { MonitorSmartphone, Sun, Moon } from "lucide-react"
 
 import {
   Drawer,
@@ -15,7 +15,7 @@ import {
   DrawerTrigger,
 } from "@workspace/ui/components/drawer"
 
-import { SettingsRow } from "./settings-row"
+import { SettingsRow, SettingsOptionRow } from "./settings-row"
 
 const OPTIONS = [
   { value: "system", label: "مطابق با سیستم عامل", Icon: MonitorSmartphone },
@@ -87,24 +87,13 @@ export default function ChangeTheme() {
         <DrawerPanel className="p-0">
           <div className="flex flex-col">
             {OPTIONS.map(({ value, label, Icon }) => (
-              <button
+              <SettingsOptionRow
                 key={value}
-                type="button"
-                onClick={() => handleThemeChange(value)}
-                className="flex flex-row items-center px-4 py-5 text-start transition-colors hover:bg-muted/50 active:bg-muted"
-              >
-                <span className="flex w-full items-center justify-between">
-                  <span className="flex items-center gap-2">
-                    <Icon className="size-5 opacity-80" />
-                    <p className="text-sm">{label}</p>
-                  </span>
-                  {theme === value ? (
-                    <CircleCheck className="size-5 text-success" />
-                  ) : (
-                    <span className="text-sm opacity-80">انتخاب</span>
-                  )}
-                </span>
-              </button>
+                icon={Icon}
+                label={label}
+                selected={theme === value}
+                onSelect={() => handleThemeChange(value)}
+              />
             ))}
           </div>
         </DrawerPanel>

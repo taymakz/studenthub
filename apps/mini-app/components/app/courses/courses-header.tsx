@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { AnimatePresence, motion } from "motion/react"
+import { AnimatePresence, m } from "motion/react"
 import type { ComponentType } from "react"
 import { SearchIcon } from "lucide-react"
 import { Filter3, Search3, SliderVertical2 } from "reicon-react"
@@ -78,7 +78,7 @@ export function CoursesHeader({
           <div className="size-16">
             <AnimatePresence mode="popLayout" initial={false}>
               {!expanded ? (
-                <motion.button
+                <m.button
                   key="search-btn"
                   initial={false}
                   layoutId="courses-search"
@@ -87,7 +87,7 @@ export function CoursesHeader({
                   whileTap={{ scale: 0.95 }}
                   transition={{ type: "spring", bounce: 0, duration: 0.2 }}
                 >
-                  <motion.span
+                  <m.span
                     layout
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
@@ -100,10 +100,10 @@ export function CoursesHeader({
                         search ? "text-primary" : "text-foreground"
                       )}
                     />
-                  </motion.span>
-                </motion.button>
+                  </m.span>
+                </m.button>
               ) : (
-                <motion.div
+                <m.div
                   key="search-input"
                   ref={containerRef}
                   layoutId="courses-search"
@@ -130,20 +130,20 @@ export function CoursesHeader({
                       بر اساس نام درس، استاد، کد و روز برگزاری
                     </p>
                   </Card>
-                </motion.div>
+                </m.div>
               )}
             </AnimatePresence>
           </div>
           <AnimatePresence initial={false}>
             {!expanded && (
-              <motion.p
+              <m.p
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 0.8, y: 0 }}
                 exit={{ opacity: 0, y: -5 }}
                 className="text-sm font-medium opacity-80"
               >
                 جستجو
-              </motion.p>
+              </m.p>
             )}
           </AnimatePresence>
         </div>
@@ -176,7 +176,8 @@ function ViewCell({
   icon: ComponentType<{ className?: string; weight?: "Filled" | "Outline" }>
 }) {
   return (
-    <div
+    <button
+      type="button"
       className="flex cursor-pointer flex-col items-center gap-2.5"
       onClick={onClick}
     >
@@ -189,6 +190,6 @@ function ViewCell({
         )}
       </div>
       <p className="text-sm font-medium opacity-80">{title}</p>
-    </div>
+    </button>
   )
 }
