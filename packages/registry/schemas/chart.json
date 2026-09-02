@@ -17,8 +17,8 @@
             "type": "object",
             "properties": {
               "name": { "type": "string", "minLength": 1 },
-              "theoreticalUnits": { "type": "integer", "minimum": 0, "maximum": 20 },
-              "practicalUnits": { "type": "integer", "minimum": 0, "maximum": 20 },
+              "theoreticalUnits": { "type": "number", "minimum": 0, "maximum": 20 },
+              "practicalUnits": { "type": "number", "minimum": 0, "maximum": 20 },
               "prerequisites": { "oneOf": [{ "type": "array", "items": { "type": "string" } }, { "type": "integer", "minimum": 1 }] },
               "corequisites": { "type": "array", "items": { "type": "string" } }
             },

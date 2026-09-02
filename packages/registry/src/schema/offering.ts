@@ -22,8 +22,8 @@ export const offeringSchema = z.object({
   courseCode: z.string().min(1).max(64),
   courseName: z.string().min(1).max(255),
   courseType: z.string().min(1).max(64).optional(),
-  theoreticalUnits: z.number().int().min(0).max(20).default(0),
-  practicalUnits: z.number().int().min(0).max(20).default(0),
+  theoreticalUnits: z.number().min(0).max(20).default(0),
+  practicalUnits: z.number().min(0).max(20).default(0),
   classCode: z.string().min(1).max(64),
 
   degree: z.string().min(1).max(128),

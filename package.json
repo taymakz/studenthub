@@ -16,7 +16,8 @@
     "db:generate": "pnpm --filter @workspace/db generate",
     "db:migrate": "pnpm --filter @workspace/db migrate",
     "reg:sync:ensure": "pnpm --filter @workspace/registry sync:ensure",
-    "update": "ncu -u --target minor --packageFile \"{apps/api,apps/mini-app,apps/chart-builder,packages/ui}/package.json\" && pnpm install"
+    "update": "ncu -u --target minor --packageFile \"{apps/api,apps/mini-app,apps/chart-builder,packages/ui}/package.json\" && pnpm install",
+    "doctor": "npx react-doctor@latest"
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",

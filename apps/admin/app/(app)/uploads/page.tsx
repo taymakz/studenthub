@@ -392,7 +392,9 @@ export default function UploadsPage() {
                         </Badge>
                       </TableCell>
                       <TableCell className="text-xs whitespace-nowrap text-muted-foreground">
-                        {new Date(u.createdAt).toLocaleDateString("fa-IR")}
+                        {new Date(u.createdAt).toLocaleDateString("fa-IR", {
+                          timeZone: "Asia/Tehran",
+                        })}
                       </TableCell>
                       <TableCell className="text-end">
                         <div className="flex justify-end gap-1">

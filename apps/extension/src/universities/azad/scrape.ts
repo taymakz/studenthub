@@ -200,6 +200,15 @@ export function scrapeOfferingsFromPage(): ScrapeResult {
     return /^\d+$/.test(normalized) ? Number(normalized) : null;
   }
 
+  function toFloat(value: string): number | null {
+    if (!value) return null;
+    // Keep dot as decimal, drop thousand separators, handle Persian decimal "٫" (U+066B)
+    const normalized = value
+      .replace(/[,،\u066C\s]/g, "")
+      .replace(/[\u066B\u00B7]/g, ".");
+    return /^\d+(\.\d+)?$/.test(normalized) ? Number(normalized) : null;
+  }
+
   const rows: ScrapeResult["rows"] = [];
   const seenIndexes = new Set<string>();
   let duplicateCount = 0;
@@ -227,8 +236,8 @@ export function scrapeOfferingsFromPage(): ScrapeResult {
       courseCode,
       courseName: cell(cells, "courseName"),
       courseType: cell(cells, "courseType") || null,
-      theoreticalUnits: toInt(cell(cells, "theoreticalUnits")) ?? 0,
-      practicalUnits: toInt(cell(cells, "practicalUnits")) ?? 0,
+      theoreticalUnits: toFloat(cell(cells, "theoreticalUnits")) ?? 0,
+      practicalUnits: toFloat(cell(cells, "practicalUnits")) ?? 0,
       classCode,
       degree: cell(cells, "degree"),
       presentationType: cell(cells, "presentationType") || null,

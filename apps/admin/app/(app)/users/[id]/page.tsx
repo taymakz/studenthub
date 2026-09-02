@@ -599,7 +599,10 @@ export default function UserDetailPage() {
                   <p className="mt-2 text-xs text-muted-foreground">
                     آخرین فعالیت:{" "}
                     {user.lastOnlineAt
-                      ? new Date(user.lastOnlineAt).toLocaleDateString("fa-IR")
+                      ? new Date(user.lastOnlineAt).toLocaleDateString(
+                          "fa-IR",
+                          { timeZone: "Asia/Tehran" }
+                        )
                       : "هرگز"}
                   </p>
                 </div>
