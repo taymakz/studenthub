@@ -7,7 +7,7 @@ import { Button } from "@workspace/ui/components/button"
 import { toastManager } from "@workspace/ui/components/toast"
 
 import type { Offering } from "@/lib/api"
-import { courseLine } from "./../sections"
+import { courseLine } from "./../course-format"
 
 export function DetailActions({
   offering,

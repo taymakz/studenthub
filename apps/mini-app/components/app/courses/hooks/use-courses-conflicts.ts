@@ -2,7 +2,7 @@
 
 import type { Offering } from "@/lib/api"
 
-import { detectConflicts } from "../conflicts"
+import { detectConflicts } from "../conflict-detect"
 
 export function useCoursesConflicts(opts: {
   notedOfferings: Offering[]

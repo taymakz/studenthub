@@ -3,14 +3,6 @@
 import { ChevronLeft } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils"
 
-const SEMESTER_FA: Record<string, string> = { MEHR: "مهر", BAHMAN: "بهمن", SUMMER: "تابستان" }
-export { SEMESTER_FA }
-
-export function formatYearRange(range: string) {
-  const m = /^\[(\d{4})-(\d{4})\]$/.exec(range)
-  return m ? `${m[1]} تا ${m[2]}` : range
-}
-
 export function EditRow({ icon, label, value, badge, multiline = false, onClick }: { icon: React.ReactNode; label: string; value: string; badge?: React.ReactNode; multiline?: boolean; onClick: () => void }) {
   return (
     <button type="button" onClick={onClick} className="flex w-full items-start gap-3 px-4 py-3.5 text-start transition-colors hover:bg-muted/40">

@@ -5,7 +5,7 @@ import { toastManager } from "@workspace/ui/components/toast"
 
 import { apiClient } from "@/lib/request"
 import { useProfileStore } from "@/stores/profile-store"
-import type { CourseConflict } from "./../conflicts"
+import type { CourseConflict } from "./../conflict-detect"
 
 function PreReqArrayActions({ group }: { group: CourseConflict }) {
   if (

@@ -19,7 +19,8 @@ import { SettingsRow } from "@/components/app/theme/settings-row"
 import { IsLastTermDrawer } from "./is-last-term-drawer"
 import { SemesterDrawer } from "@/components/app/semester-drawer"
 import { TermNumberPicker } from "./term-number-picker"
-import { EditRow, formatYearRange, SEMESTER_FA } from "./student-account/account-rows"
+import { EditRow } from "./student-account/account-rows"
+import { formatYearRange, SEMESTER_FA } from "./student-account/account-format"
 import { useStudentAccountData, useStudentPatch } from "./student-account-hooks"
 
 function StudentAccountContent({

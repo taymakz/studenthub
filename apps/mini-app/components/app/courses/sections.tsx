@@ -7,6 +7,7 @@ import { CopyButton } from "@workspace/ui/components/copy-button"
 import { cn } from "@workspace/ui/lib/utils"
 
 import { type Offering, professorName } from "@/lib/api"
+import { fmt, unitClass } from "./course-format"
 
 export type ErrorCourseType =
   | "class_schedule"
@@ -15,10 +16,6 @@ export type ErrorCourseType =
   | "co_requisites"
   | "pre_requisites"
   | "gender"
-
-export function fmt(code: string | undefined): string {
-  return (code ?? "").toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ")
-}
 
 export function CourseBadges({
   isNoted,
@@ -161,19 +158,6 @@ export function CourseTable({
   )
 }
 
-export function unitClass(value: number): string {
-  const map: Record<string, string> = {
-    "0.5":
-      "bg-yellow-600 text-white dark:bg-yellow-400/10 dark:text-yellow-400",
-    "1": "bg-cyan-600 text-white dark:bg-cyan-400/10 dark:text-cyan-400",
-    "2": "bg-blue-600 text-white dark:bg-blue-400/10 dark:text-blue-400",
-    "3": "bg-primary text-white dark:bg-primary/10 dark:text-primary",
-    "4": "bg-orange-600 text-white dark:bg-orange-400/10 dark:text-orange-400",
-    "6": "bg-warning text-white dark:bg-warning/10 dark:text-warning",
-  }
-  return map[String(value)] || ""
-}
-
 export function CourseTags({ offering }: { offering: Offering }) {
   return (
     <div className="flex flex-wrap gap-1 text-sm">
@@ -200,26 +184,4 @@ export function CourseTags({ offering }: { offering: Offering }) {
       <Badge variant="outline">{offering.degree}</Badge>
     </div>
   )
-}
-
-/** Escape for dangerouslySetInnerHTML previews — registry strings are contributor-controlled. */
-export function escapeHtml(s: string): string {
-  return s
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;")
-}
-
-/** formatted line for the single-course action copy/share actions. */
-export function courseLine(
-  o: Offering,
-  mode: "full" | "nameUnit" | "code"
-): string {
-  const total = (o.theoreticalUnits ?? 0) + (o.practicalUnits ?? 0)
-  if (mode === "code") return o.courseCode || "ثبت نشده"
-  if (mode === "nameUnit")
-    return `${o.courseName} - ${total} واحد - ${o.courseCode}`
-  return `📘 ${o.courseName}\nکد درس: ${o.courseCode} · کد ارائه: ${o.classCode} · ${total} واحد\nاستاد: ${professorName(o) ?? "—"}\nمکان: ${o.location ?? "—"}\nزمان کلاس: ${o.classSchedule ?? "—"}\nزمان امتحان: ${o.examSchedule ?? "—"}`
 }
