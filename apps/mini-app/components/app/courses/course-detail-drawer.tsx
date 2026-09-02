@@ -1,6 +1,6 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { Eye3 } from "reicon-react"
 import { ChevronLeft } from "lucide-react"
 
@@ -19,11 +19,33 @@ import {
   professorName,
 } from "@/lib/api"
 import { useProfileStore } from "@/stores/profile-store"
-import { CourseTable, CourseTags, courseLine } from "./sections"
+import { CourseTable, CourseTags } from "./sections"
+import { courseLine } from "./course-format"
 import { StudentsDrawer } from "./students-drawer"
 import { useCourseDetailClose, useCourseDetailDerived } from "./course-detail/use-course-detail"
 import { ChangesSection, CoreqSection, PrereqSection } from "./course-detail/detail-sections"
 import { DetailActions } from "./course-detail/detail-actions"
+
+// Module-scope alias: hooks must be called, not referenced inside callbacks.
+const getProfileState = useProfileStore.getState
+
+/** Sum of units for every passed course that has prerequisites left to take. */
+function sumPassedUnits(
+  chart: ReturnType<typeof getProfileState>["chart"],
+  passedNames: Set<string>
+): number {
+  if (!chart) return 0
+  const all = [...Object.values(chart.terms ?? {}).flat(), ...(chart.moaref ?? []), ...(chart.unknown ?? [])] as Array<{ name: string; theoreticalUnits?: number; practicalUnits?: number; prerequisites?: unknown }>
+  const coursesByName = new Map(all.map((x) => [x.name, x]))
+  let sum = 0
+  for (const name of passedNames) {
+    const course = coursesByName.get(name)
+    if (course && typeof course.prerequisites === "number") continue
+    const u = (course?.theoreticalUnits ?? 0) + (course?.practicalUnits ?? 0)
+    sum += u || 3
+  }
+  return sum
+}
 
 export function CourseDetailDrawer({
   offering,
@@ -55,20 +77,7 @@ export function CourseDetailDrawer({
   useCourseDetailClose(open, onOpenChange, studentsOpen, setStudentsOpen)
   const { canEditNoted, otherProfessors, passedNames, failedNames, chartCourse, chart } = useCourseDetailDerived(offering)
 
-  const passedUnits = useMemo(() => {
-    if (!useProfileStore.getState().chart) return 0
-    const c = useProfileStore.getState().chart
-    if (!c) return 0
-    const all = [...Object.values(c.terms ?? {}).flat(), ...(c.moaref ?? []), ...(c.unknown ?? [])] as unknown[]
-    let sum = 0
-    for (const name of passedNames) {
-      const course = (all as Array<{ name: string; theoreticalUnits?: number; practicalUnits?: number; prerequisites?: unknown }>).find((x) => x.name === name)
-      if (course && typeof course.prerequisites === "number") continue
-      const u = (course?.theoreticalUnits ?? 0) + (course?.practicalUnits ?? 0)
-      sum += u || 3
-    }
-    return sum
-  }, [passedNames])
+  const passedUnits = sumPassedUnits(getProfileState().chart, passedNames)
 
   // Always render, control via open prop for animation
   return (
@@ -148,9 +157,10 @@ export function CourseDetailDrawer({
 
                 <div className="grid grid-cols-1 gap-2">
                   {otherProfessors.map((x) => (
-                    <div
+                    <button
+                      type="button"
                       key={x.index}
-                      className="cursor-pointer rounded-lg bg-muted/30 p-3 transition-colors hover:bg-muted/50"
+                      className="w-full cursor-pointer rounded-lg bg-muted/30 p-3 text-start transition-colors hover:bg-muted/50"
                       onClick={() => {
                         if (onSelectCourse) onSelectCourse(x)
                         else onOpenProfessor(professorName(x) ?? "")
@@ -173,7 +183,7 @@ export function CourseDetailDrawer({
                         </div>
                         <ChevronLeft className="size-4 shrink-0 text-muted-foreground" />
                       </div>
-                    </div>
+                    </button>
                   ))}
                 </div>
               </div>
