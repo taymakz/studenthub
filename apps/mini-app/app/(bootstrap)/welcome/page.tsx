@@ -30,6 +30,21 @@ const slides = [
   <ThemeSettingsSlide key="theme" />,
 ]
 
+/** Stable per-slide identity for the pagination dots (never use the index:
+    a key reassignment on reorder/filter would hand React state to the wrong
+    dot). Order mirrors `slides`. */
+const SLIDE_KEYS = [
+  "welcome",
+  "opensource",
+  "courses",
+  "notes",
+  "conflicts",
+  "notifications",
+  "schedule",
+  "more",
+  "theme",
+] as const
+
 /**
  * Intro slider - the rewrite of the old Swiper introduce flow: full-height
  * slides, clickable dots, single CTA that flips the intro flag (localStorage +
@@ -115,9 +130,9 @@ export default function WelcomePage() {
 
       {/* Pagination dots — visual 6px, hit target ≥44px on mobile */}
       <div className="max-w-screen-xs mx-auto flex w-full items-center justify-center pb-4">
-        {slides.map((_, i) => (
+        {SLIDE_KEYS.map((slideKey, i) => (
           <button
-            key={i}
+            key={slideKey}
             aria-label={`اسلاید ${i + 1}`}
             onClick={() => setState([i, i > index ? 1 : -1])}
             className="flex min-h-11 touch-manipulation items-center justify-center px-0.5"

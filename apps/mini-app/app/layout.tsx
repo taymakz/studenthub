@@ -21,7 +21,21 @@ const vazirmatn = Vazirmatn({
   display: "swap",
 })
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://student-hub.ir"
+const FALLBACK_SITE_URL = "https://student-hub.ir"
+
+/** Safe wrapper: a malformed NEXT_PUBLIC_SITE_URL would otherwise make
+    `new URL` throw at module init and crash EVERY route (root layout). */
+function safeSiteUrl(raw: string): URL {
+  try {
+    return new URL(raw)
+  } catch {
+    return new URL(FALLBACK_SITE_URL)
+  }
+}
+
+const siteUrl = safeSiteUrl(
+  process.env.NEXT_PUBLIC_SITE_URL ?? FALLBACK_SITE_URL
+)
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
