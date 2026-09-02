@@ -5,7 +5,7 @@ import { Check, Copy, Eye } from "lucide-react"
 import { Drawer, DrawerDescription, DrawerHeader, DrawerPanel, DrawerPopup, DrawerTitle } from "@workspace/ui/components/drawer"
 import { Button } from "@workspace/ui/components/button"
 import type { Offering } from "@/lib/api"
-import { courseLine, escapeHtml } from "./../sections"
+import { courseLine } from "./../course-format"
 
 export function NotedExportDrawer({ open, onOpenChange, offerings }: { open: boolean; onOpenChange: (o: boolean) => void; offerings: Offering[] }) {
   const [copiedFull, setCopiedFull] = useState(false)
@@ -17,8 +17,7 @@ export function NotedExportDrawer({ open, onOpenChange, offerings }: { open: boo
   const getNameUnitText = () => offerings.map((o) => courseLine(o, "nameUnit")).join("\n")
   const getCodeText = () => offerings.map((o) => courseLine(o, "code")).join(", ")
   const getPreviewContent = (type: "full" | "nameUnit" | "code") => {
-    let content = type === "full" ? getFullText() : type === "nameUnit" ? getNameUnitText() : getCodeText()
-    return escapeHtml(content).replace(/\n/g, "<br>")
+    return type === "full" ? getFullText() : type === "nameUnit" ? getNameUnitText() : getCodeText()
   }
 
   return (
@@ -34,7 +33,7 @@ export function NotedExportDrawer({ open, onOpenChange, offerings }: { open: boo
         </DrawerPopup>
       </Drawer>
       <Drawer open={!!previewType} onOpenChange={()=>setPreviewType(null)}>
-        <DrawerPopup variant="inset" showBar><DrawerHeader className="text-center"><DrawerTitle>پیش نمایش {previewType==="full"?"کل جزئیات":previewType==="nameUnit"?"اسم واحد و کد درس":"کد دروس"}</DrawerTitle><DrawerDescription>متن زیر کپی میشود</DrawerDescription></DrawerHeader><DrawerPanel className="p-4"><div className="rounded-md bg-card p-4"><div dangerouslySetInnerHTML={{ __html: previewType ? getPreviewContent(previewType) : "" }} /></div></DrawerPanel></DrawerPopup>
+        <DrawerPopup variant="inset" showBar><DrawerHeader className="text-center"><DrawerTitle>پیش نمایش {previewType==="full"?"کل جزئیات":previewType==="nameUnit"?"اسم واحد و کد درس":"کد دروس"}</DrawerTitle><DrawerDescription>متن زیر کپی میشود</DrawerDescription></DrawerHeader><DrawerPanel className="p-4"><div className="rounded-md bg-card p-4"><div className="whitespace-pre-line">{previewType ? getPreviewContent(previewType) : ""}</div></div></DrawerPanel></DrawerPopup>
       </Drawer>
     </>
   )
