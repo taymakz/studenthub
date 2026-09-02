@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { useRouter } from "next/navigation"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { AnimatePresence, motion } from "motion/react"
 import { Virtuoso } from "react-virtuoso"
 import { ArrowRight, Check, Loader2, Search } from "lucide-react"
@@ -214,6 +214,7 @@ function OptionGrid({
 
 export default function SetupPage() {
   const router = useRouter()
+  const qc = useQueryClient()
   const [stepIndex, setStepIndex] = React.useState(0)
   /** +1 = going forward, -1 = going back — drives the swipe direction. */
   const [direction, setDirection] = React.useState(1)
@@ -571,6 +572,7 @@ export default function SetupPage() {
       })
     },
     onSuccess: async () => {
+      qc.invalidateQueries({ queryKey: ["me"] })
       await useProfileStore.getState().refresh()
       router.replace("/profile")
     },
