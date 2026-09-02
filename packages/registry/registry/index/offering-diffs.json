@@ -1,11 +1,11 @@
 [
   {
-    "id": "f66d969c-f568-4df5-b135-740d5d32b752",
+    "id": "a3848e6f-bbbf-4387-9d02-2c2285ecc5b7",
     "uniSlug": "azad-malard",
     "majorSlug": "accounting",
     "year": 1405,
     "semester": "MEHR",
-    "createdAt": "2026-09-02T06:45:53.796Z",
+    "createdAt": "2026-09-02T09:38:29.866Z",
     "summary": {
       "added": 0,
       "removed": 0,
@@ -14,12 +14,12 @@
     "hasPrevious": true
   },
   {
-    "id": "2b8012c3-997b-4c45-a531-7f7c915f16fe",
+    "id": "7cdeb4f1-75c2-47f6-ba56-7c803574affc",
     "uniSlug": "azad-malard",
     "majorSlug": "computer-engineering",
     "year": 1405,
     "semester": "MEHR",
-    "createdAt": "2026-09-01T12:40:27.206Z",
+    "createdAt": "2026-09-02T09:38:30.067Z",
     "summary": {
       "added": 0,
       "removed": 0,

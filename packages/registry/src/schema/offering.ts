@@ -47,8 +47,8 @@ export const offeringSchema = z.object({
 export type Offering = z.infer<typeof offeringSchema>
 
 export const offeringDocSchema = z.object({
-  year: persianYearSchema,
-  semester: semesterSchema,
+  year: persianYearSchema.optional(),
+  semester: semesterSchema.optional(),
   /** ISO timestamp of when the scraper captured this snapshot. */
   scrapedAt: z.iso.datetime(),
   offerings: z.array(offeringSchema).min(0),

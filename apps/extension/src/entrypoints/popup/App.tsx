@@ -8,18 +8,11 @@ import {
   offeringFileName,
   serializeOfferingDoc,
 } from "../../lib/export-doc";
-import {
-  buildYearOptions,
-  currentJalali,
-  detectTerm,
-} from "../../lib/jalali";
 import { offeringsStorage } from "../../lib/storage";
 import {
-  SEMESTER_LABELS,
   type BackgroundRequest,
   type ExtractionEvent,
   type ExtractionProgress,
-  type Semester,
   type ScrapedOffering,
 } from "../../lib/types";
 import {
@@ -27,8 +20,6 @@ import {
   type UniversityAdapter,
 } from "../../universities";
 import { browser } from "#imports";
-
-const SEMESTERS: Semester[] = ["MEHR", "BAHMAN", "SUMMER"];
 
 function friendlyMenuError(raw: string): string {
   if (/cannot access contents|cannot be scripted|chrome:\/\//i.test(raw)) {
@@ -47,11 +38,6 @@ export default function App() {
   const [summary, setSummary] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [university, setUniversity] = useState<UniversityAdapter | null>(null);
-  const [year, setYear] = useState(() => String(detectTerm().year));
-  const [yearOptions, setYearOptions] = useState<number[]>(() =>
-    buildYearOptions(),
-  );
-  const [semester, setSemester] = useState<Semester>(() => detectTerm().semester);
   const [toast, setToast] = useState<string | null>(null);
 
   useEffect(() => {
@@ -63,12 +49,6 @@ export default function App() {
       .then(([tab]) => {
         const uni = detectUniversity(tab?.url ?? "");
         setUniversity(uni);
-
-        // Term detection only preselects - the user can always override.
-        const term = detectTerm();
-        setYear(String(term.year));
-        setSemester(term.semester);
-        setYearOptions(buildYearOptions());
       })
       .catch(() => undefined);
 
@@ -130,10 +110,7 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [toast]);
 
-  const doc = useMemo(
-    () => buildOfferingDoc(rows, Number(year), semester),
-    [rows, year, semester],
-  );
+  const doc = useMemo(() => buildOfferingDoc(rows), [rows]);
 
   const startExtraction = async () => {
     setError(null);
@@ -169,7 +146,7 @@ export default function App() {
     const url = URL.createObjectURL(blob);
     const anchor = document.createElement("a");
     anchor.href = url;
-    anchor.download = offeringFileName(Number(year), semester);
+    anchor.download = offeringFileName();
     anchor.click();
     URL.revokeObjectURL(url);
     setToast("فایل ذخیره شد");
@@ -295,53 +272,16 @@ export default function App() {
         </div>
       )}
 
-      {/* Export section */}
+      {/* Export section - only download/copy, year/semester inferred from folder */}
       {rows.length > 0 && !running && (
         <div className="space-y-3 rounded-lg border border-border bg-card p-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-bold">خروجی رجیستری</span>
-            <Badge tone="neutral">
-              courses/{year}/{semester.toLowerCase()}/new.json
-            </Badge>
-          </div>
-
-          {/* Term picker - preselected by Shamsi month, user can override */}
           <div className="flex gap-2">
-            <select
-              dir="ltr"
-              value={year}
-              onChange={(e) => setYear(e.target.value)}
-              className="h-9 w-28 rounded-lg border border-border bg-card-elevated px-2 text-center text-sm text-foreground outline-none focus:border-brand"
-            >
-              {yearOptions.map((y) => (
-                <option key={y} value={String(y)}>
-                  {y}
-                </option>
-              ))}
-            </select>
-            <div className="flex flex-1 gap-1 rounded-lg border border-border bg-card-elevated p-1">
-              {SEMESTERS.map((s) => (
-                <button
-                  key={s}
-                  onClick={() => setSemester(s)}
-                  className={cn(
-                    "h-7 flex-1 rounded-md text-xs transition-colors",
-                    semester === s
-                      ? "bg-zinc-700 font-bold text-white"
-                      : "text-muted hover:text-foreground",
-                  )}
-                >
-                  {SEMESTER_LABELS[s]}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex gap-2">
-            <Button variant="primary" onClick={() => void copyJson()}>
+            <Button variant="primary" className="flex-1" onClick={() => void copyJson()}>
               کپی JSON
             </Button>
-            <Button onClick={() => downloadJson()}>دانلود</Button>
+            <Button className="flex-1" onClick={() => downloadJson()}>
+              دانلود
+            </Button>
           </div>
         </div>
       )}

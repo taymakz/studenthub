@@ -1,7 +1,4 @@
 {
-  "type": "chart",
-  "degree": "bachelors-degree",
-  "semester": "BOTH",
   "isCompleted": true,
   "terms": {
     "1": [

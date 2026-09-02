@@ -48,22 +48,14 @@ function orderOffering(offering: ScrapedOffering): Record<string, unknown> {
 }
 
 export interface OfferingDoc {
-  year: number;
-  semester: Semester;
   scrapedAt: string;
   offerings: Array<Record<string, unknown>>;
 }
 
-/** Build the registry document (`courses/<year>/<semester>/new.json` - the
-    downloaded file is dropped into that folder unchanged). */
-export function buildOfferingDoc(
-  rows: ScrapedOffering[],
-  year: number,
-  semester: Semester,
-): OfferingDoc {
+/** Build the registry document - year/semester are now inferred from the
+    folder path, not stored in the JSON. */
+export function buildOfferingDoc(rows: ScrapedOffering[]): OfferingDoc {
   return {
-    year,
-    semester,
     scrapedAt: new Date().toISOString(),
     offerings: rows.map(orderOffering),
   };
@@ -73,8 +65,8 @@ export function serializeOfferingDoc(doc: OfferingDoc): string {
   return `${JSON.stringify(doc, null, 2)}\n`;
 }
 
-export function offeringFileName(year: number, semester: Semester): string {
-  return `${year}-${semester.toLowerCase()}.json`;
+export function offeringFileName(): string {
+  return `studenthub-offerings.json`;
 }
 
 /**

@@ -235,6 +235,23 @@ export function buildRegistryIndex(): RegistryIndex {
               file.fileName,
             ].join("/")
 
+            // Clean legacy fields (type/degree/semester) on next build — file name + folder already declare them
+            try {
+              const absPath = join(registryRoot(), path)
+              const raw = readFileSync(absPath, "utf-8")
+              const data = JSON.parse(raw) as Record<string, unknown>
+              let changed = false
+              for (const key of ["type", "degree", "semester"] as const) {
+                if (key in data) {
+                  delete (data as Record<string, unknown>)[key]
+                  changed = true
+                }
+              }
+              if (changed) {
+                writeFileSync(absPath, `${JSON.stringify(data, null, 2)}\n`, "utf-8")
+              }
+            } catch {}
+
             charts.push({
               uniSlug,
               majorSlug,
@@ -288,6 +305,26 @@ export function buildRegistryIndex(): RegistryIndex {
             }
           }
         }
+      }
+
+      // Clean legacy year/semester fields from offering snapshots (now inferred from path)
+      for (const term of listOfferingTerms(uniSlug, majorSlug)) {
+        try {
+          const newPath = join(registryRoot(), coursesDir(uniSlug, majorSlug), String(term.year), term.semester.toLowerCase(), "new.json")
+          const rawNew = readFileSync(newPath, "utf-8")
+          const dataNew = JSON.parse(rawNew) as Record<string, unknown>
+          let changedNew = false
+          for (const k of ["year", "semester"] as const) if (k in dataNew) { delete dataNew[k]; changedNew = true }
+          if (changedNew) writeFileSync(newPath, `${JSON.stringify(dataNew, null, 2)}\n`, "utf-8")
+          const oldPath = join(registryRoot(), coursesDir(uniSlug, majorSlug), String(term.year), term.semester.toLowerCase(), "old.json")
+          if (existsSync(oldPath)) {
+            const rawOld = readFileSync(oldPath, "utf-8")
+            const dataOld = JSON.parse(rawOld) as Record<string, unknown>
+            let changedOld = false
+            for (const k of ["year", "semester"] as const) if (k in dataOld) { delete dataOld[k]; changedOld = true }
+            if (changedOld) writeFileSync(oldPath, `${JSON.stringify(dataOld, null, 2)}\n`, "utf-8")
+          }
+        } catch {}
       }
 
       // Offering terms with snapshot-pair status.
