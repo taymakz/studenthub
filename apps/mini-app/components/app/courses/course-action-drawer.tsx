@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Copy, Check, Eye, Share2, Trash2 } from "lucide-react"
 
 import {
@@ -17,6 +18,7 @@ import { toastManager } from "@workspace/ui/components/toast"
 import type { Offering } from "@/lib/api"
 import { apiClient } from "@/lib/request"
 import { useProfileStore } from "@/stores/profile-store"
+import { TermNumberPicker } from "@/components/app/settings/term-number-picker"
 import { courseLine, escapeHtml } from "./sections"
 
 /** Single-course management drawer (nested/inset), with export + share + delete.
@@ -43,6 +45,20 @@ export function CourseActionDrawer({
   const [copiedFull, setCopiedFull] = useState(false)
   const [copiedNameUnit, setCopiedNameUnit] = useState(false)
   const [copiedCode, setCopiedCode] = useState(false)
+  const [termPickerOpen, setTermPickerOpen] = useState(false)
+  const profile = useProfileStore((s) => s.profile)
+  const qc = useQueryClient()
+  const patchMut = useMutation({
+    mutationFn: async (input: { termNumber: number }) =>
+      (await apiClient.patch<{ profile: unknown }>("/me/profile", input)).data,
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["me"] })
+      import("@/stores/profile-store").then(({ useProfileStore }) =>
+        useProfileStore.getState().refresh()
+      )
+      setTermPickerOpen(false)
+    },
+  })
 
   const getPreviewContent = (
     type: "full" | "nameUnit" | "code",
@@ -253,6 +269,21 @@ export function CourseActionDrawer({
                             </div>
                           </div>
                         )}
+                        {group.type === "pre_requisites" &&
+                          group.preRequisiteName?.startsWith("گذراندن") && (
+                            <div className="space-y-2">
+                              <p className="text-center text-xs text-muted-foreground">
+                                ترم فعلی شما {profile?.termNumber ?? "—"} — برای رفع این پیش‌نیاز ترم خود را تغییر دهید
+                              </p>
+                              <Button
+                                className="w-full"
+                                variant="outline"
+                                onClick={() => setTermPickerOpen(true)}
+                              >
+                                تغییر ترم
+                              </Button>
+                            </div>
+                          )}
                       </div>
                     ))}
                     <Button
@@ -464,6 +495,27 @@ export function CourseActionDrawer({
                 }}
               />
             </div>
+          </DrawerPanel>
+        </DrawerPopup>
+      </Drawer>
+
+      <Drawer open={termPickerOpen} onOpenChange={setTermPickerOpen}>
+        <DrawerPopup variant="inset" showBar>
+          <DrawerHeader>
+            <DrawerTitle>انتخاب ترم</DrawerTitle>
+            <DrawerDescription>ترم فعلی خود را انتخاب کنید</DrawerDescription>
+          </DrawerHeader>
+          <DrawerPanel className="p-0">
+            <TermNumberPicker
+              value={profile?.termNumber ?? null}
+              onSelect={(n) => patchMut.mutate({ termNumber: n })}
+              disabled={patchMut.isPending}
+              pendingValue={
+                patchMut.isPending
+                  ? (patchMut.variables as { termNumber?: number })?.termNumber ?? null
+                  : null
+              }
+            />
           </DrawerPanel>
         </DrawerPopup>
       </Drawer>
