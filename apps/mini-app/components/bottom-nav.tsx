@@ -38,7 +38,6 @@ export function BottomNav() {
   const [pill, setPill] = useState({ left: 0, width: 0, ready: false })
   // The pill appears instantly on first measure; only later moves animate.
   const [interactive, setInteractive] = useState(false)
-  const pillMeasuredOnce = useRef(false)
 
   const user = useProfileStore((s) => s.user)
   const photoUrl = user?.photoUrl ?? null
@@ -73,11 +72,6 @@ export function BottomNav() {
       const padLeft = parseFloat(getComputedStyle(container).paddingLeft || "0")
       const left = rect.left - containerRect.left - padLeft
       setPill({ left, width: rect.width, ready: true })
-      if (!pillMeasuredOnce.current) {
-        pillMeasuredOnce.current = true
-        // Let the first paint land without a transition, then enable moves.
-        setTimeout(() => setInteractive(true), 0)
-      }
     }
     update()
     const ro = new ResizeObserver(update)
@@ -89,6 +83,13 @@ export function BottomNav() {
       window.removeEventListener("resize", update)
     }
   }, [activeIndex, pathname, showLabels])
+
+  // Let the first paint land without a transition, then enable moves.
+  useEffect(() => {
+    if (!pill.ready || interactive) return
+    const t = setTimeout(() => setInteractive(true), 0)
+    return () => clearTimeout(t)
+  }, [pill.ready, interactive])
 
   return (
     <nav
