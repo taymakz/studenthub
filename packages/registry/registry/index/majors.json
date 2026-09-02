@@ -1,6 +1,25 @@
 [
   {
     "uniSlug": "azad-malard",
+    "slug": "accounting",
+    "name": {
+      "fa": "حسابداری",
+      "en": "Accounting"
+    },
+    "degrees": [
+      {
+        "slug": "bachelors-degree",
+        "name": {
+          "fa": "کارشناسی پیوسته",
+          "en": "Bachelor's degree"
+        },
+        "termCount": 8,
+        "maxTermCount": 12
+      }
+    ]
+  },
+  {
+    "uniSlug": "azad-malard",
     "slug": "computer-engineering",
     "name": {
       "fa": "مهندسی کامپیوتر",
