@@ -307,6 +307,26 @@ export function buildRegistryIndex(): RegistryIndex {
         }
       }
 
+      // Clean legacy year/semester fields from offering snapshots (now inferred from path)
+      for (const term of listOfferingTerms(uniSlug, majorSlug)) {
+        try {
+          const newPath = join(registryRoot(), coursesDir(uniSlug, majorSlug), String(term.year), term.semester.toLowerCase(), "new.json")
+          const rawNew = readFileSync(newPath, "utf-8")
+          const dataNew = JSON.parse(rawNew) as Record<string, unknown>
+          let changedNew = false
+          for (const k of ["year", "semester"] as const) if (k in dataNew) { delete dataNew[k]; changedNew = true }
+          if (changedNew) writeFileSync(newPath, `${JSON.stringify(dataNew, null, 2)}\n`, "utf-8")
+          const oldPath = join(registryRoot(), coursesDir(uniSlug, majorSlug), String(term.year), term.semester.toLowerCase(), "old.json")
+          if (existsSync(oldPath)) {
+            const rawOld = readFileSync(oldPath, "utf-8")
+            const dataOld = JSON.parse(rawOld) as Record<string, unknown>
+            let changedOld = false
+            for (const k of ["year", "semester"] as const) if (k in dataOld) { delete dataOld[k]; changedOld = true }
+            if (changedOld) writeFileSync(oldPath, `${JSON.stringify(dataOld, null, 2)}\n`, "utf-8")
+          }
+        } catch {}
+      }
+
       // Offering terms with snapshot-pair status.
       for (const term of listOfferingTerms(uniSlug, majorSlug)) {
         const prev = getPreviousOfferings(
