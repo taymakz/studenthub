@@ -26,7 +26,7 @@
     "@visx/curve": "4.0.1-alpha.0",
     "@workspace/ui": "workspace:*",
     "class-variance-authority": "^0.7.1",
-    "clsx": "^2.1.1",
+    "cn": "^0.1.1",
     "date-fns": "^4.4.0",
     "date-fns-jalali": "4.4.0-0",
     "embla-carousel-react": "^8.6.0",
@@ -44,7 +44,6 @@
     "react-resizable-panels": "^4.12.3",
     "react-virtuoso": "^4.18.12",
     "reicon": "^1.2.1",
-    "tailwind-merge": "^3.6.0",
     "zod": "^4.4.3",
     "zustand": "^5.0.15"
   },

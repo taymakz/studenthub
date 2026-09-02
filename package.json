@@ -32,5 +32,8 @@
   "packageManager": "pnpm@11.24.0",
   "engines": {
     "node": ">=20"
+  },
+  "dependencies": {
+    "cn": "^0.1.1"
   }
 }

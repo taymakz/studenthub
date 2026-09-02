@@ -34,6 +34,7 @@ import { cn } from "@workspace/ui/lib/utils"
 import { SettingsRow } from "@/components/app/theme/settings-row"
 import { IsLastTermDrawer } from "./is-last-term-drawer"
 import { SemesterDrawer } from "@/components/app/semester-drawer"
+import { TermNumberPicker } from "./term-number-picker"
 import { findNewerSemesterCode } from "@/lib/term"
 
 const SEMESTER_FA: Record<string, string> = {
@@ -88,34 +89,6 @@ function EditRow({
       {badge}
       <ChevronLeft className="mt-0.5 size-5 shrink-0 text-muted-foreground" />
     </button>
-  )
-}
-
-/** Term number 1..12 grid. */
-function TermNumberPicker({
-  value,
-  onSelect,
-}: {
-  value: number | null
-  onSelect: (n: number) => void
-}) {
-  return (
-    <div className="flex flex-wrap justify-center gap-2 p-4">
-      {Array.from({ length: 12 }, (_, i) => i + 1).map((n) => (
-        <button
-          key={n}
-          type="button"
-          onClick={() => onSelect(n)}
-          className={`flex size-12 items-center justify-center rounded-full border text-sm font-medium tabular-nums transition-colors ${
-            value === n
-              ? "border-primary bg-primary text-primary-foreground"
-              : "bg-card hover:border-primary/50"
-          }`}
-        >
-          {n}
-        </button>
-      ))}
-    </div>
   )
 }
 
