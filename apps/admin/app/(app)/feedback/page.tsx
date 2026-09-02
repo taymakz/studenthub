@@ -129,6 +129,24 @@ function FeedbackTime({ date }: { date: string }) {
   )
 }
 
+function FeedbackKindBadge({ kind }: { kind: string }) {
+  return (
+    <Badge variant="outline" className="gap-1.5">
+      <span aria-hidden className={`size-1.5 rounded-full ${kindDot[kind] ?? "bg-muted-foreground/50"}`} />
+      {kindLabel[kind] ?? kind}
+    </Badge>
+  )
+}
+
+function FeedbackStatusBadge({ status }: { status: string }) {
+  return (
+    <Badge variant="outline" className="gap-1.5">
+      <span aria-hidden className={`size-1.5 rounded-full ${statusDot[status] ?? "bg-muted-foreground/50"}`} />
+      {statusLabel[status] ?? status}
+    </Badge>
+  )
+}
+
 function PaginationInfo({ page, totalPages, total }: { page: number; totalPages: number; total: number }) {
   const pageStr = useFormattedNumber(page)
   const totalPagesStr = useFormattedNumber(totalPages)
@@ -272,16 +290,10 @@ function FeedbackTable({
               {row.message.length > 80 ? "…" : ""}
             </TableCell>
             <TableCell>
-              <Badge variant="outline" className="gap-1.5">
-                <span aria-hidden className={`size-1.5 rounded-full ${kindDot[row.kind] ?? "bg-muted-foreground/50"}`} />
-                {kindLabel[row.kind] ?? row.kind}
-              </Badge>
+              <FeedbackKindBadge kind={row.kind} />
             </TableCell>
             <TableCell>
-              <Badge variant="outline" className="gap-1.5">
-                <span aria-hidden className={`size-1.5 rounded-full ${statusDot[row.status] ?? "bg-muted-foreground/50"}`} />
-                {statusLabel[row.status] ?? row.status}
-              </Badge>
+              <FeedbackStatusBadge status={row.status} />
             </TableCell>
             <TableCell>
               <FeedbackTime date={row.createdAt} />
@@ -335,14 +347,8 @@ function FeedbackDetailDialog({
         </ResponsiveDialogHeader>
         <div className="space-y-4 p-4 text-sm">
           <div className="flex gap-2">
-            <Badge variant="outline" className="gap-1.5">
-              <span className={`size-1.5 rounded-full ${kindDot[selected.kind]}`} />
-              {kindLabel[selected.kind]}
-            </Badge>
-            <Badge variant="outline" className="gap-1.5">
-              <span className={`size-1.5 rounded-full ${statusDot[selected.status]}`} />
-              {statusLabel[selected.status]}
-            </Badge>
+            <FeedbackKindBadge kind={selected.kind} />
+            <FeedbackStatusBadge status={selected.status} />
           </div>
           <p className="rounded-lg bg-muted p-3 break-words whitespace-pre-wrap">{selected.message}</p>
           {selected.user ? (
