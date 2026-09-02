@@ -57,26 +57,28 @@ export function detectConflicts(
         moarefNames: Set<string>
         chartCourses: Array<{
           name: string
-          prerequisites: string[] | number
+          prerequisites: string[] | number | { term: number }
           corequisites: string[]
           courseName?: string
         }>
         passedNames: Set<string>
         failedNames: Set<string>
         isLastTerm?: boolean
+        termNumber?: number | null
       },
   maybeIsLastTerm = false
 ): CourseConflict[] {
   let moarefNames: Set<string>
   let chartCourses: Array<{
     name: string
-    prerequisites: string[] | number
+    prerequisites: string[] | number | { term: number }
     corequisites: string[]
     courseName?: string
   }>
   let passedNames: Set<string>
   let failedNames: Set<string>
   let isLastTerm: boolean
+  let termNumber: number | null = null
   if (optsOrMoaref instanceof Set) {
     // Legacy call: detectConflicts(offerings, moarefNames, isLastTerm)
     moarefNames = optsOrMoaref
@@ -91,7 +93,8 @@ export function detectConflicts(
       passedNames,
       failedNames,
       isLastTerm = false,
-    } = optsOrMoaref)
+      termNumber = null,
+    } = optsOrMoaref as typeof optsOrMoaref & { termNumber?: number | null })
   }
   const out: CourseConflict[] = []
   let id = 0
@@ -234,7 +237,7 @@ export function detectConflicts(
       }
     } else if (typeof pre === "object" && pre !== null && "term" in pre) {
       const requiredTerm = (pre as { term: number }).term
-      const currentTerm = typeof (optsOrMoaref as any)?.termNumber === "number" ? (optsOrMoaref as any).termNumber : null
+      const currentTerm = termNumber
       const termSatisfied = currentTerm != null ? currentTerm > requiredTerm : false
       if (!termSatisfied) {
         const key = `گذراندن ${requiredTerm} نیمسال`
