@@ -3,6 +3,13 @@
 import { useEffect, useRef } from "react"
 import { Loader2, ShieldCheck } from "lucide-react"
 
+/** Random nonce for Telegram Login — Web Crypto, never Math.random (auth material). */
+function createNonce(): string {
+  const bytes = new Uint8Array(16)
+  crypto.getRandomValues(bytes)
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("")
+}
+
 export function useLegacyWidget(botUsername: string, containerRef: React.RefObject<HTMLDivElement | null>, setError: (s: string) => void) {
   const loadedRef = useRef(false)
   useEffect(() => {
@@ -45,17 +52,17 @@ export function useNewLogin(clientId: string, handleAuth: (d: Record<string, unk
     if (!clientId || Number.isNaN(cid) || cid <= 0) { setError("شناسه کلاینت تلگرام تنظیم نشده است"); return }
     const w = window as unknown as { Telegram?: { Login?: { auth: (opts: Record<string, unknown>, cb: (data: Record<string, unknown>) => void) => void } } }
     if (typeof window !== "undefined" && w.Telegram?.Login?.auth) {
-      w.Telegram.Login.auth({ bot_id: cid, client_id: cid, scope: ["profile"], nonce: Math.random().toString(36).slice(2) }, (data: Record<string, unknown>) => void handleAuth(data as Record<string, unknown>))
+      w.Telegram.Login.auth({ bot_id: cid, client_id: cid, scope: ["profile"], nonce: createNonce() }, (data: Record<string, unknown>) => void handleAuth(data as Record<string, unknown>))
       return
     }
     const existing = document.querySelector('script[src*="telegram-login.js"]') as HTMLScriptElement | null
-    if (existing) { existing.addEventListener("load", () => (window as unknown as { Telegram?: { Login?: { auth: (opts: Record<string, unknown>, cb: (d: Record<string, unknown>) => void) => void } } }).Telegram?.Login?.auth?.({ bot_id: cid, client_id: cid, scope: ["profile"], nonce: Math.random().toString(36).slice(2) }, (d: Record<string, unknown>) => void handleAuth(d)), { once: true }); return }
+    if (existing) { existing.addEventListener("load", () => (window as unknown as { Telegram?: { Login?: { auth: (opts: Record<string, unknown>, cb: (d: Record<string, unknown>) => void) => void } } }).Telegram?.Login?.auth?.({ bot_id: cid, client_id: cid, scope: ["profile"], nonce: createNonce() }, (d: Record<string, unknown>) => void handleAuth(d)), { once: true }); return }
     const s = document.createElement("script")
     s.src = "https://oauth.telegram.org/js/telegram-login.js?6"
     s.async = true
     s.onload = () => {
       const ww = window as unknown as { Telegram?: { Login?: { auth: (opts: Record<string, unknown>, cb: (data: Record<string, unknown>) => void) => void } } }
-      if (ww.Telegram?.Login?.auth) ww.Telegram.Login.auth({ bot_id: cid, client_id: cid, scope: ["profile"], nonce: Math.random().toString(36).slice(2) }, (data: Record<string, unknown>) => void handleAuth(data as Record<string, unknown>))
+      if (ww.Telegram?.Login?.auth) ww.Telegram.Login.auth({ bot_id: cid, client_id: cid, scope: ["profile"], nonce: createNonce() }, (data: Record<string, unknown>) => void handleAuth(data as Record<string, unknown>))
       else setError("ربات تلگرام پیکربندی نشده است")
     }
     s.onerror = () => setError("بارگذاری لاگین تلگرام ناموفق بود")
