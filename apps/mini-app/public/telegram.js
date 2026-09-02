@@ -1182,7 +1182,7 @@
     WebView.onEvent(tgEventName, onBottomButtonPressed);
 
     var debugBtn = null;
-    if (initParams.tgWebAppDebug) {
+    if (initParams.tgWebAppDebug && typeof document !== 'undefined') {
       debugBtn = document.createElement('tg-bottom-button');
       var debugBtnStyle = {
         display: 'none',
@@ -2936,7 +2936,7 @@
       }
       WebView.postEvent('web_app_open_link', false, req_params);
     } else {
-      window.open(url, '_blank');
+      window.open(url, '_blank', 'noopener');
     }
   };
   WebApp.openTelegramLink = function (url, options) {
