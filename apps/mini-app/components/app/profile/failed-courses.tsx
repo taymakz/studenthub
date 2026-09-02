@@ -21,6 +21,30 @@ import { useProfileStore } from "@/stores/profile-store"
 import { useProfileChart } from "./use-profile-chart"
 import { FailedSkeleton } from "./section-skeleton"
 
+function CourseChip({
+  c,
+  isFailed,
+  onToggle,
+}: {
+  c: ChartCourseItem
+  isFailed: boolean
+  onToggle: (name: string) => void
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onToggle(c.name)}
+      className={cn(
+        "cursor-pointer rounded-md border px-3 py-2 text-start text-sm font-medium transition-all duration-300",
+        isFailed && "border-warning bg-warning/10 text-warning"
+      )}
+    >
+      <p>{c.name}</p>
+      <p className="text-muted-foreground">{c.units} واحد</p>
+    </button>
+  )
+}
+
 export function FailedCourses() {
   const { pool, isLoading, isError, complete } = useProfileChart()
   const failed = useProfileStore((s) => s.failed)
@@ -97,23 +121,6 @@ export function FailedCourses() {
     return <FailedSkeleton />
   }
 
-  const CourseChip = ({ c }: { c: ChartCourseItem }) => {
-    const isFailed = failedNamesSet.has(c.name)
-    return (
-      <button
-        type="button"
-        onClick={() => toggle(c.name)}
-        className={cn(
-          "cursor-pointer rounded-md border px-3 py-2 text-start text-sm font-medium transition-all duration-300",
-          isFailed && "border-warning bg-warning/10 text-warning"
-        )}
-      >
-        <p>{c.name}</p>
-        <p className="text-muted-foreground">{c.units} واحد</p>
-      </button>
-    )
-  }
-
   return (
     <Drawer
       open={open}
@@ -180,7 +187,12 @@ export function FailedCourses() {
                     </h3>
                     <div className="flex flex-wrap gap-2 rounded-md border bg-card p-2">
                       {termCourses(term).map((c) => (
-                        <CourseChip key={`${term}-${c.name}`} c={c} />
+                        <CourseChip
+                          key={`${term}-${c.name}`}
+                          c={c}
+                          isFailed={failedNamesSet.has(c.name)}
+                          onToggle={toggle}
+                        />
                       ))}
                     </div>
                   </div>
@@ -192,7 +204,12 @@ export function FailedCourses() {
                     </h3>
                     <div className="flex flex-wrap gap-2 rounded-md border bg-card p-2">
                       {moaref.map((c) => (
-                        <CourseChip key={`m-${c.name}`} c={c} />
+                        <CourseChip
+                          key={`m-${c.name}`}
+                          c={c}
+                          isFailed={failedNamesSet.has(c.name)}
+                          onToggle={toggle}
+                        />
                       ))}
                     </div>
                   </div>
@@ -204,7 +221,12 @@ export function FailedCourses() {
                     </h3>
                     <div className="flex flex-wrap gap-2 rounded-md border bg-card p-2">
                       {unknown.map((c) => (
-                        <CourseChip key={`u-${c.name}`} c={c} />
+                        <CourseChip
+                          key={`u-${c.name}`}
+                          c={c}
+                          isFailed={failedNamesSet.has(c.name)}
+                          onToggle={toggle}
+                        />
                       ))}
                     </div>
                   </div>
