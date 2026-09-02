@@ -4,6 +4,12 @@ import * as React from "react"
 
 import { clearWebToken } from "@/lib/auth/web-token"
 
+/** Navigation policy lives at module scope; the effects below only trigger it
+    when the boot state (banned / maintenance) demands it. */
+function replaceRoute(router: { replace: (url: string) => void }, url: string) {
+  router.replace(url)
+}
+
 export function useBootstrapRedirects({
   isBanned,
   isMaintenance,
@@ -24,7 +30,7 @@ export function useBootstrapRedirects({
     setVisible(true)
     if (pathname === "/banned") return
     redirectedRef.current = true
-    router.replace("/banned")
+    replaceRoute(router, "/banned")
   }, [isBanned, pathname, router, redirectedRef, setVisible])
 
   React.useEffect(() => {
@@ -32,7 +38,7 @@ export function useBootstrapRedirects({
     setVisible(true)
     if (pathname === "/maintenance" || pathname === "/banned") return
     redirectedRef.current = true
-    router.replace("/maintenance")
+    replaceRoute(router, "/maintenance")
   }, [isMaintenance, pathname, router, redirectedRef, setVisible])
 }
 

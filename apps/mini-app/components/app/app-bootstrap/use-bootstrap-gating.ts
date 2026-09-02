@@ -9,6 +9,50 @@ import { resolveInitData } from "@/lib/request"
 import { INTRO_STORAGE_KEY, DEBUG } from "@/constants"
 import type { MeProfile } from "@/lib/api"
 
+/** Navigation policy lives at module scope; the effect below only triggers it
+    after the async gate resolves (cloud storage + initData — no event-handler
+    equivalent exists for this decision). */
+function replaceRoute(router: { replace: (url: string) => void }, url: string) {
+  router.replace(url)
+}
+
+async function resolveBootstrapTarget(
+  pathname: string,
+  profile: MeProfile | null
+): Promise<string | null> {
+  let introCompleted = false
+  try {
+    introCompleted =
+      localStorage.getItem(INTRO_STORAGE_KEY) === JSON.stringify(true)
+  } catch {
+    introCompleted = false
+  }
+  if (!introCompleted) {
+    const v = await cloudStorageGet(INTRO_STORAGE_KEY)
+    if (v === JSON.stringify(true)) {
+      introCompleted = true
+      try {
+        localStorage.setItem(INTRO_STORAGE_KEY, v)
+      } catch {}
+    }
+  }
+
+  if (DEBUG) return "/welcome"
+  if (!introCompleted) {
+    if (pathname !== "/welcome") return "/welcome"
+    return null
+  }
+  if (!isProfileComplete(profile)) {
+    if (pathname !== "/setup") return "/setup"
+    return null
+  }
+  const initData = await resolveInitData()
+  const { rd } = applyLaunchParams(initData)
+  if (rd) return rd.startsWith("/") ? rd : `/${rd}`
+  if (pathname === "/" || pathname === "/welcome") return "/profile"
+  return null
+}
+
 export function useBootstrapGating({
   booted,
   ready,
@@ -39,40 +83,7 @@ export function useBootstrapGating({
     let cancelled = false
 
     void (async () => {
-      let introCompleted = false
-      try {
-        introCompleted =
-          localStorage.getItem(INTRO_STORAGE_KEY) === JSON.stringify(true)
-      } catch {
-        introCompleted = false
-      }
-      if (!introCompleted) {
-        const v = await cloudStorageGet(INTRO_STORAGE_KEY)
-        if (v === JSON.stringify(true)) {
-          introCompleted = true
-          try {
-            localStorage.setItem(INTRO_STORAGE_KEY, v)
-          } catch {}
-        }
-      }
-
-      const appRoutes = ["/profile", "/courses", "/dashboard", "/settings"]
-      const isAppRoute = appRoutes.some(
-        (r) => pathname === r || pathname.startsWith(r + "/")
-      )
-
-      let target: string | null = null
-      if (DEBUG) target = "/welcome"
-      else if (!introCompleted) {
-        if (pathname !== "/welcome") target = "/welcome"
-      } else if (!isProfileComplete(profile ?? null)) {
-        if (pathname !== "/setup") target = "/setup"
-      } else {
-        const initData = await resolveInitData()
-        const { rd } = applyLaunchParams(initData)
-        if (rd) target = rd.startsWith("/") ? rd : `/${rd}`
-        else if (pathname === "/" || pathname === "/welcome") target = "/profile"
-      }
+      const target = await resolveBootstrapTarget(pathname, profile ?? null)
 
       if (cancelled) return
       if (target === null) {
@@ -88,7 +99,7 @@ export function useBootstrapGating({
         return
       }
       redirectedRef.current = true
-      router.replace(target)
+      replaceRoute(router, target)
       try {
         localStorage.removeItem("rd")
       } catch {}
