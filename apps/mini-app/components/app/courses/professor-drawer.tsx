@@ -33,6 +33,45 @@ import type { ProfessorFieldsHandle } from "./professor/professor-fields"
 
 export type { ProfessorFieldsHandle }
 
+type DeleteVoteArgs = {
+  slug: string
+  uni: string
+  major: string
+  qc: ReturnType<typeof useQueryClient>
+  refetchOwn: () => void
+  refetchVotes: () => void
+  onDeleting: (v: boolean) => void
+  onClose: () => void
+}
+
+/** Delete flow with toast + cache refresh. Module-scope: the try/catch/
+    finally stays out of the Compiler's component graph. */
+async function runDeleteVote(args: DeleteVoteArgs) {
+  try {
+    args.onDeleting(true)
+    await deleteVote(args.slug)
+    toastManager.add({
+      type: "success",
+      title: "رأی شما با موفقیت حذف شد",
+      data: { variant: "x" },
+    })
+    args.refetchOwn()
+    args.refetchVotes()
+    args.qc.invalidateQueries({
+      queryKey: ["professor-votes", args.uni, args.major, args.slug],
+    })
+    args.onClose()
+  } catch {
+    toastManager.add({
+      type: "error",
+      title: "خطا در حذف رأی",
+      data: { variant: "x" },
+    })
+  } finally {
+    args.onDeleting(false)
+  }
+}
+
 export function ProfessorDrawer({
   open,
   onOpenChange,
@@ -70,29 +109,18 @@ export function ProfessorDrawer({
   const isInitialLoading =
     slugQuery.isLoading || (!!slug && (votesQuery.isLoading || ownQuery.isLoading))
 
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (!slug) return
-    try {
-      setIsDeleting(true)
-      await deleteVote(slug)
-      toastManager.add({
-        type: "success",
-        title: "رأی شما با موفقیت حذف شد",
-        data: { variant: "x" },
-      })
-      ownQuery.refetch()
-      votesQuery.refetch()
-      qc.invalidateQueries({ queryKey: ["professor-votes", uni, major, slug] })
-      setDeleteOpen(false)
-    } catch {
-      toastManager.add({
-        type: "error",
-        title: "خطا در حذف رأی",
-        data: { variant: "x" },
-      })
-    } finally {
-      setIsDeleting(false)
-    }
+    void runDeleteVote({
+      slug,
+      uni,
+      major,
+      qc,
+      refetchOwn: () => ownQuery.refetch(),
+      refetchVotes: () => votesQuery.refetch(),
+      onDeleting: setIsDeleting,
+      onClose: () => setDeleteOpen(false),
+    })
   }
 
   const handleVoteSuccess = () => {

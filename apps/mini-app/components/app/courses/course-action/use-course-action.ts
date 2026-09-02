@@ -13,9 +13,7 @@ export function useCourseActionTerm() {
       (await apiClient.patch<{ profile: unknown }>("/me/profile", input)).data,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["me"] })
-      import("@/stores/profile-store").then(({ useProfileStore }) =>
-        useProfileStore.getState().refresh()
-      )
+      void useProfileStore.getState().refresh()
     },
   })
   return { profile, patchMut }

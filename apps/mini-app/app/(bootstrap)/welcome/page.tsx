@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation"
 import { AnimatePresence, m } from "motion/react"
 
 import { DEBUG, INTRO_STORAGE_KEY } from "@/constants"
+import { cloudStorageSet } from "@/lib/tma-storage"
 import { cn } from "@workspace/ui/lib/utils"
 
 import { WelcomeSlide } from "./_components/welcome-slide"
@@ -42,12 +43,12 @@ export default function WelcomePage() {
   const [finishing, setFinishing] = React.useState(false)
   const isLast = index === slides.length - 1
 
-  const paginate = React.useCallback((delta: number) => {
+  const paginate = (delta: number) => {
     setState(([current]) => [
       Math.min(Math.max(current + delta, 0), slides.length - 1),
       delta,
     ])
-  }, [])
+  }
 
   // RTL swipe + fade (multi-step pattern): forward (dir=1) — next slide
   // enters from the LEFT edge while the current one slides off to the RIGHT;
@@ -75,7 +76,6 @@ export default function WelcomePage() {
       /* storage blocked - gate re-shows next launch */
     }
     try {
-      const { cloudStorageSet } = await import("@/lib/tma-storage")
       // Hang-proof + non-blocking: localStorage above already marked the
       // intro complete; cloud mirror must never delay navigation (the raw
       // SDK setItem can pend forever without a Telegram bridge response).
@@ -100,7 +100,7 @@ export default function WelcomePage() {
         <AnimatePresence initial={false} custom={direction}>
           <m.div
             key={index}
-            className="absolute inset-0 px-6 will-change-transform"
+            className="absolute inset-0 px-6"
             custom={direction}
             variants={variants}
             initial="enter"

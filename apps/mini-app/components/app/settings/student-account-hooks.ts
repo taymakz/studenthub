@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { fetchMe, fetchMajors, fetchOfferingTerms, fetchUniversities } from "@/lib/api"
 import { apiClient } from "@/lib/request"
 import { findNewerSemesterCode } from "@/lib/term"
+import { useProfileStore } from "@/stores/profile-store"
 
 export function useStudentAccountData(open: boolean) {
   const meQuery = useQuery({ queryKey: ["me"], queryFn: fetchMe })
@@ -23,7 +24,7 @@ export function useStudentPatch(onClose: () => void) {
     mutationFn: async (input: { termNumber?: number; currentSemesterCode?: string; isLastTerm?: boolean }) => (await apiClient.patch<{ profile: unknown }>("/me/profile", input)).data,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: ["me"] })
-      import("@/stores/profile-store").then(({ useProfileStore }) => useProfileStore.getState().refresh())
+      void useProfileStore.getState().refresh()
       onClose()
     },
   })

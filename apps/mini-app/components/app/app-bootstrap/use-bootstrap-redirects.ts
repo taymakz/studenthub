@@ -2,6 +2,8 @@
 
 import * as React from "react"
 
+import { clearWebToken } from "@/lib/auth/web-token"
+
 export function useBootstrapRedirects({
   isBanned,
   isMaintenance,
@@ -40,9 +42,7 @@ export function useBootstrapStaleToken(
 ) {
   React.useEffect(() => {
     if (!hasStaleWebToken) return
-    void import("@/lib/auth/web-token").then(({ clearWebToken }) => {
-      clearWebToken()
-      setNeedsWebAuth(true)
-    })
+    clearWebToken()
+    setNeedsWebAuth(true)
   }, [hasStaleWebToken, setNeedsWebAuth])
 }

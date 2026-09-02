@@ -1,6 +1,12 @@
 "use client"
 
-import { forwardRef, useCallback, useImperativeHandle, useState } from "react"
+import {
+  forwardRef,
+  useEffect,
+  useImperativeHandle,
+  useRef,
+  useState,
+} from "react"
 
 import { Button } from "@workspace/ui/components/button"
 import { ElasticSlider } from "@workspace/ui/components/elastic-slider"
@@ -36,6 +42,42 @@ function getSliderTheme(value: number, inverted: boolean) {
 export type ProfessorFieldsHandle = {
   submit: () => Promise<void>
   isSubmitting: boolean
+}
+
+type SubmitVoteArgs = {
+  payload: Parameters<typeof saveVote>[0]
+  mode: "create" | "update"
+  onSubmitting: (v: boolean) => void
+  onLoadingChange?: (loading: boolean) => void
+  onSuccess?: () => void
+}
+
+/** Vote submit with toast + loading handoff. Module-scope: the try/catch/
+    finally stays out of the Compiler's component graph. */
+async function submitProfessorVote(args: SubmitVoteArgs) {
+  try {
+    args.onSubmitting(true)
+    args.onLoadingChange?.(true)
+    await saveVote(args.payload)
+    toastManager.add({
+      type: "success",
+      title:
+        args.mode === "create"
+          ? "رأی شما با موفقیت ثبت شد"
+          : "رأی شما با موفقیت ویرایش شد",
+      data: { variant: "x" },
+    })
+    args.onSuccess?.()
+  } catch {
+    toastManager.add({
+      type: "error",
+      title: "خطا در ثبت رأی",
+      data: { variant: "x" },
+    })
+  } finally {
+    args.onSubmitting(false)
+    setTimeout(() => args.onLoadingChange?.(false), 300)
+  }
 }
 
 export const ProfessorFields = forwardRef<
@@ -78,11 +120,9 @@ export const ProfessorFields = forwardRef<
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const handleSubmit = useCallback(async () => {
-    try {
-      setIsSubmitting(true)
-      onLoadingChange?.(true)
-      await saveVote({
+  const handleSubmit = async () => {
+    await submitProfessorVote({
+      payload: {
         universitySlug,
         majorSlug,
         professorSlug,
@@ -94,43 +134,29 @@ export const ProfessorFields = forwardRef<
         providesSampleQuestions,
         providesNotes,
         mandatoryAttendance,
-      })
-      toastManager.add({
-        type: "success",
-        title:
-          mode === "create"
-            ? "رأی شما با موفقیت ثبت شد"
-            : "رأی شما با موفقیت ویرایش شد",
-        data: { variant: "x" },
-      })
-      onSuccess?.()
-    } catch {
-      toastManager.add({
-        type: "error",
-        title: "خطا در ثبت رأی",
-        data: { variant: "x" },
-      })
-    } finally {
-      setIsSubmitting(false)
-      setTimeout(() => onLoadingChange?.(false), 300)
-    }
-  }, [
-    formData,
-    majorSlug,
-    mandatoryAttendance,
-    mode,
-    onLoadingChange,
-    onSuccess,
-    professorSlug,
-    providesNotes,
-    providesSampleQuestions,
-    universitySlug,
-  ])
+      },
+      mode,
+      onSubmitting: setIsSubmitting,
+      onLoadingChange,
+      onSuccess,
+    })
+  }
 
-  useImperativeHandle(ref, () => ({ submit: handleSubmit, isSubmitting }), [
-    handleSubmit,
-    isSubmitting,
-  ])
+  // Latest-submit pointer: the handle stays stable across renders while
+  // submitRef always points at the freshest handleSubmit closure.
+  const submitRef = useRef(handleSubmit)
+  useEffect(() => {
+    submitRef.current = handleSubmit
+  })
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      submit: () => submitRef.current(),
+      isSubmitting,
+    }),
+    [isSubmitting]
+  )
 
   return (
     <div className="space-y-6">

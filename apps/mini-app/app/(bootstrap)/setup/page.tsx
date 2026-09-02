@@ -71,7 +71,15 @@ export default function SetupPage() {
       </div>
 
       <div className="mb-6 h-1 overflow-hidden rounded-full bg-muted">
-        <m.div initial={false} className="h-full rounded-full bg-primary" animate={{ width: `${(stepIndex / STEPS.length) * 100}%` }} transition={{ duration: 0.35 }} />
+        {/* scaleX instead of width: compositor-only, no layout pass per frame.
+            originX: 1 = fill grows from the inline-start edge (RTL). */}
+        <m.div
+          initial={false}
+          className="h-full rounded-full bg-primary"
+          style={{ originX: 1 }}
+          animate={{ scaleX: stepIndex / STEPS.length }}
+          transition={{ duration: 0.35 }}
+        />
       </div>
 
       <div className="relative overflow-hidden">
@@ -88,7 +96,6 @@ export default function SetupPage() {
             animate="center"
             exit="exit"
             transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
-            className="will-change-transform"
           >
             <SetupSteps
               step={step}

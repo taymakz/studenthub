@@ -60,14 +60,12 @@ export function FloatingButtons({
           className="fixed bottom-22 z-20 transition-transform duration-150 ease-out"
           style={{
             right: "1.5rem",
-            willChange: "transform",
           }}
         >
           <div
             className="relative flex h-10 cursor-pointer items-center gap-2 rounded-xl border bg-background px-2 transition-all duration-150 ease-out"
             style={{
               width: isScrollingDown ? "42px" : "105px",
-              willChange: "width",
             }}
             onClick={onOpenNoted}
           >
@@ -91,14 +89,12 @@ export function FloatingButtons({
           className="fixed bottom-34 z-20 transition-transform duration-150 ease-out"
           style={{
             right: "1.5rem",
-            willChange: "transform",
           }}
         >
           <div
             className="relative flex h-10 cursor-pointer items-center gap-2 rounded-xl border bg-background px-2 transition-all duration-150 ease-out"
             style={{
               width: isScrollingDown ? "42px" : "105px",
-              willChange: "width",
             }}
             onClick={onOpenConflicts}
           >
@@ -126,7 +122,6 @@ export function FloatingButtons({
         style={{
           transform: showScrollTop ? "scale(1)" : "scale(0)",
           opacity: showScrollTop ? 1 : 0,
-          willChange: "transform, opacity",
         }}
       >
         <button
