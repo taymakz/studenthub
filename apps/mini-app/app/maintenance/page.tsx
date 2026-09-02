@@ -17,7 +17,7 @@ async function runMaintenanceCheck(
     await useProfileStore.getState().refresh()
     const s = useProfileStore.getState()
     // If maintenance cleared (or bypass now valid), leave the page.
-    // Use hard navigation so TopRedirect + AppBootstrap re-gate from "/".
+    // Use hard navigation so AppBootstrap re-gates from "/".
     if (!s.maintenance) {
       // Clear any stale session flag that might keep us here
       try {
@@ -49,9 +49,9 @@ export default function MaintenancePage() {
   const [checking, setChecking] = useState(false)
   const mounted = useMounted()
 
-  // If this page is ever reached via hard refresh without going through
-  // TopRedirect (e.g. direct link), ensure we actually probe /me — the store
-  // starts unhydrated and would otherwise show stale sessionStorage forever.
+  // If this page is ever reached via hard refresh (e.g. direct link), ensure
+  // we actually probe /me — the store starts unhydrated and would otherwise
+  // show stale sessionStorage forever.
   useEffect(() => {
     if (!hydrated && !checking) {
       void useProfileStore.getState().refresh()

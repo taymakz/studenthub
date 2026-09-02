@@ -10,7 +10,6 @@ import { SDKLaunchParamsProvider } from "@/providers/launch-params"
 import { ThemeProvider } from "@/providers/theme-provider"
 import { ToastProvider } from "@workspace/ui/components/toast"
 import { cn } from "@workspace/ui/lib/utils"
-import { TopRedirect } from "@/components/app/top-redirect"
 import { MotionProvider } from "@/providers/motion-provider"
 
 const vazirmatn = Vazirmatn({
@@ -148,7 +147,6 @@ export default function RootLayout({
             Iranian filtering. beforeInteractive guarantees it exists before
             SDKProvider's init(). */}
         <Script src="/telegram.js" strategy="beforeInteractive" />
-        <TopRedirect />
         <SDKProvider>
           <SDKLaunchParamsProvider>
             <ThemeProvider>
