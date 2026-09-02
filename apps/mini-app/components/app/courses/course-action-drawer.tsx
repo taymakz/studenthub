@@ -20,8 +20,8 @@ import { ConflictGroupCard } from "./course-action/conflict-actions"
 import {
   ExportPanel,
   MainActions,
-  TermPickerDrawer,
 } from "./course-action/course-action-panels"
+import { TermPickerDrawer } from "./course-action/term-picker-drawer"
 
 function CourseActionMainContent({
   offering,
@@ -33,7 +33,7 @@ function CourseActionMainContent({
   onTermPicker,
 }: {
   offering: Offering
-  relatedGroups: import("./conflicts").CourseConflict[]
+  relatedGroups: import("./conflict-detect").CourseConflict[]
   isLastTerm?: boolean
   profileTerm?: number | null
   onExport: () => void
@@ -56,7 +56,7 @@ function ConflictContent({
   onTermPicker,
 }: {
   offering: Offering
-  groups: import("./conflicts").CourseConflict[]
+  groups: import("./conflict-detect").CourseConflict[]
   isLastTerm?: boolean
   profileTerm?: number | null
   onExport: () => void
@@ -101,7 +101,7 @@ export function CourseActionDrawer({
   open: boolean
   onOpenChange: (open: boolean) => void
   onDelete: (courseIndex: string) => void
-  conflictGroups?: import("./conflicts").CourseConflict[]
+  conflictGroups?: import("./conflict-detect").CourseConflict[]
   isLastTerm?: boolean
 }) {
   const [exportOpen, setExportOpen] = useState(false)
