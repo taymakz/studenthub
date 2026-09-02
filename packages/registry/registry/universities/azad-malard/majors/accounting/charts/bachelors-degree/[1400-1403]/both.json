@@ -1,0 +1,10 @@
+﻿{
+  "type": "chart",
+  "degree": "bachelors-degree",
+  "semester": "BOTH",
+  "isCompleted": false,
+  "terms": {},
+  "moaref": [],
+  "unknown": [],
+  "electives": {}
+}

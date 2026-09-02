@@ -18,9 +18,13 @@ export const chartCourseSchema = z.object({
   name: z.string().min(1).max(255),
   theoreticalUnits: z.number().int().min(0).max(20),
   practicalUnits: z.number().int().min(0).max(20),
-  /** Prerequisites: course NAMES (string) or required passed units (number, e.g. 100). */
+  /** Prerequisites: course NAMES (string[]) or required passed units (number, e.g. 100) or required terms (e.g. { term: 5 } for گذراندن 5 نیمسال). */
   prerequisites: z
-    .union([z.array(z.string().max(255)), z.number().int().min(1).max(500)])
+    .union([
+      z.array(z.string().max(255)),
+      z.number().int().min(1).max(500),
+      z.object({ term: z.number().int().min(1).max(20) }),
+    ])
     .default([]),
   /** Corequisites: course NAMES */
   corequisites: z.array(z.string().max(255)).default([]),

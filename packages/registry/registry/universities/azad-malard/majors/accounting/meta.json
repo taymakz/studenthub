@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../../schemas/major.json",
+  "type": "major",
+  "slug": "accounting",
+  "name": {
+    "fa": "حسابداری",
+    "en": "Accounting"
+  }
+}

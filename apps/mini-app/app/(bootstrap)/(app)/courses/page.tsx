@@ -111,6 +111,7 @@ export default function CoursesPage() {
         passedNames,
         failedNames: (d as any).failedNames ?? new Set(),
         isLastTerm: profile?.isLastTerm ?? false,
+        termNumber: profile?.termNumber ?? null,
       }),
     [
       notedOfferings,

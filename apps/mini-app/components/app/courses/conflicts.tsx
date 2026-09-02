@@ -232,6 +232,16 @@ export function detectConflicts(
         arr.push(offering)
         preReqMap.set(key, arr)
       }
+    } else if (typeof pre === "object" && pre !== null && "term" in pre) {
+      const requiredTerm = (pre as { term: number }).term
+      const currentTerm = typeof (optsOrMoaref as any)?.termNumber === "number" ? (optsOrMoaref as any).termNumber : null
+      const termSatisfied = currentTerm != null ? currentTerm > requiredTerm : false
+      if (!termSatisfied) {
+        const key = `گذراندن ${requiredTerm} نیمسال`
+        const arr = preReqMap.get(key) ?? []
+        arr.push(offering)
+        preReqMap.set(key, arr)
+      }
     }
 
     // Corequisites — must be taken together or already passed
@@ -250,12 +260,14 @@ export function detectConflicts(
   }
 
   for (const [name, courses] of preReqMap.entries()) {
-    const isArrayPreReq = !name.startsWith("حداقل")
+    const isArrayPreReq = !name.startsWith("حداقل") && !name.startsWith("گذراندن")
     out.push({
       id: `pre-${id++}`,
       reason: name.startsWith("حداقل")
         ? `برای این درس حداقل باید ${name.split(" ")[1]} واحد پاس کرده باشید. واحد پاس شده شما (${passedUnits})`
-        : `درس "${name}" به عنوان پیش‌نیاز پاس نشده یا در لیست مردودی نیست`,
+        : name.startsWith("گذراندن")
+          ? `برای این درس باید ${name} گذرانده باشید`
+          : `درس "${name}" به عنوان پیش‌نیاز پاس نشده یا در لیست مردودی نیست`,
       type: "pre_requisites",
       courses,
       preRequisiteName: name,

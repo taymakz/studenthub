@@ -62,7 +62,7 @@ interface ChartStore {
     term: number,
     index: number,
     kind: "prerequisites" | "corequisites",
-    values: string[] | number
+    values: string[] | number | { term: number }
   ) => void
   addMoaref: (course: ChartCourse) => void
   addMoarefMany: (courses: ChartCourse[]) => void
@@ -71,7 +71,7 @@ interface ChartStore {
   setMoarefRequisites: (
     index: number,
     kind: "prerequisites" | "corequisites",
-    values: string[] | number
+    values: string[] | number | { term: number }
   ) => void
   addUnknown: (course: ChartCourse) => void
   addUnknownMany: (courses: ChartCourse[]) => void
