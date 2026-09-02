@@ -29,6 +29,12 @@ export function useFilteredCourses(opts: {
 
   const totalMatching = offerings.filter((o) => chartCourseNames.has(o.courseName)).length
 
+  // Constant-time lookups inside the filter loops below.
+  const professorFilter = new Set(filters.professors)
+  const unitFilter = new Set(filters.units)
+  const chartTermFilter = new Set(filters.chartTerms)
+  const dayFilter = new Set(filters.days.map(normalizeDay))
+
   let list = offerings.filter((o) => chartCourseNames.has(o.courseName))
   const term = search.trim().toLowerCase()
   const words = term.split(/\s+/)
@@ -41,21 +47,21 @@ export function useFilteredCourses(opts: {
         typeof o.professor === "string"
           ? o.professor
           : (o.professor as { fa?: string } | null)?.fa
-      return name && filters.professors.includes(name)
+      return !!name && professorFilter.has(name)
     })
   if (filters.units.length)
     list = list.filter((o) =>
-      filters.units.includes(String((o.theoreticalUnits ?? 0) + (o.practicalUnits ?? 0)))
+      unitFilter.has(String((o.theoreticalUnits ?? 0) + (o.practicalUnits ?? 0)))
     )
   if (filters.chartTerms.length)
     list = list.filter((o) => {
       const t = termByCourseName.get(o.courseName)
-      return t != null && filters.chartTerms.includes(t)
+      return t != null && chartTermFilter.has(t)
     })
   if (filters.days.length)
     list = list.filter((o) => {
       const day = extractWeekday(o.classSchedule)
-      return day && filters.days.some((d) => normalizeDay(d) === day)
+      return day != null && dayFilter.has(day)
     })
   if (filters.onlyCanTake && isChartComplete) list = list.filter((o) => canTake(o))
   if (term)
