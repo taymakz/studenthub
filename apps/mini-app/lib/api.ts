@@ -525,15 +525,9 @@ export function saveVote(input: VoteInput) {
 /* ─── Course students (همکلاسی‌ها) ──────────────────────────────── */
 
 export interface CourseStudent {
-  id: number
   firstName: string
   lastName: string | null
-  username: string | null
   photoUrl: string | null
-  visibleInCourseLists: boolean
-  termNumber: number | null
-  gender: "MALE" | "FEMALE" | null
-  createdAt: string
 }
 
 export function fetchCourseStudents(params?: {

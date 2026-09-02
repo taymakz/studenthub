@@ -65,13 +65,9 @@ function StudentRow({ student }: { student: CourseStudent }) {
         {student.photoUrl ? <AvatarImage src={student.photoUrl} alt={student.firstName} /> : null}
         <AvatarFallback>{(student.firstName?.[0] ?? "?") + (student.lastName?.[0] ?? "")}</AvatarFallback>
       </Avatar>
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium">{student.firstName} {student.lastName ?? ""}</p>
-        <p className="truncate text-xs text-muted-foreground" dir="ltr">
-          {student.username ? `@${student.username}` : `#${student.id}`}
-          {student.termNumber ? ` · ترم ${student.termNumber}` : ""}
-        </p>
-      </div>
+      <p className="min-w-0 flex-1 truncate text-sm font-medium">
+        {student.firstName} {student.lastName ?? ""}
+      </p>
     </div>
   )
 }
@@ -81,7 +77,7 @@ function StudentRow({ student }: { student: CourseStudent }) {
  * scrolling is driven by the DrawerPanel's ScrollArea viewport (the
  * noted-list drawer's scroll behavior) via `customScrollParent`. Spacing
  * uses padding on the item wrapper, never margins — Virtuoso measures
- * content boxes.
+ * content boxes. Pages only append, so default index keys are stable.
  */
 export function StudentsList({
   students,
@@ -101,7 +97,6 @@ export function StudentsList({
         <Virtuoso
           customScrollParent={scrollParent}
           data={students}
-          computeItemKey={(_, s) => s.id}
           overscan={6}
           endReached={onLoadMore}
           itemContent={(_, s) => (
