@@ -201,12 +201,16 @@ export const PERSIAN_WEEKDAYS = [
   "جمعه",
 ] as const
 
+// Built once — constructing an Intl formatter per call is expensive.
+const PERSIAN_WEEKDAY_FORMATTER = new Intl.DateTimeFormat(
+  "fa-IR-u-ca-persian",
+  { weekday: "long" }
+)
+
 /** Current Persian weekday, normalized against PERSIAN_WEEKDAYS (null = unknown). */
 export function currentPersianWeekday(): string | null {
   try {
-    const name = new Intl.DateTimeFormat("fa-IR-u-ca-persian", {
-      weekday: "long",
-    }).format(new Date())
+    const name = PERSIAN_WEEKDAY_FORMATTER.format(new Date())
     const norm = name.replace(/[\s\u200c]/g, "")
     const found = PERSIAN_WEEKDAYS.find(
       (d) => d.replace(/[\s\u200c]/g, "") === norm
@@ -254,10 +258,13 @@ export function groupByWeekday(
     if (!Number.isFinite(h) || !Number.isFinite(m)) return 0
     return h * 60 + m
   }
-  return PERSIAN_WEEKDAYS.filter((d) => map.has(d)).map((day) => ({
-    day,
-    items: (map.get(day) ?? []).sort((a, b) => startTime(a) - startTime(b)),
-  }))
+  const result: Array<{ day: string; items: Offering[] }> = []
+  for (const day of PERSIAN_WEEKDAYS) {
+    const items = map.get(day)
+    if (!items || items.length === 0) continue
+    result.push({ day, items: items.sort((a, b) => startTime(a) - startTime(b)) })
+  }
+  return result
 }
 
 /**
@@ -273,11 +280,13 @@ export function soonestClassMessage(
   const today = currentPersianWeekday()
   const now = toMinutes(currentTimeHHMM()) ?? 0
   const todayIndex = today ? PERSIAN_WEEKDAYS.findIndex((d) => d === today) : -1
+  const groupsByDay = new Map(groups.map((g) => [g.day, g]))
 
   for (let i = 0; i < 7; i++) {
     const idx = todayIndex < 0 ? i : (todayIndex + i) % 7
     const day = PERSIAN_WEEKDAYS[idx]
-    const group = groups.find((g) => g.day === day)
+    if (!day) continue
+    const group = groupsByDay.get(day)
     if (!group || group.items.length === 0) continue
 
     if (i === 0) {
