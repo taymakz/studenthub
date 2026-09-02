@@ -986,17 +986,12 @@ export const meRoutes = new Hono<AppEnv>()
       sql`${users.id} != ${user.id}`
     )
 
+    // Privacy: classmates expose only a name and avatar — nothing else.
     const rows = await db
       .selectDistinct({
-        id: users.id,
         firstName: users.firstName,
         lastName: users.lastName,
-        username: users.telegramUsername,
         photoUrl: users.photoUrl,
-        visibleInCourseLists: users.visibleInCourseLists,
-        termNumber: universityProfiles.termNumber,
-        gender: universityProfiles.gender,
-        createdAt: users.createdAt,
       })
       .from(users)
       .innerJoin(universityProfiles, eq(users.id, universityProfiles.userId))
@@ -1010,7 +1005,8 @@ export const meRoutes = new Hono<AppEnv>()
         )
       )
       .where(where)
-      .orderBy(desc(users.createdAt))
+      // DISTINCT requires ordering by selected columns — alphabetical it is.
+      .orderBy(users.lastName, users.firstName)
       .limit(limit + 1)
       .offset(offset)
 
