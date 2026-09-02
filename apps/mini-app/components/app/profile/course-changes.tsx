@@ -1,108 +1,36 @@
 "use client"
 
-import { useMemo, useState } from "react"
+import { useState } from "react"
 import { AnimatePresence, motion } from "motion/react"
 
 import { Card } from "@workspace/ui/components/card"
-import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs"
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@workspace/ui/components/carousel"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@workspace/ui/components/carousel"
 import { cn } from "@workspace/ui/lib/utils"
-import { ArrowLeft } from "reicon-react"
-import { Plus, Replace, Trash2 } from "lucide-react"
 
 import type { Offering, OfferingChangedField, OfferingUpdated } from "@/lib/api"
 import { useProfileStore } from "@/stores/profile-store"
 import { useTimeAgo } from "@/hooks/use-time-ago"
-import { useProfileChart } from "./use-profile-chart"
 import { CourseChangesSkeleton } from "./section-skeleton"
 import { CourseDetailDrawer } from "@/components/app/courses/course-detail-drawer"
 import { ProfessorDrawer } from "@/components/app/courses/professor-drawer"
+import { useCourseChangesData } from "./course-changes/use-course-changes"
+import { ChangesTabs } from "./course-changes/course-changes-tabs"
 
 type Tab = "new" | "changed" | "removed"
 
 export function CourseChanges() {
-  const { pool, complete, isLoading } = useProfileChart()
-  const changes = useProfileStore((s) => s.changes)
-  const termCode = useProfileStore((s) => s.termCode)
+  const { complete, isLoading, termCode, added, removed, updated, changes, detail } = useCourseChangesData()
   const noted = useProfileStore((s) => s.noted)
   const passed = useProfileStore((s) => s.passed)
-  const terms = useProfileStore((s) => s.terms)
   const profile = useProfileStore((s) => s.profile)
   const [tab, setTab] = useState<Tab>("new")
   const [selected, setSelected] = useState<Offering | null>(null)
-  const [selectedChanges, setSelectedChanges] = useState<
-    OfferingChangedField[]
-  >([])
-  const [professor, setProfessor] = useState<{
-    name: string
-    uni: string
-    major: string
-  } | null>(null)
+  const [selectedChanges, setSelectedChanges] = useState<OfferingChangedField[]>([])
+  const [professor, setProfessor] = useState<{ name: string; uni: string; major: string } | null>(null)
 
-  const isNoted = (o: Offering) =>
-    noted.some((n) => !n.isDeleted && n.courseIndex === o.index)
+  const isNoted = (o: Offering) => noted.some((n) => !n.isDeleted && n.courseIndex === o.index)
 
-  const chartNames = useMemo(() => new Set(pool.map((c) => c.name)), [pool])
-  const hasChart = chartNames.size > 0
-
-  const detail = changes?.detail
-
-  const added = useMemo(
-    () =>
-      (detail?.added ?? []).filter((o) =>
-        hasChart ? chartNames.has(o.courseName) : true
-      ),
-    [detail, hasChart, chartNames]
-  )
-  const removed = useMemo(
-    () =>
-      (detail?.removed ?? []).filter((o) =>
-        hasChart ? chartNames.has(o.courseName) : true
-      ),
-    [detail, hasChart, chartNames]
-  )
-  const updated = useMemo(
-    () =>
-      (detail?.updated ?? []).filter(
-        (u) => !hasChart || chartNames.has(u.after.courseName)
-      ),
-    [detail, hasChart, chartNames]
-  )
-
-  const tabs: Array<{
-    key: Tab
-    label: string
-    count: number
-    Icon: typeof Plus
-  }> = [
-    { key: "new", label: "جدید", count: added.length, Icon: Plus },
-    {
-      key: "changed",
-      label: "تغییر جزئیات",
-      count: updated.length,
-      Icon: Replace,
-    },
-    { key: "removed", label: "حذف", count: removed.length, Icon: Trash2 },
-  ]
-
-  const valueStyles: Record<string, { indicator: string; trigger: string }> = {
-    new: { indicator: "bg-success/10", trigger: "data-[active]:text-success" },
-    changed: { indicator: "bg-info/10", trigger: "data-[active]:text-info" },
-    removed: {
-      indicator: "bg-destructive/10",
-      trigger: "data-[active]:text-destructive",
-    },
-  }
-
-  const lastUpdated = useTimeAgo(
-    changes?.scrapedAt ? Date.parse(changes.scrapedAt) : null
-  )
+  const lastUpdated = useTimeAgo(changes?.scrapedAt ? Date.parse(changes.scrapedAt) : null)
 
   if (!complete) return null
   if (isLoading) return <CourseChangesSkeleton />
@@ -121,95 +49,29 @@ export function CourseChanges() {
         <p>آخرین بروزرسانی {lastUpdated}</p>
       </div>
 
-      <Tabs
-        defaultValue="new"
-        value={tab}
-        onValueChange={(v) => setTab(v as Tab)}
-        valueStyles={valueStyles}
-      >
-        <TabsList className="grid w-full grid-cols-3 gap-1 text-sm">
-          {tabs.map(({ key, label, count, Icon }) => (
-            <TabsTrigger key={key} value={key} className="gap-1.5">
-              <Icon className="size-3.5" />
-              {label} {count}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+      <ChangesTabs tab={tab} setTab={setTab} addedLen={added.length} updatedLen={updated.length} removedLen={removed.length} />
 
       <div className="min-h-30">
         <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={tab}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.1 }}
-          >
-            {tab === "new" &&
-              (added.length === 0 ? (
-                <Empty text="درس جدیدی فعلا ثبت نشده" />
-              ) : (
-                <OfferingCarousel
-                  items={added}
-                  tone="added"
-                  onOpen={setSelected}
-                />
-              ))}
-            {tab === "changed" &&
-              (updated.length === 0 ? (
-                <Empty text="جزئیات درسی فعلا تغییر نکرده" />
-              ) : (
-                <ChangedCarousel
-                  items={updated}
-                  onOpen={(item) => {
-                    setSelected(item.after)
-                    setSelectedChanges(item.changes)
-                  }}
-                />
-              ))}
-            {tab === "removed" &&
-              (removed.length === 0 ? (
-                <Empty text="درسی فعلا حذف نشده" />
-              ) : (
-                <OfferingCarousel items={removed} tone="removed" />
-              ))}
+          <motion.div key={tab} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} transition={{ duration: 0.1 }}>
+            <TabContent tab={tab} added={added} updated={updated} removed={removed} setSelected={setSelected} setSelectedChanges={setSelectedChanges} />
           </motion.div>
         </AnimatePresence>
       </div>
 
-      {/* Course detail for added/changed cards (removed cards do nothing) */}
       <CourseDetailDrawer
         offering={selected}
         isNoted={selected ? isNoted(selected) : false}
-        isPassed={
-          selected
-            ? passed.some((p) => p.courseName === selected.courseName)
-            : false
-        }
-        isNew={
-          selected
-            ? new Set((detail?.added ?? []).map((o) => o.index)).has(
-                selected.index
-              )
-            : false
-        }
+        isPassed={selected ? passed.some((p) => p.courseName === selected.courseName) : false}
+        isNew={selected ? new Set((detail?.added ?? []).map((o) => o.index)).has(selected.index) : false}
         changes={selectedChanges.length > 0 ? selectedChanges : undefined}
         open={!!selected}
         onOpenChange={(open) => !open && setSelected(null)}
         onToggleNote={(index) => useProfileStore.getState().toggleNote(index)}
         onTogglePassed={(name) => useProfileStore.getState().togglePassed(name)}
-        onOpenProfessor={(name) =>
-          setProfessor({
-            name,
-            uni: profile?.universitySlug ?? "",
-            major: profile?.majorSlug ?? "",
-          })
-        }
+        onOpenProfessor={(name) => setProfessor({ name, uni: profile?.universitySlug ?? "", major: profile?.majorSlug ?? "" })}
         onSelectCourse={(course) => setSelected(course)}
       />
-
-      {/* Nested professor drawer */}
       <ProfessorDrawer
         open={!!professor}
         onOpenChange={(o) => !o && setProfessor(null)}
@@ -217,19 +79,34 @@ export function CourseChanges() {
         uni={professor?.uni ?? ""}
         major={professor?.major ?? ""}
         currentCourseIndex={selected?.index ?? null}
-        onCourseSelected={(course) => {
-          setProfessor(null)
-          setSelected(course)
-        }}
+        onCourseSelected={(course) => { setProfessor(null); setSelected(course) }}
       />
     </div>
   )
 }
 
+function TabContent({
+  tab,
+  added,
+  updated,
+  removed,
+  setSelected,
+  setSelectedChanges,
+}: {
+  tab: Tab
+  added: import("@/lib/api").Offering[]
+  updated: import("@/lib/api").OfferingUpdated[]
+  removed: import("@/lib/api").Offering[]
+  setSelected: (o: import("@/lib/api").Offering) => void
+  setSelectedChanges: (c: import("@/lib/api").OfferingChangedField[]) => void
+}) {
+  if (tab === "new") return added.length === 0 ? <Empty text="درس جدیدی فعلا ثبت نشده" /> : <OfferingCarousel items={added} tone="added" onOpen={setSelected} />
+  if (tab === "changed") return updated.length === 0 ? <Empty text="جزئیات درسی فعلا تغییر نکرده" /> : <ChangedCarousel items={updated} onOpen={(item) => { setSelected(item.after); setSelectedChanges(item.changes) }} />
+  return removed.length === 0 ? <Empty text="درسی فعلا حذف نشده" /> : <OfferingCarousel items={removed} tone="removed" />
+}
+
 function Empty({ text }: { text: string }) {
-  return (
-    <div className="mt-6 text-center text-sm text-muted-foreground">{text}</div>
-  )
+  return <div className="mt-6 text-center text-sm text-muted-foreground">{text}</div>
 }
 
 export function OfferingCarousel({

@@ -1,7 +1,6 @@
 "use client"
-/* eslint-disable react-hooks/exhaustive-deps */
 
-import { useEffect, useRef } from "react"
+import { useCallback, useEffect, useRef } from "react"
 
 type Raindrop = {
   x: number
@@ -34,20 +33,7 @@ export default function Rain({
   const raindropsRef = useRef<Raindrop[]>([])
   const animationFrameRef = useRef<number | undefined>(undefined)
 
-  const createRaindrop = (
-    canvasWidth: number,
-    canvasHeight: number
-  ): Raindrop => {
-    return {
-      x: Math.random() * canvasWidth,
-      y: Math.random() * canvasHeight - canvasHeight,
-      length: Math.random() * (maxLength - minLength) + minLength,
-      alpha: Math.random() * 0.3 + 0.3,
-      speed: Math.random() * speed + speed,
-    }
-  }
-
-  const resizeCanvas = () => {
+  const resizeCanvas = useCallback(() => {
     if (
       !canvasContainerRef.current ||
       !canvasRef.current ||
@@ -68,29 +54,17 @@ export default function Rain({
     // Recreate raindrops
     raindropsRef.current = []
     for (let i = 0; i < quantity; i++) {
-      raindropsRef.current.push(createRaindrop(width, height))
+      raindropsRef.current.push({
+        x: Math.random() * width,
+        y: Math.random() * height - height,
+        length: Math.random() * (maxLength - minLength) + minLength,
+        alpha: Math.random() * 0.3 + 0.3,
+        speed: Math.random() * speed + speed,
+      })
     }
-  }
+  }, [maxLength, minLength, quantity, speed])
 
-  const drawRaindrop = (
-    raindrop: Raindrop,
-    r: number,
-    g: number,
-    b: number
-  ) => {
-    if (!contextRef.current) return
-
-    const { x, y, length, alpha } = raindrop
-
-    contextRef.current.beginPath()
-    contextRef.current.moveTo(x, y)
-    contextRef.current.lineTo(x, y + length)
-    contextRef.current.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`
-    contextRef.current.lineWidth = 1
-    contextRef.current.stroke()
-  }
-
-  const animate = () => {
+  const animate = useCallback(() => {
     if (!contextRef.current || !canvasRef.current) return
 
     const width = canvasRef.current.width / (window.devicePixelRatio || 1)
@@ -112,11 +86,18 @@ export default function Rain({
         raindrop.x = Math.random() * width
       }
 
-      drawRaindrop(raindrop, r, g, b)
+      if (!contextRef.current) return
+      const { x, y, length, alpha } = raindrop
+      contextRef.current.beginPath()
+      contextRef.current.moveTo(x, y)
+      contextRef.current.lineTo(x, y + length)
+      contextRef.current.strokeStyle = `rgba(${r}, ${g}, ${b}, ${alpha})`
+      contextRef.current.lineWidth = 1
+      contextRef.current.stroke()
     })
 
     animationFrameRef.current = requestAnimationFrame(animate)
-  }
+  }, [color])
 
   useEffect(() => {
     if (!canvasRef.current) return
@@ -133,7 +114,7 @@ export default function Rain({
         cancelAnimationFrame(animationFrameRef.current)
       }
     }
-  }, [color, quantity, speed, maxLength, minLength])
+  }, [resizeCanvas, animate])
 
   return (
     <div ref={canvasContainerRef} className={className} aria-hidden="true">
