@@ -70,23 +70,6 @@ export function SemesterDrawer({ open: controlledOpen, onOpenChange, trigger, ch
   const open = controlledOpen ?? internalOpen
   const setOpen = onOpenChange ?? setInternalOpen
   useSemesterOpen(setOpen)
-  const { profile, termsQuery, terms, newerCode } = useSemesterData(open)
-
-  if (controlledOpen !== undefined && !trigger && !children) {
-    return (
-      <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerPopup variant="inset" showBar>
-          <DrawerHeader>
-            <DrawerTitle>انتخاب نیم‌سال</DrawerTitle>
-            <DrawerDescription>نیم‌سال مورد نظر را انتخاب کنید</DrawerDescription>
-          </DrawerHeader>
-          <DrawerPanel className="space-y-2 p-4">
-            <SemesterList terms={terms} currentCode={profile?.currentSemesterCode} newerCode={newerCode} isLoading={termsQuery.isLoading} onSelect={(c) => handleSelectCode(c, setOpen)} />
-          </DrawerPanel>
-        </DrawerPopup>
-      </Drawer>
-    )
-  }
   return (
     <SemesterDrawerInner open={open} setOpen={setOpen} trigger={trigger}>
       {children}
