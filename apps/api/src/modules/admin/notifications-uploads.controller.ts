@@ -15,6 +15,7 @@ import {
   ok,
 } from "@/lib/http/common"
 import {
+  completeBatchDiff,
   completeOfferingDiff,
   createAnnouncementBatch,
   detectAndCreateBatch,
@@ -831,6 +832,14 @@ export const adminNotificationsRoutes = new Hono<AppEnv>()
           c,
           "دسته‌های تکمیل‌شده قابل حذف نیستند - از «اتمام» استفاده کنید"
         )
+      }
+      // Deleting counts as handling: record completion so a later detect
+      // never resurrects this exact content (with baselines, only truly new
+      // changes surface afterwards).
+      try {
+        await completeBatchDiff(id, adminChatId)
+      } catch {
+        // Best-effort: the delete itself must still succeed.
       }
       await db.delete(notificationBatches).where(eq(notificationBatches.id, id))
       return ok(c, null, "دسته اعلان حذف شد")
