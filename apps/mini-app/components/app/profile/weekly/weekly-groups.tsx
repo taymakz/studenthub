@@ -34,6 +34,7 @@ export function WeeklyGroups({
               {items.map((o) => {
                 const times = extractTimes(o.classSchedule)
                 const mates = matesByIndex?.get(o.index)
+                const hasMates = !!mates && mates.count > 0 && !!onMatesClick
                 const body = (
                   <>
                     <div className="mb-2 flex items-center justify-between gap-2"><div className="flex items-center gap-1"><p className="line-clamp-1">{o.courseName}</p></div>{!readOnly && <ChevronLeft className="size-4 min-w-fit text-muted-foreground" />}</div>
@@ -41,15 +42,12 @@ export function WeeklyGroups({
                     {o.location && <p className="text-xs text-muted-foreground">{o.location}</p>}
                   </>
                 )
-                const row = readOnly ? (
-                  <div className="relative w-full space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
-                ) : (
-                  <button type="button" className={cn("relative w-full cursor-pointer space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
-                )
-                return (
-                  <div key={o.index}>
-                    {mates && mates.count > 0 && (
-                      <div className="mb-1 flex justify-start">
+                // With mates the card becomes the bordered container: faces
+                // strip on top (real button, valid sibling), content below.
+                if (hasMates) {
+                  return (
+                    <div key={o.index} className="rounded-lg border bg-card px-4 pt-3 pb-4 text-sm">
+                      <div className="mb-2 flex justify-start">
                         <FriendFaces
                           sample={mates.sample}
                           count={mates.count}
@@ -57,9 +55,18 @@ export function WeeklyGroups({
                           className="static"
                         />
                       </div>
-                    )}
-                    {row}
-                  </div>
+                      {readOnly ? (
+                        <div className="space-y-2">{body}</div>
+                      ) : (
+                        <button type="button" className={cn("w-full cursor-pointer space-y-2 text-start")} onClick={() => onSelect?.(o)}>{body}</button>
+                      )}
+                    </div>
+                  )
+                }
+                return readOnly ? (
+                  <div key={o.index} className="relative w-full space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
+                ) : (
+                  <button type="button" key={o.index} className={cn("relative w-full cursor-pointer space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
                 )
               })}
             </div>

@@ -40,21 +40,19 @@ export function ExamGroups({
               {items.map((o) => {
                 const times = extractTimes(o.examSchedule)
                 const mates = matesByIndex?.get(o.index)
+                const hasMates = !!mates && mates.count > 0 && !!onMatesClick
                 const body = (
                   <>
                     <div className="mb-2 flex items-center justify-between gap-2"><div className="flex items-center gap-1"><p className="line-clamp-1 text-sm">{o.courseName}</p></div>{!readOnly && <ChevronLeft className="size-4 min-w-fit text-muted-foreground" />}</div>
                     <div className="flex items-center justify-between text-xs"><p className="text-muted-foreground">{professorName(o) ?? "استادی ثبت نشده"}</p>{times.length > 0 && <div className="text-sm font-medium text-warning">{times[0]}{times[1] ? ` تا ${times[1]}` : ""}</div>}</div>
                   </>
                 )
-                const row = readOnly ? (
-                  <div className="relative flex w-full flex-col gap-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
-                ) : (
-                  <button type="button" className={cn("relative flex w-full cursor-pointer flex-col gap-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
-                )
-                return (
-                  <div key={o.index}>
-                    {mates && mates.count > 0 && (
-                      <div className="mb-1 flex justify-start">
+                // With mates the card becomes the bordered container: faces
+                // strip on top (real button, valid sibling), content below.
+                if (hasMates) {
+                  return (
+                    <div key={o.index} className="rounded-lg border bg-card px-4 pt-3 pb-4 text-sm">
+                      <div className="mb-2 flex justify-start">
                         <FriendFaces
                           sample={mates.sample}
                           count={mates.count}
@@ -62,9 +60,18 @@ export function ExamGroups({
                           className="static"
                         />
                       </div>
-                    )}
-                    {row}
-                  </div>
+                      {readOnly ? (
+                        <div className="flex flex-col gap-2">{body}</div>
+                      ) : (
+                        <button type="button" className={cn("flex w-full cursor-pointer flex-col gap-2 text-start")} onClick={() => onSelect?.(o)}>{body}</button>
+                      )}
+                    </div>
+                  )
+                }
+                return readOnly ? (
+                  <div key={o.index} className="relative flex w-full flex-col gap-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
+                ) : (
+                  <button type="button" key={o.index} className={cn("relative flex w-full cursor-pointer flex-col gap-2 rounded-lg border bg-card px-4 py-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
                 )
               })}
             </div>
