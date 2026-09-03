@@ -1,9 +1,12 @@
 "use client"
 
+import { useState } from "react"
+
 import { Badge } from "@workspace/ui/components/badge"
 import { ChevronDown } from "lucide-react"
 
-import type { OfferingChangedField } from "@/lib/api"
+import type { Offering, OfferingChangedField } from "@/lib/api"
+import { RequisiteOfferingsDrawer } from "./prereq-drawer"
 
 function Divider({ label }: { label: string }) {
   return (
@@ -21,13 +24,16 @@ export function PrereqSection({
   passedNames,
   failedNames,
   passedUnits,
+  onSelectCourse,
 }: {
   chart: { isCompleted?: boolean } | null
   chartCourse: unknown
   passedNames: Set<string>
   failedNames: Set<string>
   passedUnits: number
+  onSelectCourse?: (offering: Offering) => void
 }) {
+  const [offeringsFor, setOfferingsFor] = useState<string | null>(null)
   if (!chart?.isCompleted || !chartCourse) return null
   const prereqs = (chartCourse as { prerequisites?: string[] | number })?.prerequisites
   const isUnits = typeof prereqs === "number"
@@ -48,17 +54,32 @@ export function PrereqSection({
             const isPassed = passedNames.has(name as string)
             const isFailed = failedNames.has(name as string)
             return (
-              <Badge
+              <button
                 key={name as string}
-                variant={isPassed ? "success" : isFailed ? "warning" : "destructive"}
-                className="px-2 py-1 text-xs"
+                type="button"
+                onClick={() => setOfferingsFor(name as string)}
+                className="cursor-pointer transition-transform active:scale-95"
+                aria-label={`مشاهده کلاس‌های ${name as string}`}
               >
-                {name as string}
-              </Badge>
+                <Badge
+                  variant={isPassed ? "success" : isFailed ? "warning" : "destructive"}
+                  className="px-2 py-1 text-xs"
+                >
+                  {name as string}
+                </Badge>
+              </button>
             )
           })}
         </div>
       )}
+      <RequisiteOfferingsDrawer
+        courseName={offeringsFor}
+        open={offeringsFor !== null}
+        onOpenChange={(o) => !o && setOfferingsFor(null)}
+        onSelectCourse={(c) => {
+          if (onSelectCourse) onSelectCourse(c)
+        }}
+      />
     </div>
   )
 }
@@ -67,11 +88,14 @@ export function CoreqSection({
   chart,
   chartCourse,
   passedNames,
+  onSelectCourse,
 }: {
   chart: { isCompleted?: boolean } | null
   chartCourse: unknown
   passedNames: Set<string>
+  onSelectCourse?: (offering: Offering) => void
 }) {
+  const [offeringsFor, setOfferingsFor] = useState<string | null>(null)
   if (!chart?.isCompleted || !chartCourse) return null
   const coreqs = (chartCourse as { corequisites?: string[] })?.corequisites
   if (!coreqs || coreqs.length === 0) return null
@@ -80,11 +104,27 @@ export function CoreqSection({
       <Divider label="همنیاز" />
       <div className="flex flex-wrap gap-1.5">
         {coreqs.map((name) => (
-          <Badge key={name} variant={passedNames.has(name) ? "success" : "warning"} className="px-2 py-1 text-xs">
-            {name}
-          </Badge>
+          <button
+            key={name}
+            type="button"
+            onClick={() => setOfferingsFor(name)}
+            className="cursor-pointer transition-transform active:scale-95"
+            aria-label={`مشاهده کلاس‌های ${name}`}
+          >
+            <Badge variant={passedNames.has(name) ? "success" : "warning"} className="px-2 py-1 text-xs">
+              {name}
+            </Badge>
+          </button>
         ))}
       </div>
+      <RequisiteOfferingsDrawer
+        courseName={offeringsFor}
+        open={offeringsFor !== null}
+        onOpenChange={(o) => !o && setOfferingsFor(null)}
+        onSelectCourse={(c) => {
+          if (onSelectCourse) onSelectCourse(c)
+        }}
+      />
     </div>
   )
 }

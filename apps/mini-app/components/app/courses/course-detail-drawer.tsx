@@ -179,8 +179,8 @@ export function CourseDetailDrawer({
             {/* Tags */}
             {o && <CourseTags offering={o} />}
 
-            <PrereqSection chart={chart} chartCourse={chartCourse} passedNames={passedNames} failedNames={failedNames} passedUnits={passedUnits} />
-            <CoreqSection chart={chart} chartCourse={chartCourse} passedNames={passedNames} />
+            <PrereqSection chart={chart} chartCourse={chartCourse} passedNames={passedNames} failedNames={failedNames} passedUnits={passedUnits} onSelectCourse={onSelectCourse} />
+            <CoreqSection chart={chart} chartCourse={chartCourse} passedNames={passedNames} onSelectCourse={onSelectCourse} />
             <ChangesSection changes={changes} />
             <DetailActions offering={o} isNoted={isNoted} canEditNoted={canEditNoted} onToggleNote={onToggleNote} onStudents={() => setStudentsOpen(true)} />
 
