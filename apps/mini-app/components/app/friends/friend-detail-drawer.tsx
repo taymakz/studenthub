@@ -27,16 +27,20 @@ import { SettingsRow } from "@/components/app/theme/settings-row"
 import { CourseCard } from "@/components/app/courses/course-card"
 import { useNotedSort } from "@/components/app/courses/noted/use-noted-sort"
 import { ExamGroups } from "@/components/app/profile/exam/exam-groups"
-import { groupByExamDate } from "@/components/app/profile/exam-schedule"
 import { WeeklyGroups } from "@/components/app/profile/weekly/weekly-groups"
 import { groupByWeekday } from "@/components/app/profile/export-canvas"
-import { extractWeekday } from "@/components/app/profile/schedule-util"
+import {
+  extractWeekday,
+  groupByExamDate,
+} from "@/components/app/profile/schedule-util"
 import { OfferingsEmpty } from "@/components/app/profile/use-noted-offerings"
 import { flattenChart, uniqueTerms, type ChartCourseItem } from "@/lib/chart"
 import { parseTermCode } from "@/lib/term"
 import { useProfileStore } from "@/stores/profile-store"
 import {
   fetchOfferings,
+  type FriendCard,
+  type FriendDetailData,
   type Offering,
 } from "@/lib/api"
 import { ConfirmDrawer } from "./confirm-drawer"
@@ -44,15 +48,16 @@ import {
   FriendAvatar,
   FriendsEmpty,
   FriendsLoading,
-  userSubtitle,
 } from "./friend-rows"
+import { userSubtitle } from "./friends-text"
 import {
   useBlockUser,
   useFriendDetail,
   useUnfriend,
 } from "./use-friends-data"
 
-type Nested = "weekly" | "exam" | "noted" | "passed" | "failed" | null
+export type FriendNested = "weekly" | "exam" | "noted" | "passed" | "failed" | null
+type DangerAction = "unfriend" | "block" | null
 
 function NestedDrawer({
   open,
@@ -101,6 +106,37 @@ function ViewChip({ c, tone }: { c: ChartCourseItem; tone: "passed" | "failed" }
   )
 }
 
+/** Split names into chart-backed items + off-chart extras in minimal passes. */
+function splitNames(
+  names: string[],
+  pool: ChartCourseItem[]
+): { items: ChartCourseItem[]; extra: ChartCourseItem[] } {
+  const wanted = new Set(names)
+  const items: ChartCourseItem[] = []
+  const tracked = new Set<string>()
+  for (const c of pool) {
+    if (wanted.has(c.name)) {
+      items.push(c)
+      tracked.add(c.name)
+    }
+  }
+  const extra: ChartCourseItem[] = []
+  for (const name of names) {
+    if (!tracked.has(name)) {
+      tracked.add(name)
+      extra.push({
+        name,
+        code: "",
+        units: 0,
+        termNumber: undefined,
+        isMoaref: false,
+        isUnknown: true,
+      })
+    }
+  }
+  return { items, extra }
+}
+
 /**
  * Passed/failed groups — same term/moaref/unknown grouping and flex-wrap
  * layout as /profile (graduate-progress / failed-courses), view-only and
@@ -117,20 +153,7 @@ function FriendCourseGroups({
   pool: ChartCourseItem[]
   emptyMessage: string
 }) {
-  const set = new Set(names)
-  const items = pool.filter((c) => set.has(c.name))
-  const tracked = new Set(items.map((c) => c.name))
-  const extra: ChartCourseItem[] = names
-    .filter((n) => !tracked.has(n))
-    .map((name) => ({
-      name,
-      code: "",
-      units: 0,
-      termNumber: undefined,
-      isMoaref: false,
-      isUnknown: true,
-    }))
-
+  const { items, extra } = splitNames(names, pool)
   const terms = uniqueTerms(items)
   const moaref = items.filter((c) => c.isMoaref)
   const unknown = [...items.filter((c) => c.isUnknown), ...extra]
@@ -183,34 +206,13 @@ function FriendCourseGroups({
   )
 }
 
-/**
- * Friend detail drawer: big identity header, rows for the friend's weekly /
- * exam schedule, noted / passed / failed lists, plus block + unfriend.
- */
-export function FriendDetailDrawer({
-  friendId,
-  open,
-  onOpenChange,
-}: {
-  friendId: number | null
-  open: boolean
-  onOpenChange: (open: boolean) => void
-}) {
-  const detail = useFriendDetail(friendId, open)
-  const unfriend = useUnfriend()
-  const block = useBlockUser()
-  const [confirm, setConfirm] = useState<"unfriend" | "block" | null>(null)
-  const [nested, setNested] = useState<Nested>(null)
-
-  // Viewer's own نیم‌سال — the friend's noted list is filtered to it.
-  const myTermCode = useProfileStore((s) => s.termCode)
-  const parsed = myTermCode ? parseTermCode(myTermCode) : null
-  const viewerNoted = (detail.data?.noted ?? []).filter(
-    (n) =>
-      !parsed || (n.year === String(parsed.year) && n.semester === parsed.semester)
-  )
-
-  const profile = detail.data?.profile
+/** Schedule + course data for the friend, resolved against their own term. */
+function useFriendSchedule(
+  friendId: number | null,
+  open: boolean,
+  profile: FriendDetailData["profile"],
+  viewerNotedIdx: Set<string>
+) {
   const offeringsQuery = useQuery({
     queryKey: ["friend-offerings", friendId, profile?.currentSemesterCode],
     queryFn: async () =>
@@ -227,11 +229,10 @@ export function FriendDetailDrawer({
       !!profile?.majorSlug &&
       !!profile?.currentSemesterCode,
   })
-
-  const notedIdx = new Set(viewerNoted.map((n) => n.courseIndex))
-  const notedOfferings: Offering[] = (
-    offeringsQuery.data?.offerings ?? []
-  ).filter((o) => notedIdx.has(o.index))
+  const offerings = offeringsQuery.data?.offerings ?? []
+  const notedOfferings: Offering[] = offerings.filter((o) =>
+    viewerNotedIdx.has(o.index)
+  )
   const weekly = groupByWeekday(
     notedOfferings,
     (o) => extractWeekday(o.classSchedule) ?? "نامشخص"
@@ -242,6 +243,186 @@ export function FriendDetailDrawer({
     (s, o) => s + o.theoreticalUnits + o.practicalUnits,
     0
   )
+  return { offeringsQuery, notedOfferings, weekly, exams, sortedNoted, totalUnits }
+}
+
+function DetailHeader({ user, loading }: { user: FriendCard | null; loading: boolean }) {
+  if (loading || !user) {
+    return (
+      <div className="flex flex-col items-center gap-2 pt-1">
+        <Skeleton className="size-16 rounded-full" />
+        <Skeleton className="h-5 w-28" />
+      </div>
+    )
+  }
+  return (
+    <div className="flex flex-col items-center gap-2 pt-1">
+      <FriendAvatar user={user} size="xl" />
+      <DrawerTitle>
+        {`${user.firstName} ${user.lastName ?? ""}`.trim()}
+      </DrawerTitle>
+      <DrawerDescription dir="ltr">{userSubtitle(user)}</DrawerDescription>
+    </div>
+  )
+}
+
+function DetailMenu({
+  notedCount,
+  passedCount,
+  failedCount,
+  onNested,
+  onBlock,
+  onUnfriend,
+}: {
+  notedCount: number
+  passedCount: number
+  failedCount: number
+  onNested: (n: Exclude<FriendNested, null>) => void
+  onBlock: () => void
+  onUnfriend: () => void
+}) {
+  return (
+    <div className="mb-4 flex flex-col">
+      <SettingsRow
+        icon={<CalendarDays className="size-5" />}
+        title="برنامه هفتگی"
+        description={`${notedCount} درس`}
+        onClick={() => onNested("weekly")}
+      />
+      <SettingsRow
+        icon={<CalendarClock className="size-5" />}
+        title="برنامه امتحانی"
+        description={`${notedCount} درس`}
+        onClick={() => onNested("exam")}
+      />
+      <SettingsRow
+        icon={<ClipboardList className="size-5" />}
+        title="لیست یادداشت"
+        description={`${notedCount} درس`}
+        onClick={() => onNested("noted")}
+      />
+      <SettingsRow
+        icon={<CircleCheck className="size-5" />}
+        title="دروس پاس شده"
+        description={`${passedCount} درس`}
+        onClick={() => onNested("passed")}
+      />
+      <SettingsRow
+        icon={<CircleX className="size-5" />}
+        title="دروس مردود شده"
+        description={`${failedCount} درس`}
+        onClick={() => onNested("failed")}
+      />
+      <div className="mx-4 border-t" />
+      <button
+        type="button"
+        onClick={onBlock}
+        className="flex w-full cursor-pointer items-center gap-3 px-4 py-5 text-start text-destructive"
+      >
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted">
+          <Ban className="size-5" />
+        </span>
+        <span className="text-sm font-medium">مسدود کردن</span>
+      </button>
+      <button
+        type="button"
+        onClick={onUnfriend}
+        className="flex w-full cursor-pointer items-center gap-3 px-4 py-5 text-start text-destructive"
+      >
+        <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted">
+          <UserMinus className="size-5" />
+        </span>
+        <span className="text-sm font-medium">حذف از دوستان</span>
+      </button>
+    </div>
+  )
+}
+
+function WeeklyBody({
+  loading,
+  groups,
+}: {
+  loading: boolean
+  groups: ReturnType<typeof groupByWeekday>
+}) {
+  if (loading) return <FriendsLoading />
+  if (groups.length === 0) return <OfferingsEmpty enabled isLoading={false} />
+  return <WeeklyGroups groups={groups} onSelect={() => {}} />
+}
+
+function ExamBody({
+  loading,
+  groups,
+}: {
+  loading: boolean
+  groups: ReturnType<typeof groupByExamDate>
+}) {
+  if (loading) return <FriendsLoading />
+  if (groups.length === 0) return <OfferingsEmpty enabled isLoading={false} />
+  return <ExamGroups groups={groups} onSelect={() => {}} />
+}
+
+function DangerConfirm({
+  action,
+  name,
+  pending,
+  onClose,
+  onConfirm,
+}: {
+  action: DangerAction
+  name: string
+  pending: boolean
+  onClose: () => void
+  onConfirm: () => void
+}) {
+  return (
+    <ConfirmDrawer
+      open={action !== null}
+      onOpenChange={(o) => !o && onClose()}
+      title={action === "unfriend" ? "حذف از دوستان" : "مسدود کردن کاربر"}
+      description={
+        action === "unfriend"
+          ? `${name} از لیست دوستان شما حذف می‌شود.`
+          : `${name} مسدود می‌شود و از لیست دوستان حذف می‌گردد.`
+      }
+      confirmLabel={action === "unfriend" ? "حذف" : "مسدود کردن"}
+      danger
+      pending={pending}
+      onConfirm={onConfirm}
+    />
+  )
+}
+
+/**
+ * Friend detail drawer: big identity header, rows for the friend's weekly /
+ * exam schedule, noted / passed / failed lists, plus block + unfriend.
+ */
+export function FriendDetailDrawer({
+  friendId,
+  open,
+  onOpenChange,
+}: {
+  friendId: number | null
+  open: boolean
+  onOpenChange: (open: boolean) => void
+}) {
+  const detail = useFriendDetail(friendId, open)
+  const unfriend = useUnfriend()
+  const block = useBlockUser()
+  const [confirm, setConfirm] = useState<DangerAction>(null)
+  const [nested, setNested] = useState<FriendNested>(null)
+
+  // Viewer's own نیم‌سال — the friend's noted list is filtered to it.
+  const myTermCode = useProfileStore((s) => s.termCode)
+  const parsed = myTermCode ? parseTermCode(myTermCode) : null
+  const viewerNoted = (detail.data?.noted ?? []).filter(
+    (n) =>
+      !parsed || (n.year === String(parsed.year) && n.semester === parsed.semester)
+  )
+  const viewerNotedIdx = new Set(viewerNoted.map((n) => n.courseIndex))
+
+  const { offeringsQuery, notedOfferings, weekly, exams, sortedNoted, totalUnits } =
+    useFriendSchedule(friendId, open, detail.data?.profile ?? null, viewerNotedIdx)
 
   const pool = flattenChart(detail.data?.chart)
   const user = detail.data?.user ?? null
@@ -250,6 +431,7 @@ export function FriendDetailDrawer({
     : ""
   const passed = detail.data?.passed ?? []
   const failed = detail.data?.failed ?? []
+  const detailLoading = detail.isLoading || !user
 
   const closeAfterAction = {
     onSuccess: () => {
@@ -257,85 +439,33 @@ export function FriendDetailDrawer({
       onOpenChange(false)
     },
   }
+  const runDangerConfirm = () => {
+    if (friendId === null || !confirm) return
+    if (confirm === "unfriend") unfriend.mutate(friendId, closeAfterAction)
+    else block.mutate(friendId, closeAfterAction)
+  }
 
   return (
     <>
       <Drawer open={open} onOpenChange={onOpenChange}>
         <DrawerPopup variant="inset" showBar>
           <DrawerHeader>
-            <div className="flex flex-col items-center gap-2 pt-1">
-              {user ? (
-                <FriendAvatar user={user} size="xl" />
-              ) : (
-                <Skeleton className="size-16 rounded-full" />
-              )}
-              <DrawerTitle>{fullName || <Skeleton className="h-5 w-28" />}</DrawerTitle>
-              {user ? (
-                <DrawerDescription dir="ltr">
-                  {userSubtitle(user)}
-                </DrawerDescription>
-              ) : null}
-            </div>
+            <DetailHeader user={user} loading={detailLoading} />
           </DrawerHeader>
           <DrawerPanel className="p-0">
-            {detail.isLoading || !user ? (
+            {detailLoading ? (
               <div className="p-4">
                 <FriendsLoading />
               </div>
             ) : (
-              <div className="mb-4 flex flex-col">
-                <SettingsRow
-                  icon={<CalendarDays className="size-5" />}
-                  title="برنامه هفتگی"
-                  description={`${notedOfferings.length} درس`}
-                  onClick={() => setNested("weekly")}
-                />
-                <SettingsRow
-                  icon={<CalendarClock className="size-5" />}
-                  title="برنامه امتحانی"
-                  description={`${notedOfferings.length} درس`}
-                  onClick={() => setNested("exam")}
-                />
-                <SettingsRow
-                  icon={<ClipboardList className="size-5" />}
-                  title="لیست یادداشت"
-                  description={`${viewerNoted.length} درس`}
-                  onClick={() => setNested("noted")}
-                />
-                <SettingsRow
-                  icon={<CircleCheck className="size-5" />}
-                  title="دروس پاس شده"
-                  description={`${passed.length} درس`}
-                  onClick={() => setNested("passed")}
-                />
-                <SettingsRow
-                  icon={<CircleX className="size-5" />}
-                  title="دروس مردود شده"
-                  description={`${failed.length} درس`}
-                  onClick={() => setNested("failed")}
-                />
-                <div className="mx-4 border-t" />
-                <button
-                  type="button"
-                  onClick={() => setConfirm("block")}
-                  className="flex w-full cursor-pointer items-center gap-3 px-4 py-5 text-start text-destructive"
-                >
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted">
-                    <Ban className="size-5" />
-                  </span>
-                  <span className="text-sm font-medium">مسدود کردن</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setConfirm("unfriend")}
-                  className="flex w-full cursor-pointer items-center gap-3 px-4 py-5 text-start text-destructive"
-                >
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-lg bg-muted">
-                    <UserMinus className="size-5" />
-                  </span>
-                  <span className="text-sm font-medium">حذف از دوستان</span>
-                </button>
-              </div>
+              <DetailMenu
+                notedCount={notedOfferings.length}
+                passedCount={passed.length}
+                failedCount={failed.length}
+                onNested={setNested}
+                onBlock={() => setConfirm("block")}
+                onUnfriend={() => setConfirm("unfriend")}
+              />
             )}
           </DrawerPanel>
         </DrawerPopup>
@@ -347,13 +477,7 @@ export function FriendDetailDrawer({
         title="برنامه هفتگی"
         description={fullName}
       >
-        {offeringsQuery.isLoading ? (
-          <FriendsLoading />
-        ) : notedOfferings.length === 0 ? (
-          <OfferingsEmpty enabled isLoading={false} />
-        ) : (
-          <WeeklyGroups groups={weekly} onSelect={() => {}} />
-        )}
+        <WeeklyBody loading={offeringsQuery.isLoading} groups={weekly} />
       </NestedDrawer>
 
       <NestedDrawer
@@ -362,13 +486,7 @@ export function FriendDetailDrawer({
         title="برنامه امتحانی"
         description={fullName}
       >
-        {offeringsQuery.isLoading ? (
-          <FriendsLoading />
-        ) : notedOfferings.length === 0 ? (
-          <OfferingsEmpty enabled isLoading={false} />
-        ) : (
-          <ExamGroups groups={exams} onSelect={() => {}} />
-        )}
+        <ExamBody loading={offeringsQuery.isLoading} groups={exams} />
       </NestedDrawer>
 
       <NestedDrawer
@@ -426,25 +544,12 @@ export function FriendDetailDrawer({
         />
       </NestedDrawer>
 
-      <ConfirmDrawer
-        open={confirm !== null}
-        onOpenChange={(o) => !o && setConfirm(null)}
-        title={confirm === "unfriend" ? "حذف از دوستان" : "مسدود کردن کاربر"}
-        description={
-          confirm === "unfriend"
-            ? `${fullName} از لیست دوستان شما حذف می‌شود.`
-            : `${fullName} مسدود می‌شود و از لیست دوستان حذف می‌گردد.`
-        }
-        confirmLabel={confirm === "unfriend" ? "حذف" : "مسدود کردن"}
-        danger
-        pending={
-          confirm === "unfriend" ? unfriend.isPending : block.isPending
-        }
-        onConfirm={() => {
-          if (friendId === null || !confirm) return
-          if (confirm === "unfriend") unfriend.mutate(friendId, closeAfterAction)
-          else block.mutate(friendId, closeAfterAction)
-        }}
+      <DangerConfirm
+        action={confirm}
+        name={fullName}
+        pending={confirm === "unfriend" ? unfriend.isPending : block.isPending}
+        onClose={() => setConfirm(null)}
+        onConfirm={runDangerConfirm}
       />
     </>
   )

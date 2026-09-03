@@ -17,8 +17,8 @@ import {
   FriendsLoading,
   LoadMoreButton,
   PersonRow,
-  userSubtitle,
 } from "./friend-rows"
+import { userSubtitle } from "./friends-text"
 import { FriendDetailDrawer } from "./friend-detail-drawer"
 import {
   useAcceptRequest,
@@ -39,6 +39,135 @@ function requestFullName(r: FriendRequestItem) {
   return `${r.user.firstName} ${r.user.lastName ?? ""}`.trim()
 }
 
+function IncomingSection({
+  query,
+  onAccept,
+  onDecline,
+  onBlock,
+}: {
+  query: ReturnType<typeof useIncomingRequests>
+  onAccept: (r: FriendRequestItem) => void
+  onDecline: (r: FriendRequestItem) => void
+  onBlock: (r: FriendRequestItem) => void
+}) {
+  const items = query.data?.pages.flatMap((p) => p.requests) ?? []
+  if (query.isLoading) return <FriendsLoading />
+  if (query.isError)
+    return (
+      <FriendsError
+        message={(query.error as Error)?.message ?? "خطا در دریافت لیست"}
+      />
+    )
+  if (items.length === 0)
+    return <FriendsEmpty message="درخواست دریافتی ندارید." />
+  return (
+    <div className="space-y-2">
+      {items.map((r) => (
+        <PersonRow key={r.id} user={r.user} subtitle={userSubtitle(r.user)}>
+          <AcceptAction onClick={() => onAccept(r)} />
+          <DeclineAction onClick={() => onDecline(r)} />
+          <BlockAction onClick={() => onBlock(r)} />
+        </PersonRow>
+      ))}
+      {query.hasNextPage && (
+        <LoadMoreButton
+          isFetching={query.isFetchingNextPage}
+          onLoadMore={() => void query.fetchNextPage()}
+        />
+      )}
+    </div>
+  )
+}
+
+function OutgoingSection({
+  query,
+  onCancel,
+  cancelPending,
+}: {
+  query: ReturnType<typeof useOutgoingRequests>
+  onCancel: (id: string) => void
+  cancelPending: boolean
+}) {
+  const items = query.data?.pages.flatMap((p) => p.requests) ?? []
+  if (query.isLoading) return <FriendsLoading />
+  if (query.isError)
+    return (
+      <FriendsError
+        message={(query.error as Error)?.message ?? "خطا در دریافت لیست"}
+      />
+    )
+  if (items.length === 0)
+    return <FriendsEmpty message="درخواست ارسالی در انتظاری ندارید." />
+  return (
+    <div className="space-y-2">
+      {items.map((r) => (
+        <PersonRow key={r.id} user={r.user} subtitle={userSubtitle(r.user)}>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            disabled={cancelPending}
+            onClick={() => onCancel(r.id)}
+          >
+            لغو
+          </Button>
+        </PersonRow>
+      ))}
+      {query.hasNextPage && (
+        <LoadMoreButton
+          isFetching={query.isFetchingNextPage}
+          onLoadMore={() => void query.fetchNextPage()}
+        />
+      )}
+    </div>
+  )
+}
+
+function RequestConfirmDialog({
+  confirm,
+  pending,
+  onClose,
+  onConfirm,
+}: {
+  confirm: RequestConfirm | null
+  pending: boolean
+  onClose: () => void
+  onConfirm: () => void
+}) {
+  return (
+    <ConfirmDrawer
+      open={confirm !== null}
+      onOpenChange={(o) => !o && onClose()}
+      title={
+        confirm?.kind === "accept"
+          ? "پذیرش درخواست دوستی"
+          : confirm?.kind === "decline"
+            ? "رد درخواست دوستی"
+            : "مسدود کردن کاربر"
+      }
+      description={
+        confirm
+          ? confirm.kind === "block"
+            ? `${requestFullName(confirm.request)} مسدود می‌شود و دوستی یا درخواست‌های دوطرفه حذف می‌گردد.`
+            : confirm.kind === "decline"
+              ? `${requestFullName(confirm.request)} تا یک ماه نمی‌تواند دوباره درخواست بفرستد.`
+              : `با ${requestFullName(confirm.request)} دوست می‌شوید.`
+          : undefined
+      }
+      confirmLabel={
+        confirm?.kind === "accept"
+          ? "پذیرش"
+          : confirm?.kind === "decline"
+            ? "رد درخواست"
+            : "مسدود کردن"
+      }
+      danger={confirm?.kind !== "accept"}
+      pending={pending}
+      onConfirm={onConfirm}
+    />
+  )
+}
+
 /** Pending tab: incoming requests (accept / decline / block) + outgoing (cancel). */
 export function PendingTab() {
   const incoming = useIncomingRequests(true)
@@ -50,11 +179,7 @@ export function PendingTab() {
   const block = useBlockUser()
 
   const [confirm, setConfirm] = useState<RequestConfirm | null>(null)
-
-  const incomingItems =
-    incoming.data?.pages.flatMap((p) => p.requests) ?? []
-  const outgoingItems =
-    outgoing.data?.pages.flatMap((p) => p.requests) ?? []
+  const closeConfirm = () => setConfirm(null)
 
   const confirmPending =
     confirm?.kind === "accept"
@@ -65,7 +190,7 @@ export function PendingTab() {
 
   const runConfirm = () => {
     if (!confirm) return
-    const done = { onSuccess: () => setConfirm(null) }
+    const done = { onSuccess: closeConfirm }
     if (confirm.kind === "accept") accept.mutate(confirm.request.id, done)
     else if (confirm.kind === "decline") decline.mutate(confirm.request.id, done)
     else block.mutate(confirm.request.user.id, done)
@@ -77,106 +202,29 @@ export function PendingTab() {
         <h3 className="mb-2 px-1 text-sm font-medium text-muted-foreground">
           درخواست‌های دریافتی
         </h3>
-        {incoming.isLoading ? (
-          <FriendsLoading />
-        ) : incoming.isError ? (
-          <FriendsError
-            message={(incoming.error as Error)?.message ?? "خطا در دریافت لیست"}
-          />
-        ) : incomingItems.length === 0 ? (
-          <FriendsEmpty message="درخواست دریافتی ندارید." />
-        ) : (
-          <div className="space-y-2">
-            {incomingItems.map((r) => (
-              <PersonRow
-                key={r.id}
-                user={r.user}
-                subtitle={userSubtitle(r.user)}
-              >
-                <AcceptAction onClick={() => setConfirm({ kind: "accept", request: r })} />
-                <DeclineAction onClick={() => setConfirm({ kind: "decline", request: r })} />
-                <BlockAction onClick={() => setConfirm({ kind: "block", request: r })} />
-              </PersonRow>
-            ))}
-            {incoming.hasNextPage && (
-              <LoadMoreButton
-                isFetching={incoming.isFetchingNextPage}
-                onLoadMore={() => void incoming.fetchNextPage()}
-              />
-            )}
-          </div>
-        )}
+        <IncomingSection
+          query={incoming}
+          onAccept={(r) => setConfirm({ kind: "accept", request: r })}
+          onDecline={(r) => setConfirm({ kind: "decline", request: r })}
+          onBlock={(r) => setConfirm({ kind: "block", request: r })}
+        />
       </section>
 
       <section>
         <h3 className="mb-2 px-1 text-sm font-medium text-muted-foreground">
           درخواست‌های ارسالی
         </h3>
-        {outgoing.isLoading ? (
-          <FriendsLoading />
-        ) : outgoing.isError ? (
-          <FriendsError
-            message={(outgoing.error as Error)?.message ?? "خطا در دریافت لیست"}
-          />
-        ) : outgoingItems.length === 0 ? (
-          <FriendsEmpty message="درخواست ارسالی در انتظاری ندارید." />
-        ) : (
-          <div className="space-y-2">
-            {outgoingItems.map((r) => (
-              <PersonRow
-                key={r.id}
-                user={r.user}
-                subtitle={userSubtitle(r.user)}
-              >
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  disabled={cancel.isPending}
-                  onClick={() => cancel.mutate(r.id)}
-                >
-                  لغو
-                </Button>
-              </PersonRow>
-            ))}
-            {outgoing.hasNextPage && (
-              <LoadMoreButton
-                isFetching={outgoing.isFetchingNextPage}
-                onLoadMore={() => void outgoing.fetchNextPage()}
-              />
-            )}
-          </div>
-        )}
+        <OutgoingSection
+          query={outgoing}
+          onCancel={(id) => cancel.mutate(id)}
+          cancelPending={cancel.isPending}
+        />
       </section>
 
-      <ConfirmDrawer
-        open={confirm !== null}
-        onOpenChange={(o) => !o && setConfirm(null)}
-        title={
-          confirm?.kind === "accept"
-            ? "پذیرش درخواست دوستی"
-            : confirm?.kind === "decline"
-              ? "رد درخواست دوستی"
-              : "مسدود کردن کاربر"
-        }
-        description={
-          confirm
-            ? confirm.kind === "block"
-              ? `${requestFullName(confirm.request)} مسدود می‌شود و دوستی یا درخواست‌های دوطرفه حذف می‌گردد.`
-              : confirm.kind === "decline"
-                ? `${requestFullName(confirm.request)} تا یک ماه نمی‌تواند دوباره درخواست بفرستد.`
-                : `با ${requestFullName(confirm.request)} دوست می‌شوید.`
-            : undefined
-        }
-        confirmLabel={
-          confirm?.kind === "accept"
-            ? "پذیرش"
-            : confirm?.kind === "decline"
-              ? "رد درخواست"
-              : "مسدود کردن"
-        }
-        danger={confirm?.kind !== "accept"}
+      <RequestConfirmDialog
+        confirm={confirm}
         pending={confirmPending}
+        onClose={closeConfirm}
         onConfirm={runConfirm}
       />
     </div>

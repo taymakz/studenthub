@@ -1,5 +1,7 @@
 /** Robust, format-tolerant parsing of free-text schedule strings (registry offerings). */
 
+import type { Offering } from "@/lib/api"
+
 function unifyPersian(text: string): string {
   return text.replace(/\u0643/g, "\u06A9").replace(/\u064A/g, "\u06CC").replace(/\u0649/g, "\u06CC")
 }
@@ -51,6 +53,24 @@ export function extractDate(
   const d = m[3]
   if (!y || !mo || !d) return null
   return `${y}/${mo.padStart(2, "0")}/${d.padStart(2, "0")}`
+}
+
+/** Group by exam date, chronological, «تاریخ نامشخص» last (old project order). */
+export function groupByExamDate(notedOfferings: Offering[]) {
+  const groupMap = new Map<string, Offering[]>()
+  for (const o of notedOfferings) {
+    const date = extractDate(o.examSchedule) ?? "تاریخ نامشخص"
+    groupMap.set(date, [...(groupMap.get(date) ?? []), o])
+  }
+  const groups: Array<{ date: string; items: Offering[] }> = []
+  for (const [date, items] of groupMap) {
+    if (items.length > 0) groups.push({ date, items })
+  }
+  return groups.sort((a, b) => {
+    if (a.date === "تاریخ نامشخص") return 1
+    if (b.date === "تاریخ نامشخص") return -1
+    return a.date.localeCompare(b.date)
+  })
 }
 
 /* ─── Persian date math (jalaali-js core, trimmed) — for «چند روز مونده» ─── */

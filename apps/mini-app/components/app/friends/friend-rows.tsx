@@ -107,11 +107,6 @@ export function PersonRow({
   )
 }
 
-/** "@username" subtitle, falling back to the numeric id. */
-export function userSubtitle(user: FriendCard): string {
-  return user.username ? `@${user.username}` : `شناسه: ${user.id}`
-}
-
 function IconAction({
   label,
   title,
