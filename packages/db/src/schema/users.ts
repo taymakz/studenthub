@@ -51,6 +51,11 @@ export const users = pgTable(
       { withTimezone: true }
     ),
 
+    /** Auto-decline every incoming friend request (sender still gets DECLINED). */
+    autoDeclineFriendRequests: boolean("auto_decline_friend_requests")
+      .notNull()
+      .default(false),
+
     banned: boolean("banned").notNull().default(false),
     bannedReason: varchar("banned_reason", { length: 255 }),
 

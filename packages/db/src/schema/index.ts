@@ -1,4 +1,5 @@
 export * from "./users"
+export * from "./friends"
 export * from "./auth"
 export * from "./university-profiles"
 export * from "./course-user-data"
