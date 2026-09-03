@@ -1,6 +1,7 @@
 import { zValidator } from "@hono/zod-validator"
 import {
   FRIEND_REQUEST_COOLDOWN_DAYS,
+  MAX_FRIENDS_PER_USER,
   failedCourses,
   friendBlocks,
   friendRequests,
@@ -78,6 +79,20 @@ function cooldownCutoff(): Date {
   return new Date(
     Date.now() - FRIEND_REQUEST_COOLDOWN_DAYS * 24 * 60 * 60 * 1000
   )
+}
+
+/** Current mutual-friend count for the cap check. */
+async function friendCountOf(userId: number): Promise<number> {
+  const [row] = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(friendships)
+    .where(
+      or(
+        eq(friendships.userLowId, userId),
+        eq(friendships.userHighId, userId)
+      )
+    )
+  return row?.count ?? 0
 }
 
 /** Minimal public card - same privacy level as the classmates list. */
@@ -414,6 +429,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
       incomingPendingCount: incomingRow?.count ?? 0,
       outgoingPendingCount: outgoingRow?.count ?? 0,
       autoDecline: me?.autoDecline ?? false,
+      maxFriends: MAX_FRIENDS_PER_USER,
     })
   })
   .get("/me/friends", async (c) => {
@@ -756,6 +772,18 @@ export const meFriendRoutes = new Hono<AppEnv>()
       return forbidden(c, "این کاربر اخیراً درخواست شما را رد کرده است؛ بعداً تلاش کنید")
     }
 
+    // Friend cap (60 each side) — checked before any friendship is created.
+    const [myCount, targetCount] = await Promise.all([
+      friendCountOf(user.id),
+      friendCountOf(targetId),
+    ])
+    if (myCount >= MAX_FRIENDS_PER_USER) {
+      return forbidden(c, `به سقف دوستان رسیده‌اید (${MAX_FRIENDS_PER_USER} نفر)`)
+    }
+    if (targetCount >= MAX_FRIENDS_PER_USER) {
+      return forbidden(c, "این کاربر به سقف دوستان رسیده است")
+    }
+
     // Mutual pending -> instant friendship, no duplicate rows.
     const [reverse] = await db
       .select()
@@ -833,6 +861,18 @@ export const meFriendRoutes = new Hono<AppEnv>()
       }
       if (request.status !== "PENDING") {
         return conflict(c, "این درخواست قبلاً پاسخ داده شده است")
+      }
+
+      // Re-check the cap: counts may have grown since the request was sent.
+      const [myCount, senderCount] = await Promise.all([
+        friendCountOf(user.id),
+        friendCountOf(request.senderId),
+      ])
+      if (myCount >= MAX_FRIENDS_PER_USER) {
+        return forbidden(c, `به سقف دوستان رسیده‌اید (${MAX_FRIENDS_PER_USER} نفر)`)
+      }
+      if (senderCount >= MAX_FRIENDS_PER_USER) {
+        return forbidden(c, "این کاربر به سقف دوستان رسیده است")
       }
 
       const [low, high] = friendshipPair(request.senderId, request.receiverId)
