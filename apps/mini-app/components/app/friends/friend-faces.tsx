@@ -9,9 +9,9 @@ import {
 import type { FriendCard } from "@/lib/api"
 
 /**
- * Instagram-style stacked faces ("liked by…") for a course card. Rendered
- * only when at least one friend noted the course; the React Compiler
- * memoizes it automatically (no manual memo).
+ * Instagram-style stacked faces ("liked by…") for a course card. Rendered as
+ * a sibling overlay (NOT inside the card button — nested buttons break
+ * hydration), positioned absolute top-right by the parent.
  */
 export function FriendFaces({
   sample,
@@ -22,7 +22,7 @@ export function FriendFaces({
   count: number
   onClick: () => void
 }) {
-  const shown = sample.slice(0, 5)
+  const shown = sample.slice(0, 3)
   const extra = count - shown.length
   return (
     <button
@@ -32,7 +32,7 @@ export function FriendFaces({
         e.stopPropagation()
         onClick()
       }}
-      className="absolute top-2 right-2 z-10 flex cursor-pointer items-center transition-transform active:scale-95"
+      className="absolute top-1 right-2 z-10 flex cursor-pointer items-center transition-transform active:scale-95 isolate"
     >
       <span className="flex -space-x-2">
         {shown.map((u) => (
@@ -48,7 +48,7 @@ export function FriendFaces({
         {extra > 0 && (
           <span
             dir="ltr"
-            className="flex size-6 items-center justify-center rounded-full bg-muted text-[10px] font-medium ring-2 ring-card"
+            className="relative z-10 flex size-6 items-center justify-center rounded-full bg-muted text-[10px] font-medium ring-2 ring-card"
           >
             +{extra}
           </span>

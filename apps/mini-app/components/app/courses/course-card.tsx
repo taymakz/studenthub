@@ -4,14 +4,13 @@ import { ChevronLeft } from "lucide-react"
 
 import { cn } from "@workspace/ui/lib/utils"
 
-import { type Offering, type FriendCard, professorName } from "@/lib/api"
+import { type Offering, professorName } from "@/lib/api"
 import {
   CourseBadges,
   CourseCardHeader,
   CourseTable,
   CourseTags,
 } from "./sections"
-import { FriendFaces } from "@/components/app/friends/friend-faces"
 
 /** Visual state flags for a course card, grouped so the prop API stays small. */
 export interface CourseCardFlags {
@@ -27,17 +26,12 @@ export function CourseCard({
   onSelect,
   flags,
   className,
-  mates,
-  onMatesClick,
 }: {
   offering: Offering
   viewMode: "full" | "simple"
   onSelect: (offering: Offering) => void
   flags: CourseCardFlags
   className?: string
-  /** Friends who noted this course — stacked faces, top-right. */
-  mates?: { count: number; sample: FriendCard[] }
-  onMatesClick?: (offering: Offering) => void
 }) {
   const cls = cn(
     "relative w-full cursor-pointer rounded-md border bg-card px-4 pt-8 pb-4 text-start text-sm",
@@ -53,13 +47,6 @@ export function CourseCard({
   if (viewMode === "simple") {
     return (
       <button type="button" className={cls} onClick={() => onSelect(offering)}>
-        {mates && mates.count > 0 && (
-          <FriendFaces
-            sample={mates.sample}
-            count={mates.count}
-            onClick={() => onMatesClick?.(offering)}
-          />
-        )}
         <CourseBadges isNoted={flags.noted} isPassed={flags.passed} />
         <div className="mb-2 flex items-center justify-between gap-2">
           <div className="flex items-center gap-1">
@@ -88,13 +75,6 @@ export function CourseCard({
 
   return (
     <button type="button" className={cls} onClick={() => onSelect(offering)}>
-      {mates && mates.count > 0 && (
-        <FriendFaces
-          sample={mates.sample}
-          count={mates.count}
-          onClick={() => onMatesClick?.(offering)}
-        />
-      )}
       <CourseBadges isNoted={flags.noted} isPassed={flags.passed} />
       <div className="mb-2">
         <CourseCardHeader offering={offering} isNew={flags.new} />

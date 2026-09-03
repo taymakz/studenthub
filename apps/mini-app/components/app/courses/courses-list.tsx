@@ -5,6 +5,7 @@ import { Virtuoso } from "react-virtuoso"
 import type { FriendCard, Offering } from "@/lib/api"
 
 import { CourseCard } from "./course-card"
+import { FriendFaces } from "@/components/app/friends/friend-faces"
 
 export function CoursesList({
   filtered,
@@ -35,7 +36,7 @@ export function CoursesList({
       overscan={6}
       itemContent={(index, o) => (
         <div
-          className="animate-fadeIn py-1.5"
+          className="relative animate-fadeIn py-1.5"
           style={{
             animationDelay: `${Math.min(index * 30, 300)}ms`,
             animationFillMode: "backwards",
@@ -51,9 +52,17 @@ export function CoursesList({
               new: newIndexes.has(o.index),
             }}
             className={borderFor(o)}
-            mates={matesByIndex?.get(o.index)}
-            onMatesClick={onMatesClick}
           />
+          {(() => {
+            const mates = matesByIndex?.get(o.index)
+            return mates && mates.count > 0 ? (
+              <FriendFaces
+                sample={mates.sample}
+                count={mates.count}
+                onClick={() => onMatesClick?.(o)}
+              />
+            ) : null
+          })()}
         </div>
       )}
     />
