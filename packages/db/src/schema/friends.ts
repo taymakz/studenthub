@@ -135,3 +135,6 @@ export function friendshipPair(a: number, b: number): [number, number] {
 
 /** Months-equivalent cooldown after a DECLINED request before re-requesting. */
 export const FRIEND_REQUEST_COOLDOWN_DAYS = 30
+
+/** Maximum mutual friends per user (grandfathered: existing oversized lists keep working). */
+export const MAX_FRIENDS_PER_USER = 60

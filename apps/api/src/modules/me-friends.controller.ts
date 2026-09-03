@@ -1,6 +1,7 @@
 import { zValidator } from "@hono/zod-validator"
 import {
   FRIEND_REQUEST_COOLDOWN_DAYS,
+  MAX_FRIENDS_PER_USER,
   failedCourses,
   friendBlocks,
   friendRequests,
@@ -47,10 +48,12 @@ import { requireUser, withUser } from "@/middleware/auth"
  * - Send by friend id. Rejected when: self, unknown user, already friends,
  *   pending exists either way, a block exists either way, or the sender was
  *   declined by this receiver within FRIEND_REQUEST_COOLDOWN_DAYS.
+ * - Target-side rejections (friend cap reached, auto-decline on, block
+ *   either way) all return the same generic 403 so senders cannot probe
+ *   which one applies. Auto-declined sends store nothing and start no
+ *   cooldown.
  * - Reverse PENDING on send -> instant auto-befriend (no duplicate rows).
- * - Receiver with autoDeclineFriendRequests -> request stored as DECLINED
- *   (cooldown applies like a manual decline).
- * - Decline (manual or auto) starts a 1-month cooldown for the sender.
+ * - Manual decline starts a 1-month cooldown for the sender.
  * - Block is full: drops the friendship + cancels pendings both ways, and
  *   forbids sending until unblocked. Unblock restores nothing.
  */
@@ -78,6 +81,20 @@ function cooldownCutoff(): Date {
   return new Date(
     Date.now() - FRIEND_REQUEST_COOLDOWN_DAYS * 24 * 60 * 60 * 1000
   )
+}
+
+/** Current mutual-friend count for the cap check. */
+async function friendCountOf(userId: number): Promise<number> {
+  const [row] = await db
+    .select({ count: sql<number>`count(*)::int` })
+    .from(friendships)
+    .where(
+      or(
+        eq(friendships.userLowId, userId),
+        eq(friendships.userHighId, userId)
+      )
+    )
+  return row?.count ?? 0
 }
 
 /** Minimal public card - same privacy level as the classmates list. */
@@ -414,6 +431,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
       incomingPendingCount: incomingRow?.count ?? 0,
       outgoingPendingCount: outgoingRow?.count ?? 0,
       autoDecline: me?.autoDecline ?? false,
+      maxFriends: MAX_FRIENDS_PER_USER,
     })
   })
   .get("/me/friends", async (c) => {
@@ -756,6 +774,18 @@ export const meFriendRoutes = new Hono<AppEnv>()
       return forbidden(c, "این کاربر اخیراً درخواست شما را رد کرده است؛ بعداً تلاش کنید")
     }
 
+    // Friend cap (60 each side) — checked before any friendship is created.
+    const [myCount, targetCount] = await Promise.all([
+      friendCountOf(user.id),
+      friendCountOf(targetId),
+    ])
+    if (myCount >= MAX_FRIENDS_PER_USER) {
+      return forbidden(c, `به سقف دوستان رسیده‌اید (${MAX_FRIENDS_PER_USER} نفر)`)
+    }
+    if (targetCount >= MAX_FRIENDS_PER_USER || target.autoDecline) {
+      return forbidden(c, "امکان ارسال درخواست دوستی وجود ندارد")
+    }
+
     // Mutual pending -> instant friendship, no duplicate rows.
     const [reverse] = await db
       .select()
@@ -782,22 +812,18 @@ export const meFriendRoutes = new Hono<AppEnv>()
       return ok(c, { befriended: true }, "شما با هم دوست شدید")
     }
 
-    const now = new Date()
     const [request] = await db
       .insert(friendRequests)
       .values({
         senderId: user.id,
         receiverId: targetId,
-        status: target.autoDecline ? "DECLINED" : "PENDING",
-        respondedAt: target.autoDecline ? now : null,
+        status: "PENDING",
       })
       .returning()
     if (!request) return notFound(c, "ثبت درخواست ممکن نشد")
 
-    if (request.status === "PENDING") {
-      await notifyFriendRequest(target.id, user)
-      audit(`درخواست دوستی جدید: ${personLine(user)} به ${personLine(target)}`)
-    }
+    await notifyFriendRequest(target.id, user)
+    audit(`درخواست دوستی جدید: ${personLine(user)} به ${personLine(target)}`)
 
     return ok(
       c,
@@ -811,9 +837,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
           user: toFriendCard(target),
         },
       },
-      target.autoDecline
-        ? "این کاربر درخواست‌ها را خودکار رد می‌کند"
-        : "درخواست دوستی ارسال شد"
+      "درخواست دوستی ارسال شد"
     )
   })
   .post(
@@ -833,6 +857,18 @@ export const meFriendRoutes = new Hono<AppEnv>()
       }
       if (request.status !== "PENDING") {
         return conflict(c, "این درخواست قبلاً پاسخ داده شده است")
+      }
+
+      // Re-check the cap: counts may have grown since the request was sent.
+      const [myCount, senderCount] = await Promise.all([
+        friendCountOf(user.id),
+        friendCountOf(request.senderId),
+      ])
+      if (myCount >= MAX_FRIENDS_PER_USER) {
+        return forbidden(c, `به سقف دوستان رسیده‌اید (${MAX_FRIENDS_PER_USER} نفر)`)
+      }
+      if (senderCount >= MAX_FRIENDS_PER_USER) {
+        return forbidden(c, "این کاربر به سقف دوستان رسیده است")
       }
 
       const [low, high] = friendshipPair(request.senderId, request.receiverId)

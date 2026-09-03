@@ -26,6 +26,7 @@ import {
   useCancelRequest,
   useDeclineRequest,
   useFriendsList,
+  useFriendsSummary,
   useIncomingRequests,
   useOutgoingRequests,
 } from "./use-friends-data"
@@ -244,9 +245,11 @@ export function PendingTab() {
 /** Friends tab: big avatars, tap a friend to open their detail drawer. */
 export function FriendsTab() {
   const list = useFriendsList(true)
+  const summary = useFriendsSummary(true)
   const [selectedId, setSelectedId] = useState<number | null>(null)
 
   const items = list.data?.pages.flatMap((p) => p.friends) ?? []
+  const maxFriends = summary.data?.maxFriends ?? null
 
   const handleLoadMore = () => {
     if (list.hasNextPage && !list.isFetchingNextPage) void list.fetchNextPage()
@@ -262,8 +265,14 @@ export function FriendsTab() {
   if (items.length === 0)
     return <FriendsEmpty message="هنوز دوستی ندارید. با شناسه دوستی، دوست‌هایتان را اضافه کنید." />
 
+  const total = summary.data?.friendsCount ?? items.length
+  const max = summary.data?.maxFriends ?? null
+
   return (
     <div>
+      <p className="pb-2 text-xs text-muted-foreground">
+        {total} دوست{max !== null ? ` از ${max} نفر` : ""}
+      </p>
       <Virtuoso
         useWindowScroll
         data={items}

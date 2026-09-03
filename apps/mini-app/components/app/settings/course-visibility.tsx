@@ -19,12 +19,13 @@ import { fetchMe, toggleVisibility } from "@/lib/api"
 import { useProfileStore } from "@/stores/profile-store"
 import { Badge } from "@workspace/ui/components/badge"
 
-function getRemainingHours(lastUpdated: string | null): number {
+/** Visibility may change once every 2 weeks (abuse-resistant). */
+function getRemainingDays(lastUpdated: string | null): number {
   if (!lastUpdated) return 0
   const diff = Date.now() - new Date(lastUpdated).getTime()
-  const hours = diff / (1000 * 60 * 60)
-  if (hours >= 24) return 0
-  return Math.ceil(24 - hours)
+  const days = diff / (1000 * 60 * 60 * 24)
+  if (days >= 14) return 0
+  return Math.ceil(14 - days)
 }
 
 export default function CourseVisibility() {
@@ -34,8 +35,8 @@ export default function CourseVisibility() {
   const user = meQuery.data?.data?.user ?? null
   const visible = user?.visibleInCourseLists ?? true
   const lastUpdated = user?.visibleInCourseListsLastUpdated ?? null
-  const remainingHours = getRemainingHours(lastUpdated)
-  const canChange = remainingHours === 0
+  const remainingDays = getRemainingDays(lastUpdated)
+  const canChange = remainingDays === 0
 
   const toggleMut = useMutation({
     mutationFn: async () => (await toggleVisibility()).data,
@@ -52,7 +53,7 @@ export default function CourseVisibility() {
   })
 
   const description = !canChange
-    ? `غیر قابل تغییر تا ${remainingHours} ساعت دیگر`
+    ? `غیر قابل تغییر تا ${remainingDays} روز دیگر`
     : visible
       ? "فعال"
       : "غیر فعال"
@@ -74,7 +75,7 @@ export default function CourseVisibility() {
           <DrawerDescription>
             تنظیم نمایش شما در لیست دانشجویان دروس
             <br />
-            <Badge variant="warning"> هر ۲۴ ساعت یکبار قابل تغییر است</Badge>
+            <Badge variant="warning"> هر ۲ هفته یکبار قابل تغییر است</Badge>
           </DrawerDescription>
         </DrawerHeader>
         <DrawerPanel className="p-0">
@@ -119,7 +120,7 @@ export default function CourseVisibility() {
           <div className="mx-4 mb-4 rounded-lg bg-muted/50 p-3 text-xs leading-5 text-muted-foreground">
             {!canChange ? (
               <p className="font-medium text-warning">
-                شما باید {remainingHours} ساعت دیگر صبر کنید تا بتوانید این
+                شما باید {remainingDays} روز دیگر صبر کنید تا بتوانید این
                 تنظیم را تغییر دهید.
               </p>
             ) : null}

@@ -14,7 +14,7 @@ import { Button } from "@workspace/ui/components/button"
 import { Input } from "@workspace/ui/components/input"
 import { Spinner } from "@workspace/ui/components/spinner"
 
-import { useSendRequest } from "./use-friends-data"
+import { useSendRequest, useFriendsSummary } from "./use-friends-data"
 
 /** Add-friend drawer: numeric friend-id input (phone-keypad pattern). */
 export function AddFriendDrawer({
@@ -29,6 +29,11 @@ export function AddFriendDrawer({
 }) {
   const [value, setValue] = useState("")
   const send = useSendRequest()
+  const summary = useFriendsSummary(open)
+  const maxFriends = summary.data?.maxFriends ?? null
+  const atCap =
+    maxFriends !== null &&
+    (summary.data?.friendsCount ?? 0) >= maxFriends
 
   const submit = () => {
     const id = Number.parseInt(value, 10)
@@ -73,11 +78,16 @@ export function AddFriendDrawer({
             <Button
               type="button"
               className="w-full"
-              disabled={!value || send.isPending}
+              disabled={!value || send.isPending || atCap}
               onClick={submit}
             >
               {send.isPending ? <Spinner /> : "ارسال درخواست دوستی"}
             </Button>
+            {atCap && maxFriends !== null && (
+              <p className="text-center text-xs text-destructive">
+                به سقف دوستان رسیده‌اید ({maxFriends} نفر)
+              </p>
+            )}
           </div>
         </DrawerPanel>
       </DrawerPopup>

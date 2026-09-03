@@ -914,15 +914,17 @@ export const meRoutes = new Hono<AppEnv>()
       .limit(1)
     if (!dbUser) return notFound(c, "کاربر یافت نشد")
 
+    /** Visibility may change once every 2 weeks (abuse-resistant). */
+    const VISIBILITY_CHANGE_DAYS = 14
     const last = dbUser.visibleInCourseListsLastUpdated
     if (last) {
       const diffMs = Date.now() - new Date(last).getTime()
-      const hoursPassed = diffMs / (1000 * 60 * 60)
-      if (hoursPassed < 24) {
-        const remaining = Math.ceil(24 - hoursPassed)
+      const daysPassed = diffMs / (1000 * 60 * 60 * 24)
+      if (daysPassed < VISIBILITY_CHANGE_DAYS) {
+        const remaining = Math.ceil(VISIBILITY_CHANGE_DAYS - daysPassed)
         return badRequest(
           c,
-          `شما باید ${remaining} ساعت دیگر صبر کنید تا بتوانید این تنظیم را تغییر دهید`
+          `شما باید ${remaining} روز دیگر صبر کنید تا بتوانید این تنظیم را تغییر دهید`
         )
       }
     }

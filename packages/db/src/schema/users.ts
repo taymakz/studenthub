@@ -51,7 +51,7 @@ export const users = pgTable(
       { withTimezone: true }
     ),
 
-    /** Auto-decline every incoming friend request (sender still gets DECLINED). */
+    /** Auto-decline every incoming friend request (sender gets a generic rejection, nothing is stored). */
     autoDeclineFriendRequests: boolean("auto_decline_friend_requests")
       .notNull()
       .default(false),

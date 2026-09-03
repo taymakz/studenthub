@@ -607,6 +607,7 @@ export interface FriendsSummary {
   incomingPendingCount: number
   outgoingPendingCount: number
   autoDecline: boolean
+  maxFriends: number
 }
 
 export function fetchFriendsSummary() {
