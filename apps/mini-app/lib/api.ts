@@ -577,6 +577,7 @@ export interface FriendCard {
 
 export interface FriendItem extends FriendCard {
   friendsSince: string
+  profile: string | null
 }
 
 export interface FriendRequestItem {
@@ -687,11 +688,22 @@ export interface FriendDetailData {
   profile: {
     universitySlug: string | null
     majorSlug: string | null
+    degree: string | null
+    entryYearRange: string | null
+    entrySemester: "MEHR" | "BAHMAN" | "SUMMER" | null
     currentSemesterCode: string | null
   } | null
   noted: { courseIndex: string; year: string | null; semester: string | null }[]
   passed: string[]
   failed: string[]
+  chart: {
+    terms: Record<
+      string,
+      { name: string; code?: string; theoreticalUnits?: number; practicalUnits?: number }[]
+    >
+    moaref: { name: string; code?: string; theoreticalUnits?: number; practicalUnits?: number }[]
+    unknown: { name: string; code?: string; theoreticalUnits?: number; practicalUnits?: number }[]
+  } | null
 }
 
 export function fetchFriendDetail(friendId: number) {

@@ -41,16 +41,22 @@ export function FriendAvatar({
   )
 }
 
-/** Card row: avatar + name + optional subtitle + action buttons / tap. */
+/** Card row: avatar + name + optional subtitle/hint + action buttons / tap. */
 export function PersonRow({
   user,
   subtitle,
+  subtitleLtr = false,
+  hint,
   avatarSize = "sm",
   onClick,
   children,
 }: {
   user: FriendCard
   subtitle?: string
+  /** Render the subtitle LTR but right-aligned (for @usernames). */
+  subtitleLtr?: boolean
+  /** Second dimmer line (e.g. university profile). */
+  hint?: string
   avatarSize?: "sm" | "xl"
   onClick?: () => void
   children?: React.ReactNode
@@ -63,8 +69,20 @@ export function PersonRow({
           {user.firstName} {user.lastName ?? ""}
         </p>
         {subtitle ? (
-          <p className="mt-0.5 truncate text-xs text-muted-foreground">
+          <p
+            dir={subtitleLtr ? "ltr" : undefined}
+            className={
+              subtitleLtr
+                ? "mt-0.5 truncate text-right text-xs text-muted-foreground"
+                : "mt-0.5 truncate text-xs text-muted-foreground"
+            }
+          >
             {subtitle}
+          </p>
+        ) : null}
+        {hint ? (
+          <p className="mt-0.5 truncate text-[11px] leading-4 text-muted-foreground/80">
+            {hint}
           </p>
         ) : null}
       </div>

@@ -206,9 +206,6 @@ export function FriendsTab() {
 
   return (
     <div>
-      <p className="pb-2 text-xs text-muted-foreground">
-        {items.length} دوست
-      </p>
       <Virtuoso
         useWindowScroll
         data={items}
@@ -218,7 +215,9 @@ export function FriendsTab() {
           <div className="pb-2">
             <PersonRow
               user={f}
-              subtitle={userSubtitle(f)}
+              subtitle={f.username ? `@${f.username}` : undefined}
+              subtitleLtr
+              hint={f.profile ?? undefined}
               avatarSize="xl"
               onClick={() => setSelectedId(f.id)}
             />

@@ -1,4 +1,4 @@
-import type { ChartCourse, MyChart } from "@/lib/api"
+import type { MyChart } from "@/lib/api"
 
 /**
  * One flattened curriculum line that the profile widgets work with. Term index
@@ -16,8 +16,25 @@ export interface ChartCourseItem {
   isUnknown: boolean
 }
 
+export interface PoolCourse {
+  name: string
+  code?: string
+  theoreticalUnits?: number
+  practicalUnits?: number
+}
+
+/**
+ * Minimal chart shape the pool builder needs - a full MyChart satisfies it,
+ * and so does a friend chart served by the API (terms/moaref/unknown only).
+ */
+export interface ChartPoolSource {
+  terms?: Record<string, PoolCourse[]> | null
+  moaref?: PoolCourse[] | null
+  unknown?: PoolCourse[] | null
+}
+
 function toItem(
-  c: ChartCourse,
+  c: PoolCourse,
   termNumber: number | undefined,
   isMoaref: boolean,
   isUnknown: boolean
@@ -39,7 +56,7 @@ function toItem(
  * units (the old widget counted terms + معارف + ناشناس only).
  */
 export function flattenChart(
-  chart: MyChart | null | undefined
+  chart: ChartPoolSource | MyChart | null | undefined
 ): ChartCourseItem[] {
   if (!chart) return []
   const out: ChartCourseItem[] = []
