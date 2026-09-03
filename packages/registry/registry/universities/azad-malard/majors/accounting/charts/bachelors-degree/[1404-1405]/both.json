@@ -96,8 +96,8 @@
       },
       {
         "name": "کاربینی",
-        "theoreticalUnits": 0,
-        "practicalUnits": 0,
+        "theoreticalUnits": 0.5,
+        "practicalUnits": 0.5,
         "prerequisites": [],
         "corequisites": []
       }
@@ -148,8 +148,8 @@
       },
       {
         "name": "تربیت بدنی",
-        "theoreticalUnits": 0,
-        "practicalUnits": 0,
+        "theoreticalUnits": 0.5,
+        "practicalUnits": 0.5,
         "prerequisites": [],
         "corequisites": []
       }
@@ -292,6 +292,13 @@
           "تربیت بدنی"
         ],
         "corequisites": []
+      },
+      {
+        "name": "اندیشه های امامین انقلاب اسلامی و وصایای حضرت امام خمینی(ره)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
       }
     ],
     "7": [
@@ -342,9 +349,7 @@
         "name": "کارآموزی",
         "theoreticalUnits": 0,
         "practicalUnits": 2,
-        "prerequisites": {
-          "term": 5
-        },
+        "prerequisites": [],
         "corequisites": []
       }
     ]

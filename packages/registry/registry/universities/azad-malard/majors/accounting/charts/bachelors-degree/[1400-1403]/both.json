@@ -278,8 +278,8 @@
       },
       {
         "name": "تربیت بدنی",
-        "theoreticalUnits": 0,
-        "practicalUnits": 0,
+        "theoreticalUnits": 0.5,
+        "practicalUnits": 0.5,
         "prerequisites": [],
         "corequisites": []
       }
@@ -449,6 +449,13 @@
         "theoreticalUnits": 0,
         "practicalUnits": 2,
         "prerequisites": 100,
+        "corequisites": []
+      },
+      {
+        "name": "اندیشه های امامین انقلاب اسلامی و وصایای حضرت امام خمینی(ره)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
         "corequisites": []
       }
     ]
