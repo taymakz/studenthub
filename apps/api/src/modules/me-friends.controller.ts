@@ -11,9 +11,18 @@ import {
   universityProfiles,
   users,
 } from "@workspace/db/schema"
-import { and, desc, eq, gt, or, sql } from "drizzle-orm"
+import { and, desc, eq, gt, inArray, or, sql } from "drizzle-orm"
 import { Hono } from "hono"
 import { z } from "zod"
+import {
+  findChartYearDirForYear,
+  getChart,
+} from "@/lib/registry"
+import {
+  formatYearDirectory,
+  getMajor,
+  getUniversity,
+} from "@workspace/registry"
 
 import { db } from "@/lib/db"
 import {
@@ -123,6 +132,75 @@ async function notifyFriendAccepted(
   )
 }
 
+/** First year of an entry-cohort directory: "[1403-1404]" -> 1403, "1405" -> 1405. */
+function entryYearStart(range: string | null | undefined): number | null {
+  if (!range) return null
+  const single = /^(\d{4})$/.exec(range)
+  if (single) return Number(single[1])
+  const pair = /^\[(\d{4})-(\d{4})\]$/.exec(range)
+  if (pair) return Number(pair[1])
+  return null
+}
+
+const FA_ENTRY_SEMESTER: Record<string, string> = {
+  MEHR: "مهر",
+  BAHMAN: "بهمن",
+  SUMMER: "تابستان",
+}
+
+// Registry reads are sync file IO - cache fa names per process.
+const uniNameCache = new Map<string, string | null>()
+const majorNameCache = new Map<string, string | null>()
+
+function cachedUniName(slug: string): string | null {
+  const hit = uniNameCache.get(slug)
+  if (hit !== undefined) return hit
+  let name: string | null = null
+  try {
+    name = getUniversity(slug)?.name.fa ?? null
+  } catch {
+    name = null
+  }
+  uniNameCache.set(slug, name)
+  return name
+}
+
+function cachedMajorName(uniSlug: string, majorSlug: string): string | null {
+  const key = `${uniSlug}/${majorSlug}`
+  const hit = majorNameCache.get(key)
+  if (hit !== undefined) return hit
+  let name: string | null = null
+  try {
+    name = getMajor(uniSlug, majorSlug)?.name.fa ?? null
+  } catch {
+    name = null
+  }
+  majorNameCache.set(key, name)
+  return name
+}
+
+/**
+ * Friend subtitle: «دانشگاه آزاد ملارد - مهندسی کامپیوتر - ورودی 1403-1405 مهر».
+ * Null when the friend has no usable university profile.
+ */
+function profileLine(profile: {
+  universitySlug: string | null
+  majorSlug: string | null
+  entryYearRange: string | null
+  entrySemester: string | null
+} | null | undefined): string | null {
+  if (!profile?.universitySlug || !profile?.majorSlug) return null
+  const uni = cachedUniName(profile.universitySlug)
+  const major = cachedMajorName(profile.universitySlug, profile.majorSlug)
+  if (!uni || !major) return null
+  const range = (profile.entryYearRange ?? "").replace(/[\[\]]/g, "")
+  const sem = profile.entrySemester
+    ? (FA_ENTRY_SEMESTER[profile.entrySemester] ?? null)
+    : null
+  const entry = [range || null, sem].filter(Boolean).join(" ")
+  return entry ? `${uni} - ${major} - ورودی ${entry}` : `${uni} - ${major}`
+}
+
 export const meFriendRoutes = new Hono<AppEnv>()
   .use("*", withUser, requireUser)
   .get("/me/friends/summary", async (c) => {
@@ -200,9 +278,31 @@ export const meFriendRoutes = new Hono<AppEnv>()
       .offset(offset)
 
     const hasMore = rows.length > limit
-    const friends = (hasMore ? rows.slice(0, limit) : rows).map((r) => ({
+    const pageRows = hasMore ? rows.slice(0, limit) : rows
+
+    const profiles = pageRows.length > 0
+      ? await db
+          .select({
+            userId: universityProfiles.userId,
+            universitySlug: universityProfiles.universitySlug,
+            majorSlug: universityProfiles.majorSlug,
+            entryYearRange: universityProfiles.entryYearRange,
+            entrySemester: universityProfiles.entrySemester,
+          })
+          .from(universityProfiles)
+          .where(
+            inArray(
+              universityProfiles.userId,
+              pageRows.map((r) => r.id)
+            )
+          )
+      : []
+    const profileByUser = new Map(profiles.map((p) => [p.userId, p]))
+
+    const friends = pageRows.map((r) => ({
       ...toFriendCard(r),
       friendsSince: r.friendsSince,
+      profile: profileLine(profileByUser.get(r.id) ?? null),
     }))
 
     return ok(c, { friends, page, limit, hasMore })
@@ -263,6 +363,9 @@ export const meFriendRoutes = new Hono<AppEnv>()
         .select({
           universitySlug: universityProfiles.universitySlug,
           majorSlug: universityProfiles.majorSlug,
+          degree: universityProfiles.degree,
+          entryYearRange: universityProfiles.entryYearRange,
+          entrySemester: universityProfiles.entrySemester,
           currentSemesterCode: universityProfiles.currentSemesterCode,
         })
         .from(universityProfiles)
@@ -297,12 +400,47 @@ export const meFriendRoutes = new Hono<AppEnv>()
         .where(eq(failedCourses.userId, friendId))
         .limit(500)
 
+      // Friend's graduation chart (same resolution as GET /me) so the client
+      // can group passed/failed courses by term exactly like /profile.
+      let chart: unknown = null
+      if (
+        profile?.universitySlug &&
+        profile?.majorSlug &&
+        profile?.degree &&
+        profile?.entryYearRange &&
+        profile?.entrySemester
+      ) {
+        try {
+          const year = entryYearStart(profile.entryYearRange)
+          if (year != null) {
+            const ydir = findChartYearDirForYear(
+              profile.universitySlug,
+              profile.majorSlug,
+              profile.degree,
+              year
+            )
+            if (ydir) {
+              chart = getChart(
+                profile.universitySlug,
+                profile.majorSlug,
+                profile.degree,
+                formatYearDirectory(ydir),
+                profile.entrySemester
+              )
+            }
+          }
+        } catch {
+          chart = null
+        }
+      }
+
       return ok(c, {
         user: toFriendCard(friend),
         profile: profile ?? null,
         noted,
         passed: passed.map((p) => p.courseName),
         failed: failed.map((f) => f.courseName),
+        chart,
       })
     }
   )
