@@ -17,8 +17,9 @@ import {
   FriendsLoading,
   LoadMoreButton,
   PersonRow,
-  UnfriendAction,
+  userSubtitle,
 } from "./friend-rows"
+import { FriendDetailDrawer } from "./friend-detail-drawer"
 import {
   useAcceptRequest,
   useBlockUser,
@@ -27,7 +28,6 @@ import {
   useFriendsList,
   useIncomingRequests,
   useOutgoingRequests,
-  useUnfriend,
 } from "./use-friends-data"
 
 type RequestConfirm =
@@ -91,7 +91,7 @@ export function PendingTab() {
               <PersonRow
                 key={r.id}
                 user={r.user}
-                subtitle={`شناسه: ${r.user.id}`}
+                subtitle={userSubtitle(r.user)}
               >
                 <AcceptAction onClick={() => setConfirm({ kind: "accept", request: r })} />
                 <DeclineAction onClick={() => setConfirm({ kind: "decline", request: r })} />
@@ -126,7 +126,7 @@ export function PendingTab() {
               <PersonRow
                 key={r.id}
                 user={r.user}
-                subtitle={`شناسه: ${r.user.id}`}
+                subtitle={userSubtitle(r.user)}
               >
                 <Button
                   type="button"
@@ -183,17 +183,10 @@ export function PendingTab() {
   )
 }
 
-/** Friends tab: virtualized friends list with unfriend / block actions. */
+/** Friends tab: big avatars, tap a friend to open their detail drawer. */
 export function FriendsTab() {
   const list = useFriendsList(true)
-  const unfriend = useUnfriend()
-  const block = useBlockUser()
-
-  const [confirm, setConfirm] = useState<
-    | { kind: "unfriend"; id: number; name: string }
-    | { kind: "block"; id: number; name: string }
-    | null
-  >(null)
+  const [selectedId, setSelectedId] = useState<number | null>(null)
 
   const items = list.data?.pages.flatMap((p) => p.friends) ?? []
 
@@ -223,26 +216,12 @@ export function FriendsTab() {
         endReached={handleLoadMore}
         itemContent={(_, f) => (
           <div className="pb-2">
-            <PersonRow user={f} subtitle={`شناسه: ${f.id}`}>
-              <UnfriendAction
-                onClick={() =>
-                  setConfirm({
-                    kind: "unfriend",
-                    id: f.id,
-                    name: `${f.firstName} ${f.lastName ?? ""}`.trim(),
-                  })
-                }
-              />
-              <BlockAction
-                onClick={() =>
-                  setConfirm({
-                    kind: "block",
-                    id: f.id,
-                    name: `${f.firstName} ${f.lastName ?? ""}`.trim(),
-                  })
-                }
-              />
-            </PersonRow>
+            <PersonRow
+              user={f}
+              subtitle={userSubtitle(f)}
+              avatarSize="xl"
+              onClick={() => setSelectedId(f.id)}
+            />
           </div>
         )}
       />
@@ -252,24 +231,10 @@ export function FriendsTab() {
         </div>
       )}
 
-      <ConfirmDrawer
-        open={confirm !== null}
-        onOpenChange={(o) => !o && setConfirm(null)}
-        title={confirm?.kind === "unfriend" ? "حذف از دوستان" : "مسدود کردن کاربر"}
-        description={
-          confirm?.kind === "unfriend"
-            ? `${confirm.name} از لیست دوستان شما حذف می‌شود.`
-            : `${confirm?.name} مسدود می‌شود و از لیست دوستان حذف می‌گردد.`
-        }
-        confirmLabel={confirm?.kind === "unfriend" ? "حذف" : "مسدود کردن"}
-        danger
-        pending={confirm?.kind === "unfriend" ? unfriend.isPending : block.isPending}
-        onConfirm={() => {
-          if (!confirm) return
-          const done = { onSuccess: () => setConfirm(null) }
-          if (confirm.kind === "unfriend") unfriend.mutate(confirm.id, done)
-          else block.mutate(confirm.id, done)
-        }}
+      <FriendDetailDrawer
+        friendId={selectedId}
+        open={selectedId !== null}
+        onOpenChange={(o) => !o && setSelectedId(null)}
       />
     </div>
   )

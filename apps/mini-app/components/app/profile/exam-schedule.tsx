@@ -28,7 +28,7 @@ import { exportImage, ExportUploadCanceled } from "@/lib/export-image"
 import { toastManager } from "@workspace/ui/components/toast"
 
 /** Group by exam date, chronological, «تاریخ نامشخص» last (old project order). */
-function groupByExamDate(notedOfferings: Offering[]) {
+export function groupByExamDate(notedOfferings: Offering[]) {
   const groupMap = new Map<string, Offering[]>()
   for (const o of notedOfferings) {
     const date = extractDate(o.examSchedule) ?? "تاریخ نامشخص"

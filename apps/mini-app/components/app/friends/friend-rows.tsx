@@ -13,8 +13,24 @@ import { Spinner } from "@workspace/ui/components/spinner"
 
 import type { FriendCard } from "@/lib/api"
 
-export function FriendAvatar({ user }: { user: FriendCard }) {
+export function FriendAvatar({
+  user,
+  size = "sm",
+}: {
+  user: FriendCard
+  size?: "sm" | "xl"
+}) {
   const initials = (user.firstName?.[0] ?? "?") + (user.lastName?.[0] ?? "")
+  if (size === "xl") {
+    return (
+      <Avatar size="lg" className="size-16">
+        {user.photoUrl ? (
+          <AvatarImage src={user.photoUrl} alt={user.firstName} />
+        ) : null}
+        <AvatarFallback className="text-base">{initials}</AvatarFallback>
+      </Avatar>
+    )
+  }
   return (
     <Avatar size="sm">
       {user.photoUrl ? (
@@ -25,19 +41,23 @@ export function FriendAvatar({ user }: { user: FriendCard }) {
   )
 }
 
-/** Card row: avatar + name + optional subtitle + action buttons. */
+/** Card row: avatar + name + optional subtitle + action buttons / tap. */
 export function PersonRow({
   user,
   subtitle,
+  avatarSize = "sm",
+  onClick,
   children,
 }: {
   user: FriendCard
   subtitle?: string
+  avatarSize?: "sm" | "xl"
+  onClick?: () => void
   children?: React.ReactNode
 }) {
-  return (
-    <div className="flex items-center gap-3 rounded-lg border bg-card p-3">
-      <FriendAvatar user={user} />
+  const inner = (
+    <>
+      <FriendAvatar user={user} size={avatarSize} />
       <div className="min-w-0 flex-1">
         <p className="truncate text-sm font-medium">
           {user.firstName} {user.lastName ?? ""}
@@ -49,8 +69,29 @@ export function PersonRow({
         ) : null}
       </div>
       {children ? <div className="flex shrink-0 items-center gap-1">{children}</div> : null}
+    </>
+  )
+  if (onClick) {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="flex w-full cursor-pointer items-center gap-3 rounded-lg border bg-card p-3 text-start transition-transform active:scale-[0.99]"
+      >
+        {inner}
+      </button>
+    )
+  }
+  return (
+    <div className="flex items-center gap-3 rounded-lg border bg-card p-3">
+      {inner}
     </div>
   )
+}
+
+/** "@username" subtitle, falling back to the numeric id. */
+export function userSubtitle(user: FriendCard): string {
+  return user.username ? `@${user.username}` : `شناسه: ${user.id}`
 }
 
 function IconAction({

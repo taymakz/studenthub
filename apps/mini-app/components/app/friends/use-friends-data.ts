@@ -14,6 +14,7 @@ import {
   cancelFriendRequest,
   declineFriendRequest,
   fetchBlocks,
+  fetchFriendDetail,
   fetchFriendRequests,
   fetchFriends,
   fetchFriendsSummary,
@@ -37,6 +38,7 @@ function notifyError(title: string) {
 const ALL_FRIEND_KEYS = [
   ["friends-summary"],
   ["friends"],
+  ["friend-detail"],
   ["friend-requests"],
   ["friend-blocks"],
   ["friend-settings"],
@@ -116,6 +118,14 @@ export function useFriendSettings(enabled = true) {
     queryKey: ["friend-settings"],
     queryFn: async () => (await fetchFriendSettings()).data,
     enabled,
+  })
+}
+
+export function useFriendDetail(friendId: number | null, enabled = true) {
+  return useQuery({
+    queryKey: ["friend-detail", friendId],
+    queryFn: async () => (await fetchFriendDetail(friendId!)).data,
+    enabled: enabled && friendId !== null,
   })
 }
 

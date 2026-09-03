@@ -572,6 +572,7 @@ export interface FriendCard {
   firstName: string
   lastName: string | null
   photoUrl: string | null
+  username: string | null
 }
 
 export interface FriendItem extends FriendCard {
@@ -679,6 +680,22 @@ export function unblockFriend(friendId: number) {
 
 export function fetchFriendSettings() {
   return apiClient.get<{ autoDecline: boolean }>("/me/friends/settings")
+}
+
+export interface FriendDetailData {
+  user: FriendCard
+  profile: {
+    universitySlug: string | null
+    majorSlug: string | null
+    currentSemesterCode: string | null
+  } | null
+  noted: { courseIndex: string; year: string | null; semester: string | null }[]
+  passed: string[]
+  failed: string[]
+}
+
+export function fetchFriendDetail(friendId: number) {
+  return apiClient.get<FriendDetailData>(`/me/friends/${friendId}/detail`)
 }
 
 export function patchFriendSettings(autoDecline: boolean) {
