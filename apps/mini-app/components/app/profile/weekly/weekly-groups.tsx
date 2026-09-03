@@ -42,22 +42,24 @@ export function WeeklyGroups({
                     {o.location && <p className="text-xs text-muted-foreground">{o.location}</p>}
                   </>
                 )
-                // With mates the card becomes the bordered container: faces
-                // strip on top (real button, valid sibling), content below.
-                // The strip's empty area opens the card action; only the
-                // avatars themselves (w-fit) open the mates list.
+                // With mates the card becomes the bordered container: a faces
+                // button (mates list) plus an empty-area button (same card
+                // action) as valid siblings — no nested buttons, all native.
                 if (hasMates) {
                   return (
                     <div key={o.index} className="rounded-lg border bg-card px-4 pt-3 pb-4 text-sm">
-                      <div
-                        className="mb-2 flex cursor-pointer justify-start"
-                        onClick={() => onSelect?.(o)}
-                      >
+                      <div className="mb-2 flex items-center gap-2">
                         <FriendFaces
                           sample={mates.sample}
                           count={mates.count}
                           onClick={() => onMatesClick?.(o)}
                           className="static"
+                        />
+                        <button
+                          type="button"
+                          aria-label="مشاهده جزئیات درس"
+                          onClick={() => onSelect?.(o)}
+                          className="flex h-6 flex-1 cursor-pointer items-center"
                         />
                       </div>
                       {readOnly ? (
