@@ -4,6 +4,7 @@ import type { Semester } from "@workspace/registry"
 import { and, desc, eq } from "drizzle-orm"
 import { Hono } from "hono"
 import { z } from "zod"
+import { randomUUID } from "node:crypto"
 
 import { db } from "@/lib/db"
 import {
@@ -23,7 +24,14 @@ import {
   listBatches,
   sendNextMessage,
 } from "@/lib/notifications/service"
-import { validateFileSize } from "@workspace/ui/lib/file"
+import { validateFileSize, MAX_UPLOAD_BYTES } from "@workspace/ui/lib/file"
+import {
+  deleteExportObject,
+  getExportBytes,
+  isExportStorageConfigured,
+  presignExportPut,
+} from "@/lib/storage/s3"
+import { fetchUrlBytesLimited } from "@/lib/net"
 import {
   ingestFile,
   ingestMedia,
@@ -532,6 +540,119 @@ export const adminNotificationsRoutes = new Hono<AppEnv>()
         console.error("announcement failed:", error)
         return internalServerError(c)
       }
+    }
+  )
+  /* ─── One-time media intake (Supabase -> STORAGE topic -> file_id) ───
+     Browser uploads straight to Supabase via presigned PUT (bypassing the
+     ~4.5MB serverless body limit), then prepare() pushes the bytes into the
+     private STORAGE topic once and returns a file_id the broadcast reuses
+     for every recipient. The file_id is persisted on the batch payload, so
+     pause/unpause and page refreshes never re-upload. Supabase objects are
+     deleted right after Telegram accepts them (one-time). */
+  .post(
+    "/uploads/presign",
+    requireRole("ADMIN", "SUPERADMIN"),
+    zValidator(
+      "json",
+      z.object({
+        fileName: z.string().min(1).max(128),
+        mimeType: z.string().max(128).optional(),
+        sizeBytes: z.number().int().min(1).max(MAX_UPLOAD_BYTES),
+      })
+    ),
+    async (c) => {
+      if (!isExportStorageConfigured()) {
+        return badRequest(c, "ذخیره‌سازی پیکربندی نشده است")
+      }
+      const { fileName, sizeBytes } = c.req.valid("json")
+      if (sizeBytes > MAX_UPLOAD_BYTES) {
+        return badRequest(c, "فایل بزرگتر از 20MB است")
+      }
+      const safe = fileName
+        .split("/")
+        .pop()!
+        .replace(/[^\w.\-()\[\] ]+/g, "_")
+        .slice(0, 80)
+      const key = `admin-media/${randomUUID()}/${safe || "upload.bin"}`
+      const { uploadUrl } = await presignExportPut(key)
+      return ok(c, { uploadUrl, key })
+    }
+  )
+  .post(
+    "/uploads/prepare",
+    requireRole("ADMIN", "SUPERADMIN"),
+    zValidator(
+      "json",
+      z.object({
+        key: z.string().min(1).max(256).optional(),
+        url: z.string().url().max(2048).optional(),
+        mediaType: z.enum(["photo", "video", "document"]),
+        fileName: z.string().min(1).max(128).optional(),
+      })
+    ),
+    async (c) => {
+      const { key, url, mediaType, fileName } = c.req.valid("json")
+      if ((key && url) || (!key && !url)) {
+        return badRequest(c, "یکی از کلید یا نشانی ارسال شود")
+      }
+      if (!isExportStorageConfigured() && key) {
+        return badRequest(c, "ذخیره‌سازی پیکربندی نشده است")
+      }
+      let bytes: Buffer
+      let name = fileName?.trim() || "upload.bin"
+      try {
+        if (key) {
+          if (!key.startsWith("admin-media/") || key.includes("..")) {
+            return badRequest(c, "کلید نامعتبر است")
+          }
+          bytes = await getExportBytes(key)
+          const tail = key.split("/").pop()
+          if (!fileName && tail) name = tail
+        } else {
+          const fetched = await fetchUrlBytesLimited(url!)
+          bytes = fetched.bytes
+          if (!fileName) {
+            try {
+              const tail = new URL(fetched.finalUrl).pathname
+                .split("/")
+                .pop()
+              if (tail) name = decodeURIComponent(tail).slice(0, 80)
+            } catch {}
+          }
+        }
+      } catch (error) {
+        const msg = error instanceof Error ? error.message : "دریافت فایل ناموفق بود"
+        return badRequest(c, msg)
+      }
+      if (bytes.length > MAX_UPLOAD_BYTES) {
+        return badRequest(c, "فایل بزرگتر از 20MB است")
+      }
+      const ing = await ingestMedia(
+        new Blob([bytes]),
+        name,
+        mediaType
+      )
+      if (!ing.ok) return badRequest(c, `آپلود ناموفق: ${ing.error}`)
+      // One-time: drop the Supabase object once Telegram hosts the bytes.
+      if (key) void deleteExportObject(key)
+      return ok(c, {
+        fileId: ing.fileId,
+        mediaType,
+        sizeBytes: bytes.length,
+      })
+    }
+  )
+  .delete(
+    "/uploads/object",
+    requireRole("ADMIN", "SUPERADMIN"),
+    async (c) => {
+      const key = c.req.query("key") ?? ""
+      if (!key.startsWith("admin-media/") || key.includes("..")) {
+        return badRequest(c, "کلید نامعتبر است")
+      }
+      // Idempotent orphan cleanup (e.g. cancelled uploads).
+      await deleteExportObject(key)
+      return ok(c, null, "پاک شد")
     }
   )
   .post(

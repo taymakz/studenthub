@@ -178,9 +178,9 @@ function BroadcastPreview({
                     <p className="truncate font-sans text-xs font-medium">
                       پیش‌نمایش رسانه
                     </p>
-                    <p className="font-sans text-[10px] text-muted-foreground">
-                      تا ۴MB
-                    </p>
+                      <p className="font-sans text-[10px] text-muted-foreground">
+                        تا ۲۰MB
+                      </p>
                   </div>
                 </div>
               )}

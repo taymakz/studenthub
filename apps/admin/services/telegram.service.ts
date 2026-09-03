@@ -1,6 +1,12 @@
 import { apiClient } from "@/lib/api/client"
 
 export type InlineButton = { text: string; url: string }
+
+export type PreparedMedia = {
+  fileId: string
+  mediaType: "photo" | "video" | "document"
+  sizeBytes: number
+}
 export type TelegramPayload = {
   chatId?: number
   text: string
@@ -22,6 +28,45 @@ export type TelegramPayload = {
 }
 
 export const telegramService = {
+  /**
+   * One-time media intake: presigned Supabase PUT (browser uploads direct,
+   * bypassing the serverless body limit).
+   */
+  async presignUpload(input: {
+    fileName: string
+    mimeType?: string
+    sizeBytes: number
+  }): Promise<{ uploadUrl: string; key: string }> {
+    const res = await apiClient.post<{ uploadUrl: string; key: string }>(
+      "/admin/uploads/presign",
+      input
+    )
+    return res.data
+  },
+  /**
+   * Push a Supabase object (or download URL) into the private STORAGE topic
+   * and get back a file_id the broadcast reuses for every recipient. The
+   * Supabase object is deleted right after (one-time). The file_id persists
+   * on the batch payload, so pause/unpause and page refreshes never re-upload.
+   */
+  async prepareMedia(input: {
+    key?: string
+    url?: string
+    mediaType: "photo" | "video" | "document"
+    fileName?: string
+  }): Promise<PreparedMedia> {
+    const res = await apiClient.post<PreparedMedia>(
+      "/admin/uploads/prepare",
+      input
+    )
+    return res.data
+  },
+  /** Best-effort orphan cleanup (e.g. cancelled uploads). Idempotent. */
+  async deleteUploadObject(key: string): Promise<void> {
+    await apiClient.delete(
+      `/admin/uploads/object?key=${encodeURIComponent(key)}`
+    )
+  },
   async sendSingle(payload: TelegramPayload & { chatId: number }) {
     const hasFile = Boolean(
       payload.photoFile || payload.videoFile || payload.documentFile

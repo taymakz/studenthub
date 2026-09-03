@@ -30,6 +30,7 @@ import {
   TabsTrigger,
 } from "@workspace/ui/components/tabs"
 import { MAX_UPLOAD_BYTES, validateFileSize } from "@workspace/ui/lib/file"
+import { telegramService } from "@/services/telegram.service"
 
 export type InlineButton = { text: string; url: string }
 export type ComposerValue = {
@@ -41,6 +42,7 @@ export type ComposerValue = {
   videoUrl: string
   videoFile: File | null
   videoFileId: string
+  documentUrl: string
   documentFile: File | null
   documentFileId: string
   buttons: InlineButton[][]
@@ -56,6 +58,7 @@ const emptyValue: ComposerValue = {
   videoUrl: "",
   videoFile: null,
   videoFileId: "",
+  documentUrl: "",
   documentFile: null,
   documentFileId: "",
   buttons: [],
@@ -70,6 +73,175 @@ export function useComposerState(initial?: Partial<ComposerValue>) {
     ...initial,
   })
   return [value, setValue] as const
+}
+
+export type MediaKind = "photo" | "video" | "document"
+
+export type MediaUpload =
+  | {
+      status: "uploading"
+      progress: number
+      key: string | null
+      mediaType: MediaKind
+      fileName: string
+    }
+  | {
+      status: "preparing"
+      progress: number
+      key: string
+      mediaType: MediaKind
+      fileName: string
+    }
+  | {
+      status: "error"
+      mediaType: MediaKind
+      error: string
+      key: string | null
+    }
+  | null
+
+/** XHR PUT with progress (fetch has no upload progress) + external abort. */
+function xhrPut(
+  url: string,
+  file: File,
+  onProgress: (percent: number) => void,
+  register: (xhr: XMLHttpRequest) => void
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    register(xhr)
+    xhr.upload.addEventListener("progress", (e) => {
+      if (e.lengthComputable) {
+        onProgress(Math.round((e.loaded / e.total) * 100))
+      }
+    })
+    xhr.addEventListener("load", () => {
+      if (xhr.status >= 200 && xhr.status < 300) resolve()
+      else reject(new Error(`آپلود ناموفق (${xhr.status})`))
+    })
+    xhr.addEventListener("error", () => reject(new Error("آپلود ناموفق")))
+    xhr.addEventListener("abort", () => reject(new Error("__CANCELLED__")))
+    xhr.open("PUT", url, true)
+    if (file.type) xhr.setRequestHeader("Content-Type", file.type)
+    xhr.send(file)
+  })
+}
+
+/**
+ * One-time media intake for the composer: browser -> Supabase (presigned PUT,
+ * bypasses the serverless body limit) -> STORAGE topic -> file_id. The
+ * file_id is what the broadcast persists, so pause/unpause and page refreshes
+ * after batch creation never re-upload. Refreshing mid-prepare loses the
+ * local File and must be redone (documented limitation, same as before).
+ */
+export function useMediaUpload(
+  applyFileId: (type: MediaKind, fileId: string) => void
+) {
+  const [upload, setUpload] = React.useState<MediaUpload>(null)
+  const xhrRef = React.useRef<XMLHttpRequest | null>(null)
+  const runRef = React.useRef(0)
+
+  const cancel = React.useCallback(async (key: string | null) => {
+    runRef.current += 1
+    xhrRef.current?.abort()
+    xhrRef.current = null
+    if (key) {
+      try {
+        await telegramService.deleteUploadObject(key)
+      } catch {
+        // Best-effort orphan cleanup.
+      }
+    }
+    setUpload(null)
+  }, [])
+
+  const start = React.useCallback(
+    async (file: File, type: MediaKind) => {
+      // A new pick supersedes any in-flight upload (its completion is ignored).
+      xhrRef.current?.abort()
+      xhrRef.current = null
+      const run = ++runRef.current
+      const alive = () => runRef.current === run
+      const check = validateFileSize(file)
+      if (!check.ok) {
+        alert(check.error ?? "فایل نامعتبر است")
+        return
+      }
+      // Orphaned Supabase object (failed prepare) is deletable via cancel.
+      let objectKey: string | null = null
+      setUpload({
+        status: "uploading",
+        progress: 0,
+        key: null,
+        mediaType: type,
+        fileName: file.name,
+      })
+      try {
+        const presigned = await telegramService.presignUpload({
+          fileName: file.name,
+          mimeType: file.type || undefined,
+          sizeBytes: file.size,
+        })
+        if (!alive()) return
+        objectKey = presigned.key
+        setUpload({
+          status: "uploading",
+          progress: 0,
+          key: objectKey,
+          mediaType: type,
+          fileName: file.name,
+        })
+        await xhrPut(
+          presigned.uploadUrl,
+          file,
+          (progress) => {
+            if (!alive()) return
+            setUpload((prev) =>
+              prev && prev.status === "uploading"
+                ? { ...prev, progress }
+                : prev
+            )
+          },
+          (xhr) => {
+            xhrRef.current = xhr
+          }
+        )
+        if (!alive()) return
+        xhrRef.current = null
+        setUpload({
+          status: "preparing",
+          progress: 100,
+          key: objectKey,
+          mediaType: type,
+          fileName: file.name,
+        })
+        const prepared = await telegramService.prepareMedia({
+          key: objectKey,
+          mediaType: type,
+          fileName: file.name,
+        })
+        if (!alive()) return
+        applyFileId(type, prepared.fileId)
+        setUpload(null)
+      } catch (e: unknown) {
+        if (!alive()) return
+        xhrRef.current = null
+        if (e instanceof Error && e.message === "__CANCELLED__") {
+          setUpload(null)
+          return
+        }
+        setUpload({
+          status: "error",
+          mediaType: type,
+          error: e instanceof Error ? e.message : "آپلود ناموفق",
+          key: objectKey,
+        })
+      }
+    },
+    [applyFileId]
+  )
+
+  return { upload, start, cancel }
 }
 
 // Reusable composer form + preview. No dialog chrome here – so broadcast page can reuse it inline.
@@ -113,6 +285,84 @@ export function TelegramComposer({
     })
   }
 
+  // Always operate on the latest value (prepare flows await network).
+  const valueRef = React.useRef(value)
+  valueRef.current = value
+  const applyFileId = React.useCallback(
+    (type: MediaKind, fileId: string) => {
+      const v = valueRef.current
+      if (type === "photo")
+        onChange({
+          ...v,
+          photoFileId: fileId,
+          photoFile: null,
+          photoUrl: "",
+          videoUrl: "",
+          videoFile: null,
+          videoFileId: "",
+          documentUrl: "",
+          documentFile: null,
+          documentFileId: "",
+        })
+      else if (type === "video")
+        onChange({
+          ...v,
+          videoFileId: fileId,
+          videoFile: null,
+          videoUrl: "",
+          photoUrl: "",
+          photoFile: null,
+          photoFileId: "",
+          documentUrl: "",
+          documentFile: null,
+          documentFileId: "",
+        })
+      else
+        onChange({
+          ...v,
+          documentFileId: fileId,
+          documentFile: null,
+          documentUrl: "",
+          photoUrl: "",
+          photoFile: null,
+          photoFileId: "",
+          videoUrl: "",
+          videoFile: null,
+          videoFileId: "",
+        })
+    },
+    [onChange]
+  )
+  const {
+    upload,
+    start: startUpload,
+    cancel: cancelUpload,
+  } = useMediaUpload(applyFileId)
+  const [fetchingUrlFor, setFetchingUrlFor] =
+    React.useState<MediaKind | null>(null)
+
+  // Download-link flow: server fetches the URL into STORAGE and returns a
+  // file_id (SSRF-guarded server-side).
+  const fetchFromUrl = async (type: MediaKind) => {
+    const v = valueRef.current
+    const url = (
+      type === "photo" ? v.photoUrl : type === "video" ? v.videoUrl : v.documentUrl
+    ).trim()
+    if (!url) return
+    setFetchingUrlFor(type)
+    try {
+      const prepared = await telegramService.prepareMedia({
+        url,
+        mediaType: type,
+      })
+      applyFileId(type, prepared.fileId)
+    } catch (e: unknown) {
+      alert(e instanceof Error ? e.message : "دریافت ناموفق بود")
+    } finally {
+      setFetchingUrlFor(null)
+    }
+  }
+
   // Controlled media tab (the only controlled Tabs usage pattern that
   // animates reliably across apps — uncontrolled defaultValue leaves the
   // sliding indicator stuck on mount in this dashboard).
@@ -125,7 +375,7 @@ export function TelegramComposer({
     if (!file) return
     const check = validateFileSize(file)
     if (!check.ok) {
-      alert(check.error ?? "فایل بزرگتر از 4MB است")
+      alert(check.error ?? "فایل نامعتبر است")
       return
     }
     if (type === "photo")
@@ -136,6 +386,7 @@ export function TelegramComposer({
         documentFile: null,
         photoUrl: "",
         videoUrl: "",
+        documentUrl: "",
         photoFileId: "",
         videoFileId: "",
         documentFileId: "",
@@ -148,6 +399,7 @@ export function TelegramComposer({
         documentFile: null,
         photoUrl: "",
         videoUrl: "",
+        documentUrl: "",
         photoFileId: "",
         videoFileId: "",
         documentFileId: "",
@@ -160,10 +412,86 @@ export function TelegramComposer({
         videoFile: null,
         photoUrl: "",
         videoUrl: "",
+        documentUrl: "",
         photoFileId: "",
         videoFileId: "",
         documentFileId: "",
       })
+    // Auto-start the one-time pipeline (Supabase -> STORAGE -> file_id).
+    void startUpload(file, type)
+  }
+
+  // Per-tab upload/progress/retry UI for the active one-time intake.
+  const renderUploadState = (type: MediaKind, file: File | null) => {
+    if (upload?.mediaType === type) {
+      if (upload.status === "error") {
+        return (
+          <div className="flex items-center justify-between gap-2 text-xs">
+            <span className="text-destructive">{upload.error}</span>
+            <div className="flex shrink-0 gap-2">
+              {upload.key && (
+                <button
+                  type="button"
+                  onClick={() => cancelUpload(upload.key)}
+                  className="text-muted-foreground hover:underline"
+                >
+                  پاک‌سازی
+                </button>
+              )}
+              {file && (
+                <button
+                  type="button"
+                  onClick={() => startUpload(file, type)}
+                  className="text-primary hover:underline"
+                >
+                  تلاش مجدد
+                </button>
+              )}
+            </div>
+          </div>
+        )
+      }
+      return (
+        <div className="space-y-1.5">
+          <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+            <div
+              className="h-full rounded-full bg-primary transition-all"
+              style={{
+                width: `${upload.status === "preparing" ? 100 : upload.progress}%`,
+              }}
+            />
+          </div>
+          <div className="flex items-center justify-between text-xs text-muted-foreground">
+            <span>
+              {upload.status === "preparing"
+                ? "در حال آماده‌سازی در تلگرام..."
+                : `در حال آپلود ${upload.progress}٪`}
+            </span>
+            <button
+              type="button"
+              onClick={() => cancelUpload(upload.key)}
+              className="text-destructive hover:underline"
+            >
+              لغو
+            </button>
+          </div>
+        </div>
+      )
+    }
+    if (file) {
+      return (
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          className="w-full"
+          onClick={() => startUpload(file, type)}
+        >
+          آپلود فایل (تا 20MB)
+        </Button>
+      )
+    }
+    return null
   }
 
   // preview url – file > fileId > url
@@ -180,7 +508,8 @@ export function TelegramComposer({
     return value.videoUrl.trim() || null
   }, [value.videoFile, value.videoFileId, value.videoUrl])
   const documentPreviewName =
-    value.documentFile?.name ?? (value.documentFileId.trim() || null)
+    value.documentFile?.name ??
+    (value.documentFileId.trim() || value.documentUrl.trim() || null)
   React.useEffect(() => {
     return () => {
       if (photoPreviewUrl?.startsWith("blob:"))
@@ -196,7 +525,9 @@ export function TelegramComposer({
   const hasVideo = Boolean(
     value.videoFile || value.videoUrl.trim() || value.videoFileId.trim()
   )
-  const hasDocument = Boolean(value.documentFile || value.documentFileId.trim())
+  const hasDocument = Boolean(
+    value.documentFile || value.documentUrl.trim() || value.documentFileId.trim()
+  )
   const mediaUrl =
     photoPreviewUrl || videoPreviewUrl || documentPreviewName || ""
   const mediaType: "photo" | "video" | "document" | "none" = hasPhoto
@@ -291,25 +622,37 @@ export function TelegramComposer({
                   }
                   className="cursor-pointer"
                 />
-                <Input
-                  value={value.photoUrl}
-                  onChange={(e) =>
-                    onChange({
-                      ...value,
-                      photoUrl: e.target.value,
-                      photoFile: null,
-                      photoFileId: "",
-                      videoUrl: "",
-                      videoFile: null,
-                      videoFileId: "",
-                      documentFile: null,
-                      documentFileId: "",
-                    })
-                  }
-                  placeholder="https://.../photo.jpg — یا فایل بالا"
-                  dir="ltr"
-                  className="text-left"
-                />
+                {renderUploadState("photo", value.photoFile)}
+                <div className="grid grid-cols-[1fr_auto] gap-2">
+                  <Input
+                    value={value.photoUrl}
+                    onChange={(e) =>
+                      onChange({
+                        ...value,
+                        photoUrl: e.target.value,
+                        photoFile: null,
+                        photoFileId: "",
+                        videoUrl: "",
+                        videoFile: null,
+                        videoFileId: "",
+                        documentUrl: "",
+                        documentFile: null,
+                        documentFileId: "",
+                      })
+                    }
+                    placeholder="https://.../photo.jpg — یا فایل بالا"
+                    dir="ltr"
+                    className="text-left"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={!value.photoUrl.trim() || fetchingUrlFor !== null}
+                    onClick={() => fetchFromUrl("photo")}
+                  >
+                    {fetchingUrlFor === "photo" ? "در حال آوردن..." : "آوردن"}
+                  </Button>
+                </div>
                 <Input
                   value={value.photoFileId}
                   onChange={(e) =>
@@ -351,7 +694,7 @@ export function TelegramComposer({
                 )}
               </div>
               <p className="text-xs text-muted-foreground">
-                تا 4MB — فایل مستقیم یا fileId یا لینک. برای همگانی fileId کش
+                تا 20MB — فایل خودکار به حافظه یک‌بارمصرف می‌رود و fileId کش
                 می‌شود.
               </p>
             </TabsContent>
@@ -366,25 +709,37 @@ export function TelegramComposer({
                   }
                   className="cursor-pointer"
                 />
-                <Input
-                  value={value.videoUrl}
-                  onChange={(e) =>
-                    onChange({
-                      ...value,
-                      videoUrl: e.target.value,
-                      videoFile: null,
-                      videoFileId: "",
-                      photoUrl: "",
-                      photoFile: null,
-                      photoFileId: "",
-                      documentFile: null,
-                      documentFileId: "",
-                    })
-                  }
-                  placeholder="https://.../video.mp4"
-                  dir="ltr"
-                  className="text-left"
-                />
+                {renderUploadState("video", value.videoFile)}
+                <div className="grid grid-cols-[1fr_auto] gap-2">
+                  <Input
+                    value={value.videoUrl}
+                    onChange={(e) =>
+                      onChange({
+                        ...value,
+                        videoUrl: e.target.value,
+                        videoFile: null,
+                        videoFileId: "",
+                        photoUrl: "",
+                        photoFile: null,
+                        photoFileId: "",
+                        documentUrl: "",
+                        documentFile: null,
+                        documentFileId: "",
+                      })
+                    }
+                    placeholder="https://.../video.mp4"
+                    dir="ltr"
+                    className="text-left"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={!value.videoUrl.trim() || fetchingUrlFor !== null}
+                    onClick={() => fetchFromUrl("video")}
+                  >
+                    {fetchingUrlFor === "video" ? "در حال آوردن..." : "آوردن"}
+                  </Button>
+                </div>
                 <Input
                   value={value.videoFileId}
                   onChange={(e) =>
@@ -436,6 +791,37 @@ export function TelegramComposer({
                   }
                   className="cursor-pointer"
                 />
+                {renderUploadState("document", value.documentFile)}
+                <div className="grid grid-cols-[1fr_auto] gap-2">
+                  <Input
+                    value={value.documentUrl}
+                    onChange={(e) =>
+                      onChange({
+                        ...value,
+                        documentUrl: e.target.value,
+                        documentFile: null,
+                        documentFileId: "",
+                        photoUrl: "",
+                        photoFile: null,
+                        photoFileId: "",
+                        videoUrl: "",
+                        videoFile: null,
+                        videoFileId: "",
+                      })
+                    }
+                    placeholder="https://.../file.pdf"
+                    dir="ltr"
+                    className="text-left"
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={!value.documentUrl.trim() || fetchingUrlFor !== null}
+                    onClick={() => fetchFromUrl("document")}
+                  >
+                    {fetchingUrlFor === "document" ? "در حال آوردن..." : "آوردن"}
+                  </Button>
+                </div>
                 <Input
                   value={value.documentFileId}
                   onChange={(e) =>
@@ -477,8 +863,8 @@ export function TelegramComposer({
                 )}
               </div>
               <p className="text-xs text-muted-foreground">
-                هر نوع فایل تا 4MB — fileId مستقیم یا فایل؛ برای همگانی یک‌بار
-                آپلود و سپس با fileId ارسال می‌شود.
+                هر نوع فایل تا 20MB — fileId مستقیم، فایل یا لینک؛ فایل‌ها
+                یک‌بار آپلود و سپس با fileId ارسال می‌شوند.
               </p>
             </TabsContent>
           </Tabs>
@@ -610,7 +996,7 @@ function TelegramPreview({
           </div>
           <div className="min-w-0 flex-1">
             <p className="truncate text-xs font-medium">{mediaUrl}</p>
-            <p className="text-[10px] text-muted-foreground">سند — تا 4MB</p>
+            <p className="text-[10px] text-muted-foreground">سند — تا 20MB</p>
           </div>
         </div>
       )}
