@@ -46,7 +46,7 @@ export function FriendFaces({
         onClick()
       }}
       className={cn(
-        "absolute top-1 right-4 z-10 flex cursor-pointer items-center transition-transform active:scale-95 isolate",
+        "absolute top-1 right-4 z-10 flex w-fit cursor-pointer items-center transition-transform active:scale-95 isolate",
         className
       )}
     >
