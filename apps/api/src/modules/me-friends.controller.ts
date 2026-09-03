@@ -113,22 +113,22 @@ function personLine(u: PersonInfo): string {
  * failed DM never breaks the friend action itself.
  */
 async function notifyFriendRequest(
-  receiver: PersonInfo & { id: number },
+  receiverId: number,
   sender: PersonInfo
 ): Promise<void> {
   await sendMessage(
-    receiver.id,
-    `درخواست دوستی جدید\nاز: ${personLine(sender)}\nبه: ${personLine(receiver)}\nبخش پروفایل ← دوستای من`
+    receiverId,
+    `درخواست دوستی جدید\nاز: ${personLine(sender)}\nبخش پروفایل ← دوستای من`
   )
 }
 
 async function notifyFriendAccepted(
-  requester: PersonInfo & { id: number },
+  requesterId: number,
   accepter: PersonInfo
 ): Promise<void> {
   await sendMessage(
-    requester.id,
-    `درخواست دوستی شما پذیرفته شد\nاز: ${personLine(accepter)}\nبه: ${personLine(requester)}`
+    requesterId,
+    `درخواست دوستی شما پذیرفته شد\nاز: ${personLine(accepter)}`
   )
 }
 
@@ -602,7 +602,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
           .where(eq(friendRequests.id, reverse.id))
         await tx.insert(friendships).values({ userLowId: low, userHighId: high })
       })
-      await notifyFriendAccepted(target, user)
+      await notifyFriendAccepted(target.id, user)
       return ok(c, { befriended: true }, "شما با هم دوست شدید")
     }
 
@@ -619,7 +619,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
     if (!request) return notFound(c, "ثبت درخواست ممکن نشد")
 
     if (request.status === "PENDING") {
-      await notifyFriendRequest(target, user)
+      await notifyFriendRequest(target.id, user)
     }
 
     return ok(
@@ -683,7 +683,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
         .from(users)
         .where(eq(users.id, request.senderId))
         .limit(1)
-      if (sender) await notifyFriendAccepted(sender, user)
+      if (sender) await notifyFriendAccepted(sender.id, user)
 
       return ok(c, { befriended: true }, "درخواست دوستی پذیرفته شد")
     }
