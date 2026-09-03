@@ -693,6 +693,47 @@ export function fetchFriendSettings() {
   return apiClient.get<{ autoDecline: boolean }>("/me/friends/settings")
 }
 
+export interface CourseMatesEntry {
+  courseIndex: string
+  count: number
+  sample: FriendCard[]
+}
+
+export function fetchFriendsCourses(params: {
+  uni: string
+  major: string
+  termCode: string
+}) {
+  const qs = new URLSearchParams({
+    uni: params.uni,
+    major: params.major,
+    termCode: params.termCode,
+  })
+  return apiClient.get<{ courses: CourseMatesEntry[] }>(
+    `/me/friends/courses?${qs.toString()}`
+  )
+}
+
+export function fetchCourseMates(
+  courseIndex: string,
+  params: { uni: string; major: string; termCode: string; page?: number; limit?: number }
+) {
+  const qs = new URLSearchParams({
+    uni: params.uni,
+    major: params.major,
+    termCode: params.termCode,
+  })
+  if (params.page) qs.set("page", String(params.page))
+  if (params.limit) qs.set("limit", String(params.limit))
+  const q = qs.toString()
+  return apiClient.get<{
+    mates: FriendCard[]
+    page: number
+    limit: number
+    hasMore: boolean
+  }>(`/me/friends/courses/${encodeURIComponent(courseIndex)}?${q}`)
+}
+
 export interface FriendDetailData {
   user: FriendCard
   profile: {

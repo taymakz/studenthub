@@ -2,7 +2,7 @@
 
 import { Virtuoso } from "react-virtuoso"
 
-import type { Offering } from "@/lib/api"
+import type { FriendCard, Offering } from "@/lib/api"
 
 import { CourseCard } from "./course-card"
 
@@ -14,6 +14,8 @@ export function CoursesList({
   viewMode,
   borderFor,
   onSelect,
+  matesByIndex,
+  onMatesClick,
 }: {
   filtered: Offering[]
   notedIndexes: Set<string>
@@ -22,6 +24,8 @@ export function CoursesList({
   viewMode: "full" | "simple"
   borderFor: (o: Offering) => string
   onSelect: (o: Offering) => void
+  matesByIndex?: Map<string, { count: number; sample: FriendCard[] }>
+  onMatesClick?: (o: Offering) => void
 }) {
   return (
     <Virtuoso
@@ -47,6 +51,8 @@ export function CoursesList({
               new: newIndexes.has(o.index),
             }}
             className={borderFor(o)}
+            mates={matesByIndex?.get(o.index)}
+            onMatesClick={onMatesClick}
           />
         </div>
       )}

@@ -1,8 +1,13 @@
 "use client"
 
+import { useState } from "react"
+
 import type { Offering } from "@/lib/api"
 import { Skeleton } from "@workspace/ui/components/skeleton"
 
+import { useProfileStore } from "@/stores/profile-store"
+import { useFriendsCoursesMap } from "@/components/app/friends/use-friends-data"
+import { CourseMatesDrawer } from "@/components/app/friends/friend-course-mates-drawer"
 import { CoursesEmptyStates } from "./courses-empty-states"
 import { CoursesList } from "./courses-list"
 
@@ -41,6 +46,18 @@ export function CoursesContent({
   onSelect: (o: Offering) => void
   onClearFilters: () => void
 }) {
+  const [matesFor, setMatesFor] = useState<Offering | null>(null)
+  const profile = useProfileStore((s) => s.profile)
+  const matesQuery = useFriendsCoursesMap(
+    profile?.universitySlug,
+    profile?.majorSlug,
+    termCode,
+    complete && Boolean(termCode)
+  )
+  const matesByIndex = new Map(
+    (matesQuery.data ?? []).map((e) => [e.courseIndex, e])
+  )
+
   return (
     <div className="container mx-auto space-y-3 px-4 pt-5">
       <div className="flex justify-between text-sm text-muted-foreground">
@@ -63,6 +80,8 @@ export function CoursesContent({
           viewMode={viewMode}
           borderFor={borderFor}
           onSelect={onSelect}
+          matesByIndex={matesByIndex}
+          onMatesClick={setMatesFor}
         />
       ) : (
         <CoursesEmptyStates
@@ -76,6 +95,14 @@ export function CoursesContent({
           onClearFilters={onClearFilters}
         />
       )}
+      <CourseMatesDrawer
+        offering={matesFor}
+        uni={profile?.universitySlug}
+        major={profile?.majorSlug}
+        termCode={termCode}
+        open={!!matesFor}
+        onOpenChange={(o) => !o && setMatesFor(null)}
+      />
     </div>
   )
 }

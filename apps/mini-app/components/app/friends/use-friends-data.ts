@@ -16,9 +16,11 @@ import {
   cancelFriendRequest,
   declineFriendRequest,
   fetchBlocks,
+  fetchCourseMates,
   fetchFriendDetail,
   fetchFriendRequests,
   fetchFriends,
+  fetchFriendsCourses,
   fetchFriendsSummary,
   fetchFriendSettings,
   patchFriendSettings,
@@ -56,6 +58,7 @@ const ALL_FRIEND_KEYS = [
   ["friend-requests"],
   ["friend-blocks"],
   ["friend-settings"],
+  ["friends-courses"],
 ]
 
 type RequestPage = {
@@ -283,6 +286,52 @@ export function useFriendDetail(friendId: number | null, enabled = true) {
     enabled: enabled && friendId !== null,
     ...LIVE_QUERY,
   })
+}
+
+/** Per-course friend counts + avatar samples for a whole term (one query). */
+export function useFriendsCoursesMap(
+  uni: string | null | undefined,
+  major: string | null | undefined,
+  termCode: string | null | undefined,
+  enabled = true
+) {
+  return useQuery({
+    queryKey: ["friends-courses", uni, major, termCode],
+    queryFn: async () =>
+      (
+        await fetchFriendsCourses({
+          uni: uni!,
+          major: major!,
+          termCode: termCode!,
+        })
+      ).data.courses,
+    enabled: enabled && !!uni && !!major && !!termCode,
+    ...LIVE_QUERY,
+  })
+}
+
+export function useCourseMates(
+  courseIndex: string | null,
+  uni: string | null | undefined,
+  major: string | null | undefined,
+  termCode: string | null | undefined,
+  enabled = true
+) {
+  return useInfinitePager(
+    ["friends-course-mates", courseIndex ?? "", uni ?? "", major ?? "", termCode ?? ""],
+    async (page) => {
+      return (
+        await fetchCourseMates(courseIndex!, {
+          uni: uni!,
+          major: major!,
+          termCode: termCode!,
+          page,
+          limit: PAGE_LIMIT,
+        })
+      ).data
+    },
+    enabled && !!courseIndex && !!uni && !!major && !!termCode
+  )
 }
 
 export function useSendRequest() {
