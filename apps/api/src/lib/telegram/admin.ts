@@ -1,6 +1,6 @@
 import { config } from "@/config"
 
-import { sendMessageRaw } from "./bot"
+import { sendMessageRaw, telegramDry } from "./bot"
 
 /**
  * Admin forum notifications.
@@ -21,7 +21,7 @@ import { sendMessageRaw } from "./bot"
 export type AdminTopic = "JOINS" | "STORAGE" | "DEFAULT"
 
 function dry(): boolean {
-  return !config.TELEGRAM_BOT_TOKEN || config.TELEGRAM_DRY
+  return telegramDry()
 }
 
 interface ResolvedTarget {

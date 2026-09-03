@@ -76,19 +76,11 @@ export const withUser = createMiddleware<AppEnv>(async (c, next) => {
     if (validated) {
       const tg = validated.user
 
-      let isNewUser = false
-      try {
-        const existing = await db
-          .select({ id: users.id })
-          .from(users)
-          .where(eq(users.id, tg.id))
-          .limit(1)
-        isNewUser = existing.length === 0
-      } catch {
-        isNewUser = false
-      }
-
-      const [row] = await db
+      // Atomic "is new" detection: only the request that actually inserts
+      // the row counts as a signup, so the JOINS notification below fires
+      // exactly once per user. The old check-then-insert raced under
+      // concurrent first-hits (double message, single user row).
+      const [inserted] = await db
         .insert(users)
         .values({
           id: tg.id,
@@ -100,20 +92,26 @@ export const withUser = createMiddleware<AppEnv>(async (c, next) => {
           isPremium: tg.isPremium ?? false,
           allowsWriteToPm: tg.allowsWriteToPm ?? false,
         })
-        .onConflictDoUpdate({
-          target: users.id,
-          set: {
-            firstName: tg.firstName,
-            lastName: tg.lastName ?? null,
-            telegramUsername: tg.username ?? null,
-            languageCode: tg.languageCode ?? null,
-            ...(tg.photoUrl ? { photoUrl: tg.photoUrl } : {}),
-            isPremium: tg.isPremium ?? false,
-            allowsWriteToPm: tg.allowsWriteToPm ?? false,
-            updatedAt: new Date(),
-          },
-        })
+        .onConflictDoNothing()
         .returning()
+      const isNewUser = !!inserted
+
+      const [row] = inserted
+        ? [inserted]
+        : await db
+            .update(users)
+            .set({
+              firstName: tg.firstName,
+              lastName: tg.lastName ?? null,
+              telegramUsername: tg.username ?? null,
+              languageCode: tg.languageCode ?? null,
+              ...(tg.photoUrl ? { photoUrl: tg.photoUrl } : {}),
+              isPremium: tg.isPremium ?? false,
+              allowsWriteToPm: tg.allowsWriteToPm ?? false,
+              updatedAt: new Date(),
+            })
+            .where(eq(users.id, tg.id))
+            .returning()
 
       await db
         .insert(universityProfiles)
