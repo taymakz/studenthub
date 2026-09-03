@@ -136,6 +136,10 @@ export const telegramService = {
       if (payload.parseMode) fd.set("parseMode", payload.parseMode)
       if (payload.photoUrl) fd.set("photoUrl", payload.photoUrl)
       if (payload.videoUrl) fd.set("videoUrl", payload.videoUrl)
+      if (payload.photoFileId) fd.set("photoFileId", payload.photoFileId)
+      if (payload.videoFileId) fd.set("videoFileId", payload.videoFileId)
+      if (payload.documentFileId)
+        fd.set("documentFileId", payload.documentFileId)
       if (payload.documentUrl) fd.set("documentUrl", payload.documentUrl)
       if (payload.buttons?.length)
         fd.set("buttons", JSON.stringify(payload.buttons))
@@ -187,6 +191,9 @@ export const telegramService = {
       photoUrl: payload.photoUrl ?? undefined,
       videoUrl: payload.videoUrl ?? undefined,
       documentUrl: payload.documentUrl ?? undefined,
+      photoFileId: payload.photoFileId ?? undefined,
+      videoFileId: payload.videoFileId ?? undefined,
+      documentFileId: payload.documentFileId ?? undefined,
       buttons: payload.buttons ?? undefined,
       disablePreview: payload.disablePreview ?? undefined,
     } as any)

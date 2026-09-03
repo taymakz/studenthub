@@ -113,6 +113,11 @@ export function TelegramComposer({
     })
   }
 
+  // Controlled media tab (the only controlled Tabs usage pattern that
+  // animates reliably across apps — uncontrolled defaultValue leaves the
+  // sliding indicator stuck on mount in this dashboard).
+  const [mediaTab, setMediaTab] = React.useState("photo")
+
   const handleFile = (
     file: File | null,
     type: "photo" | "video" | "document"
@@ -269,7 +274,7 @@ export function TelegramComposer({
 
         <div className="space-y-3">
           <Label>رسانه (اختیاری — فقط یکی)</Label>
-          <Tabs defaultValue="photo" className="w-full">
+          <Tabs value={mediaTab} onValueChange={setMediaTab} className="w-full">
             <TabsList dir="rtl">
               <TabsTrigger value="photo">تصویر</TabsTrigger>
               <TabsTrigger value="video">ویدیو</TabsTrigger>
