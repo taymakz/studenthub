@@ -18,6 +18,7 @@ import {
   findChartYearDirForYear,
   getChart,
 } from "@/lib/registry"
+import { parseTermCode } from "@/lib/terms"
 import {
   formatYearDirectory,
   getMajor,
@@ -227,8 +228,151 @@ function profileLine(profile: {
   return entry ? `${uni} - ${major} - ورودی ${entry}` : `${uni} - ${major}`
 }
 
+const coursesQuerySchema = z.object({
+  uni: z.string().min(1).max(128),
+  major: z.string().min(1).max(128),
+  termCode: z.string().regex(/^\d{4}$/, "کد نیم‌سال معتبر نیست"),
+})
+
+/** My friend ids (both sides of the undirected friendships). */
+async function friendIdsOf(userId: number): Promise<number[]> {
+  const lows = await db
+    .select({ id: friendships.userHighId })
+    .from(friendships)
+    .where(eq(friendships.userLowId, userId))
+  const highs = await db
+    .select({ id: friendships.userLowId })
+    .from(friendships)
+    .where(eq(friendships.userHighId, userId))
+  return [...new Set([...lows, ...highs].map((r) => r.id))]
+}
+
 export const meFriendRoutes = new Hono<AppEnv>()
   .use("*", withUser, requireUser)
+  .get(
+    "/me/friends/courses",
+    zValidator("query", coursesQuerySchema),
+    async (c) => {
+      const user = c.get("user")!
+      const { uni, major, termCode } = c.req.valid("query")
+      const parsed = parseTermCode(termCode)
+      if (!parsed) return badRequest(c, "کد نیم‌سال معتبر نیست")
+
+      const ids = await friendIdsOf(user.id)
+      if (ids.length === 0) return ok(c, { courses: [] })
+
+      // One query: per-course totals + up to 5 most-recent noters each.
+      const rows = await db
+        .select({
+          courseIndex: notedCourses.courseIndex,
+          userId: notedCourses.userId,
+          total: sql<number>`count(*) over (partition by ${notedCourses.courseIndex})::int`,
+          rn: sql<number>`row_number() over (partition by ${notedCourses.courseIndex} order by ${notedCourses.createdAt} desc)::int`,
+        })
+        .from(notedCourses)
+        .innerJoin(users, eq(users.id, notedCourses.userId))
+        .where(
+          and(
+            inArray(notedCourses.userId, ids),
+            eq(notedCourses.universitySlug, uni),
+            eq(notedCourses.majorSlug, major),
+            eq(notedCourses.year, String(parsed.year)),
+            eq(notedCourses.semester, parsed.semester),
+            eq(notedCourses.isDeleted, false),
+            eq(users.banned, false)
+          )
+        )
+
+      const byCourse = new Map<
+        string,
+        { total: number; userIds: number[] }
+      >()
+      for (const r of rows) {
+        let entry = byCourse.get(r.courseIndex)
+        if (!entry) {
+          entry = { total: r.total, userIds: [] }
+          byCourse.set(r.courseIndex, entry)
+        }
+        if (r.rn <= 5) entry.userIds.push(r.userId)
+      }
+      if (byCourse.size === 0) return ok(c, { courses: [] })
+
+      const sampleIds = [
+        ...new Set([...byCourse.values()].flatMap((e) => e.userIds)),
+      ]
+      const cards = await db
+        .select({
+          id: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          photoUrl: users.photoUrl,
+          telegramUsername: users.telegramUsername,
+        })
+        .from(users)
+        .where(inArray(users.id, sampleIds))
+      const cardById = new Map(cards.map((u) => [u.id, toFriendCard(u)]))
+
+      const courses = [...byCourse.entries()].map(([courseIndex, e]) => ({
+        courseIndex,
+        count: e.total,
+        sample: e.userIds.flatMap((id) => {
+          const card = cardById.get(id)
+          return card ? [card] : []
+        }),
+      }))
+
+      return ok(c, { courses })
+    }
+  )
+  .get(
+    "/me/friends/courses/:courseIndex",
+    zValidator("query", coursesQuerySchema),
+    async (c) => {
+      const user = c.get("user")!
+      const courseIndex = c.req.param("courseIndex")
+      if (!courseIndex || courseIndex.length > 64) {
+        return badRequest(c, "شناسه درس معتبر نیست")
+      }
+      const { uni, major, termCode } = c.req.valid("query")
+      const parsed = parseTermCode(termCode)
+      if (!parsed) return badRequest(c, "کد نیم‌سال معتبر نیست")
+
+      const ids = await friendIdsOf(user.id)
+      if (ids.length === 0) return ok(c, { mates: [], page: 1, limit: 25, hasMore: false })
+
+      const { page, limit, offset } = parsePagination(c)
+      const rows = await db
+        .select({
+          id: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          photoUrl: users.photoUrl,
+          telegramUsername: users.telegramUsername,
+        })
+        .from(notedCourses)
+        .innerJoin(users, eq(users.id, notedCourses.userId))
+        .where(
+          and(
+            inArray(notedCourses.userId, ids),
+            eq(notedCourses.courseIndex, courseIndex),
+            eq(notedCourses.universitySlug, uni),
+            eq(notedCourses.majorSlug, major),
+            eq(notedCourses.year, String(parsed.year)),
+            eq(notedCourses.semester, parsed.semester),
+            eq(notedCourses.isDeleted, false),
+            eq(users.banned, false)
+          )
+        )
+        .orderBy(desc(notedCourses.createdAt))
+        .limit(limit + 1)
+        .offset(offset)
+
+      const hasMore = rows.length > limit
+      const mates = (hasMore ? rows.slice(0, limit) : rows).map(toFriendCard)
+
+      return ok(c, { mates, page, limit, hasMore })
+    }
+  )
   .get("/me/friends/summary", async (c) => {
     const user = c.get("user")!
     const [me] = await db
@@ -544,6 +688,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
         autoDecline: users.autoDeclineFriendRequests,
         firstName: users.firstName,
         lastName: users.lastName,
+        photoUrl: users.photoUrl,
         telegramUsername: users.telegramUsername,
       })
       .from(users)
@@ -656,7 +801,16 @@ export const meFriendRoutes = new Hono<AppEnv>()
 
     return ok(
       c,
-      { request: { id: request.id, status: request.status } },
+      {
+        // Full card so clients can insert it into the pending list instantly.
+        request: {
+          id: request.id,
+          status: request.status,
+          createdAt: request.createdAt,
+          direction: "outgoing" as const,
+          user: toFriendCard(target),
+        },
+      },
       target.autoDecline
         ? "این کاربر درخواست‌ها را خودکار رد می‌کند"
         : "درخواست دوستی ارسال شد"

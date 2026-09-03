@@ -29,6 +29,8 @@ interface StudentsDrawerProps {
   open: boolean
   onOpenChange: (open: boolean) => void
   onParentClose?: () => void
+  /** List only friend classmates ("دوستان این درس"). */
+  friendsOnly?: boolean
 }
 
 export function StudentsDrawer({
@@ -36,6 +38,7 @@ export function StudentsDrawer({
   open,
   onOpenChange,
   onParentClose,
+  friendsOnly = false,
 }: StudentsDrawerProps) {
   const router = useRouter()
   const pathname = usePathname()
@@ -48,7 +51,7 @@ export function StudentsDrawer({
   const [scrollParent, setScrollParent] = useState<HTMLDivElement | null>(null)
   const { visible, hasProfile, isMeLoading } = useStudentsVisibility(open)
   const courseIndex = offering?.index ?? null
-  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useStudentsList(open, visible, hasProfile, courseIndex)
+  const { data, isLoading, isError, error, fetchNextPage, hasNextPage, isFetchingNextPage } = useStudentsList(open, visible, hasProfile, courseIndex, friendsOnly)
 
   const students = data?.pages.flatMap((p) => p.students) ?? []
   const isForbidden = (error as unknown as { status?: number })?.status === 403
@@ -69,9 +72,11 @@ export function StudentsDrawer({
     <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerPopup variant="inset" showBar>
         <DrawerHeader className="text-center">
-          <DrawerTitle>دانشجویان این درس</DrawerTitle>
+          <DrawerTitle>{friendsOnly ? "دوستان این درس" : "دانشجویان این درس"}</DrawerTitle>
           <DrawerDescription>
-            دانشجویان هم‌دانشگاهی که این درس را در لیست خود ثبت کرده‌اند و نمایششان فعال است
+            {friendsOnly
+              ? "دوست‌هایی که این درس را در لیست خود ثبت کرده‌اند"
+              : "دانشجویان هم‌دانشگاهی که این درس را در لیست خود ثبت کرده‌اند و نمایششان فعال است"}
           </DrawerDescription>
         </DrawerHeader>
         <DrawerPanel className="space-y-4 p-4" viewportRef={setScrollParent}>

@@ -528,23 +528,32 @@ export interface CourseStudent {
   firstName: string
   lastName: string | null
   photoUrl: string | null
+  isFriend: boolean
+}
+
+export interface CourseStudentFriends {
+  count: number
+  sample: FriendCard[]
 }
 
 export function fetchCourseStudents(params?: {
   courseIndex?: string
   page?: number
   limit?: number
+  friendsOnly?: boolean
 }) {
   const qs = new URLSearchParams()
   if (params?.courseIndex) qs.set("courseIndex", params.courseIndex)
   if (params?.page) qs.set("page", String(params.page))
   if (params?.limit) qs.set("limit", String(params.limit))
+  if (params?.friendsOnly) qs.set("friendsOnly", "1")
   const q = qs.toString()
   return apiClient.get<{
     students: CourseStudent[]
     page: number
     limit: number
     hasMore: boolean
+    friends: CourseStudentFriends
   }>(`/me/students${q ? `?${q}` : ""}`)
 }
 
@@ -635,11 +644,21 @@ export function fetchFriendRequests(params?: {
   }>(`/me/friends/requests${q ? `?${q}` : ""}`)
 }
 
+export interface SendRequestResult {
+  request?: {
+    id: string
+    status: "PENDING" | "ACCEPTED" | "DECLINED" | "CANCELED"
+    createdAt: string
+    direction: "outgoing"
+    user: FriendCard
+  }
+  befriended?: boolean
+}
+
 export function sendFriendRequest(friendId: number) {
-  return apiClient.post<{ request?: { id: string; status: string }; befriended?: boolean }>(
-    "/me/friends/requests",
-    { friendId }
-  )
+  return apiClient.post<SendRequestResult>("/me/friends/requests", {
+    friendId,
+  })
 }
 
 export function acceptFriendRequest(id: string) {
@@ -681,6 +700,47 @@ export function unblockFriend(friendId: number) {
 
 export function fetchFriendSettings() {
   return apiClient.get<{ autoDecline: boolean }>("/me/friends/settings")
+}
+
+export interface CourseMatesEntry {
+  courseIndex: string
+  count: number
+  sample: FriendCard[]
+}
+
+export function fetchFriendsCourses(params: {
+  uni: string
+  major: string
+  termCode: string
+}) {
+  const qs = new URLSearchParams({
+    uni: params.uni,
+    major: params.major,
+    termCode: params.termCode,
+  })
+  return apiClient.get<{ courses: CourseMatesEntry[] }>(
+    `/me/friends/courses?${qs.toString()}`
+  )
+}
+
+export function fetchCourseMates(
+  courseIndex: string,
+  params: { uni: string; major: string; termCode: string; page?: number; limit?: number }
+) {
+  const qs = new URLSearchParams({
+    uni: params.uni,
+    major: params.major,
+    termCode: params.termCode,
+  })
+  if (params.page) qs.set("page", String(params.page))
+  if (params.limit) qs.set("limit", String(params.limit))
+  const q = qs.toString()
+  return apiClient.get<{
+    mates: FriendCard[]
+    page: number
+    limit: number
+    hasMore: boolean
+  }>(`/me/friends/courses/${encodeURIComponent(courseIndex)}?${q}`)
 }
 
 export interface FriendDetailData {

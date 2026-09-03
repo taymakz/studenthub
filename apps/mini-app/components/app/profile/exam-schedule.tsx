@@ -21,6 +21,8 @@ import { useNotedOfferings, OfferingsEmpty } from "./use-noted-offerings"
 import { groupByExamDate } from "./schedule-util"
 import { CourseDetailDrawer } from "@/components/app/courses/course-detail-drawer"
 import { ProfessorDrawer } from "@/components/app/courses/professor-drawer"
+import { CourseMatesDrawer } from "@/components/app/friends/friend-course-mates-drawer"
+import { useMyCourseMatesMap } from "@/components/app/friends/use-friends-data"
 import { ExamGroups } from "./exam/exam-groups"
 import { captureExamScreenshot } from "./exam/use-exam-export"
 import { ThemeDrawer } from "./schedule/schedule-panels"
@@ -45,6 +47,8 @@ export function ExamSchedule({ hideTrigger = false }: { hideTrigger?: boolean })
 
   const [themeOpen, setThemeOpen] = useState(false)
   const [selected, setSelected] = useState<Offering | null>(null)
+  const [matesFor, setMatesFor] = useState<Offering | null>(null)
+  const { matesByIndex, uni, major, termCode } = useMyCourseMatesMap(open)
   const [professor, setProfessor] = useState<{
     name: string
     uni: string
@@ -92,10 +96,19 @@ export function ExamSchedule({ hideTrigger = false }: { hideTrigger?: boolean })
                 خروجی عکس
               </Button>
             )}
-            {!enabled || isLoading || groups.length === 0 ? <OfferingsEmpty enabled={enabled} isLoading={isLoading} /> : <ExamGroups groups={groups} onSelect={setSelected} />}
+            {!enabled || isLoading || groups.length === 0 ? <OfferingsEmpty enabled={enabled} isLoading={isLoading} /> : <ExamGroups groups={groups} onSelect={setSelected} matesByIndex={matesByIndex} onMatesClick={setMatesFor} />}
           </DrawerPanel>
         </DrawerPopup>
       </Drawer>
+
+      <CourseMatesDrawer
+        offering={matesFor}
+        uni={uni}
+        major={major}
+        termCode={termCode}
+        open={!!matesFor}
+        onOpenChange={(o) => !o && setMatesFor(null)}
+      />
 
       <ThemeDrawer open={themeOpen} onOpenChange={setThemeOpen} onExport={runExport} />
 

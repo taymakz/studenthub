@@ -4,6 +4,7 @@ import { EyeOff } from "lucide-react"
 import { Virtuoso } from "react-virtuoso"
 
 import { Avatar, AvatarFallback, AvatarImage } from "@workspace/ui/components/avatar"
+import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
 import { Spinner } from "@workspace/ui/components/spinner"
 
@@ -65,9 +66,16 @@ function StudentRow({ student }: { student: CourseStudent }) {
         {student.photoUrl ? <AvatarImage src={student.photoUrl} alt={student.firstName} /> : null}
         <AvatarFallback>{(student.firstName?.[0] ?? "?") + (student.lastName?.[0] ?? "")}</AvatarFallback>
       </Avatar>
-      <p className="min-w-0 flex-1 truncate text-sm font-medium">
-        {student.firstName} {student.lastName ?? ""}
-      </p>
+      <div className="flex min-w-0 flex-1 items-center gap-1.5">
+        <p className="min-w-0 flex-1 truncate text-sm font-medium">
+          {student.firstName} {student.lastName ?? ""}
+        </p>
+        {student.isFriend && (
+          <Badge variant="success" className="shrink-0">
+            دوست
+          </Badge>
+        )}
+      </div>
     </div>
   )
 }

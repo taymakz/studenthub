@@ -20,9 +20,12 @@ import { useSendRequest } from "./use-friends-data"
 export function AddFriendDrawer({
   open,
   onOpenChange,
+  onSent,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
+  /** Called with the outcome so the page can jump to the right tab. */
+  onSent?: (outcome: "pending" | "befriended" | "other") => void
 }) {
   const [value, setValue] = useState("")
   const send = useSendRequest()
@@ -31,9 +34,12 @@ export function AddFriendDrawer({
     const id = Number.parseInt(value, 10)
     if (!Number.isSafeInteger(id) || id <= 0) return
     send.mutate(id, {
-      onSuccess: () => {
+      onSuccess: (res) => {
         setValue("")
         onOpenChange(false)
+        if (res.data?.befriended) onSent?.("befriended")
+        else if (res.data?.request?.status === "PENDING") onSent?.("pending")
+        else onSent?.("other")
       },
     })
   }

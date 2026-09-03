@@ -8,10 +8,13 @@ import { cn } from "@workspace/ui/lib/utils"
 import type { Offering } from "@/lib/api"
 import { CourseCard } from "./course-card"
 import { CourseActionDrawer } from "./course-action-drawer"
+import { CourseMatesDrawer } from "@/components/app/friends/friend-course-mates-drawer"
+import { useMyCourseMatesMap } from "@/components/app/friends/use-friends-data"
 import { GptDrawer } from "@/components/app/profile/gpt-drawer"
 import { loadGpt, gptToUnits, gptToLabel } from "@/components/app/profile/gpt"
 import { useNotedSort } from "./noted/use-noted-sort"
 import { NotedExportDrawer } from "./noted/noted-export"
+import { FriendFaces } from "@/components/app/friends/friend-faces"
 import { ActionsDrawer, ConfirmAddPassed, ConfirmClear } from "./noted/noted-panels"
 
 export function NotedDrawer({
@@ -40,6 +43,8 @@ export function NotedDrawer({
   const [addPassedOpen, setAddPassedOpen] = useState(false)
   const [clearListOpen, setClearListOpen] = useState(false)
   const [selected, setSelected] = useState<Offering | null>(null)
+  const [matesFor, setMatesFor] = useState<Offering | null>(null)
+  const { matesByIndex, uni, major, termCode } = useMyCourseMatesMap(open)
   const [gptOpen, setGptOpen] = useState(false)
   const [gpt, setGpt] = useState<10 | 12 | 20 | null>(null)
 
@@ -136,13 +141,27 @@ export function NotedDrawer({
 
                 <div className="space-y-4">
                   {sorted.map((o) => (
-                    <div key={o.index} onClick={(e) => e.stopPropagation()}>
+                    <div
+                      key={o.index}
+                      onClick={(e) => e.stopPropagation()}
+                      className="relative"
+                    >
                       <CourseCard
                         offering={o}
                         viewMode={viewMode}
                         onSelect={setSelected}
                         flags={{ noted: true, passed: false, new: false }}
                       />
+                      {(() => {
+                        const mates = matesByIndex.get(o.index)
+                        return mates && mates.count > 0 ? (
+                          <FriendFaces
+                            sample={mates.sample}
+                            count={mates.count}
+                            onClick={() => setMatesFor(o)}
+                          />
+                        ) : null
+                      })()}
                     </div>
                   ))}
                 </div>
@@ -159,6 +178,16 @@ export function NotedDrawer({
           setGptOpen(o)
           if (!o) setGpt(loadGpt())
         }}
+      />
+
+      {/* mates of a noted course */}
+      <CourseMatesDrawer
+        offering={matesFor}
+        uni={uni}
+        major={major}
+        termCode={termCode}
+        open={!!matesFor}
+        onOpenChange={(o) => !o && setMatesFor(null)}
       />
 
       {/* single-course management (nested inset) */}

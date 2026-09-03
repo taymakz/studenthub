@@ -22,12 +22,42 @@ import { useProfileStore } from "@/stores/profile-store"
 import { CourseTable, CourseTags } from "./sections"
 import { courseLine } from "./course-format"
 import { StudentsDrawer } from "./students-drawer"
+import { useStudentsList, useStudentsVisibility } from "./students/use-students-data"
+import { FriendFaces } from "@/components/app/friends/friend-faces"
 import { useCourseDetailClose, useCourseDetailDerived } from "./course-detail/use-course-detail"
 import { ChangesSection, CoreqSection, PrereqSection } from "./course-detail/detail-sections"
 import { DetailActions } from "./course-detail/detail-actions"
 
 // Module-scope alias: hooks must be called, not referenced inside callbacks.
 const getProfileState = useProfileStore.getState
+
+/** Friend-classmates faces group (top of the panel, opens the friends list). */
+function CourseFriendsGroup({
+  courseIndex,
+  enabled,
+  onOpen,
+}: {
+  courseIndex: string | null
+  enabled: boolean
+  onOpen: () => void
+}) {
+  const { visible, hasProfile } = useStudentsVisibility(enabled)
+  const matesQuery = useStudentsList(enabled, visible, hasProfile, courseIndex)
+  const summary = matesQuery.data?.pages[0]?.friends
+  const count = summary?.count ?? 0
+  if (matesQuery.isLoading || count === 0 || !summary) return null
+  return (
+    <div className="flex items-center justify-center">
+      <FriendFaces
+        sample={summary.sample}
+        count={count}
+        onClick={onOpen}
+        className="static"
+        size="lg"
+      />
+    </div>
+  )
+}
 
 /** Sum of units for every passed course that has prerequisites left to take. */
 function sumPassedUnits(
@@ -73,6 +103,7 @@ export function CourseDetailDrawer({
   onSelectCourse?: (offering: Offering) => void
 }) {
   const [studentsOpen, setStudentsOpen] = useState(false)
+  const [friendsOpen, setFriendsOpen] = useState(false)
   const o = offering
   useCourseDetailClose(open, onOpenChange, studentsOpen, setStudentsOpen)
   const { canEditNoted, otherProfessors, passedNames, failedNames, chartCourse, chart } = useCourseDetailDerived(offering)
@@ -97,7 +128,7 @@ export function CourseDetailDrawer({
               </div>
 
               {/* Professor name with eye icon - center */}
-              <div className="mb-4 text-center text-sm">
+              <div className="text-center text-sm">
                 {o && professorName(o) ? (
                   <button
                     type="button"
@@ -118,6 +149,12 @@ export function CourseDetailDrawer({
             </DrawerTitle>
           </DrawerHeader>
           <DrawerPanel className="space-y-4 p-4 text-sm">
+            {/* Friend classmates — same faces, between header and جزئیات */}
+            <CourseFriendsGroup
+              courseIndex={o?.index ?? null}
+              enabled={open && !!o}
+              onOpen={() => setFriendsOpen(true)}
+            />
             {/* جزئیات */}
             <div>
               <div className="mb-2 flex items-center gap-2">
@@ -198,6 +235,14 @@ export function CourseDetailDrawer({
         open={studentsOpen}
         onOpenChange={setStudentsOpen}
         onParentClose={() => onOpenChange(false)}
+      />
+
+      {/* Friend classmates nested drawer */}
+      <StudentsDrawer
+        offering={o}
+        open={friendsOpen}
+        onOpenChange={setFriendsOpen}
+        friendsOnly
       />
     </>
   )

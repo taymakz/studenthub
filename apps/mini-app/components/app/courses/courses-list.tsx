@@ -2,9 +2,10 @@
 
 import { Virtuoso } from "react-virtuoso"
 
-import type { Offering } from "@/lib/api"
+import type { FriendCard, Offering } from "@/lib/api"
 
 import { CourseCard } from "./course-card"
+import { FriendFaces } from "@/components/app/friends/friend-faces"
 
 export function CoursesList({
   filtered,
@@ -14,6 +15,8 @@ export function CoursesList({
   viewMode,
   borderFor,
   onSelect,
+  matesByIndex,
+  onMatesClick,
 }: {
   filtered: Offering[]
   notedIndexes: Set<string>
@@ -22,6 +25,8 @@ export function CoursesList({
   viewMode: "full" | "simple"
   borderFor: (o: Offering) => string
   onSelect: (o: Offering) => void
+  matesByIndex?: Map<string, { count: number; sample: FriendCard[] }>
+  onMatesClick?: (o: Offering) => void
 }) {
   return (
     <Virtuoso
@@ -31,7 +36,7 @@ export function CoursesList({
       overscan={6}
       itemContent={(index, o) => (
         <div
-          className="animate-fadeIn py-1.5"
+          className="relative animate-fadeIn py-1.5"
           style={{
             animationDelay: `${Math.min(index * 30, 300)}ms`,
             animationFillMode: "backwards",
@@ -48,6 +53,16 @@ export function CoursesList({
             }}
             className={borderFor(o)}
           />
+          {(() => {
+            const mates = matesByIndex?.get(o.index)
+            return mates && mates.count > 0 ? (
+              <FriendFaces
+                sample={mates.sample}
+                count={mates.count}
+                onClick={() => onMatesClick?.(o)}
+              />
+            ) : null
+          })()}
         </div>
       )}
     />
