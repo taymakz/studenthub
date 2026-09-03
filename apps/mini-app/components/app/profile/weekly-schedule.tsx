@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import {
   Drawer,
@@ -29,8 +29,15 @@ import { useWeeklyDescription } from "./weekly/use-weekly-description"
 import { ThemeDrawer } from "./schedule/schedule-panels"
 import { ExportUploadCanceled } from "@/lib/export-image"
 
-export function WeeklySchedule() {
+export const OPEN_WEEKLY_SCHEDULE_EVENT = "open-weekly-schedule"
+
+export function WeeklySchedule({ hideTrigger = false }: { hideTrigger?: boolean }) {
   const [open, setOpen] = useState(false)
+  useEffect(() => {
+    const handler = () => setOpen(true)
+    window.addEventListener(OPEN_WEEKLY_SCHEDULE_EVENT, handler)
+    return () => window.removeEventListener(OPEN_WEEKLY_SCHEDULE_EVENT, handler)
+  }, [])
   const { notedOfferings, isLoading, enabled } = useNotedOfferings()
   const user = useProfileStore((s) => s.user)
   const profile = useProfileStore((s) => s.profile)
@@ -70,9 +77,11 @@ export function WeeklySchedule() {
   return (
     <>
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger
-          render={<ToolButton title="برنامه هفتگی" icon={CalendarWeekIcon} />}
-        />
+        {!hideTrigger && (
+          <DrawerTrigger
+            render={<ToolButton title="برنامه هفتگی" icon={CalendarWeekIcon} />}
+          />
+        )}
         <DrawerPopup variant="inset" showBar>
           <DrawerHeader>
             <DrawerTitle>برنامه هفتگی کلاس‌ها</DrawerTitle>

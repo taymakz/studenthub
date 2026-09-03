@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import {
   Drawer,
@@ -18,7 +18,7 @@ import { useProfileStore } from "@/stores/profile-store"
 import { ToolButton } from "./tool-card"
 import { CalendarExamIcon } from "./tool-icons"
 import { useNotedOfferings, OfferingsEmpty } from "./use-noted-offerings"
-import { extractDate } from "./schedule-util"
+import { groupByExamDate } from "./schedule-util"
 import { CourseDetailDrawer } from "@/components/app/courses/course-detail-drawer"
 import { ProfessorDrawer } from "@/components/app/courses/professor-drawer"
 import { ExamGroups } from "./exam/exam-groups"
@@ -27,26 +27,15 @@ import { ThemeDrawer } from "./schedule/schedule-panels"
 import { exportImage, ExportUploadCanceled } from "@/lib/export-image"
 import { toastManager } from "@workspace/ui/components/toast"
 
-/** Group by exam date, chronological, «تاریخ نامشخص» last (old project order). */
-function groupByExamDate(notedOfferings: Offering[]) {
-  const groupMap = new Map<string, Offering[]>()
-  for (const o of notedOfferings) {
-    const date = extractDate(o.examSchedule) ?? "تاریخ نامشخص"
-    groupMap.set(date, [...(groupMap.get(date) ?? []), o])
-  }
-  const groups: Array<{ date: string; items: Offering[] }> = []
-  for (const [date, items] of groupMap) {
-    if (items.length > 0) groups.push({ date, items })
-  }
-  return groups.sort((a, b) => {
-    if (a.date === "تاریخ نامشخص") return 1
-    if (b.date === "تاریخ نامشخص") return -1
-    return a.date.localeCompare(b.date)
-  })
-}
+export const OPEN_EXAM_SCHEDULE_EVENT = "open-exam-schedule"
 
-export function ExamSchedule() {
+export function ExamSchedule({ hideTrigger = false }: { hideTrigger?: boolean }) {
   const [open, setOpen] = useState(false)
+  useEffect(() => {
+    const handler = () => setOpen(true)
+    window.addEventListener(OPEN_EXAM_SCHEDULE_EVENT, handler)
+    return () => window.removeEventListener(OPEN_EXAM_SCHEDULE_EVENT, handler)
+  }, [])
   const { notedOfferings, isLoading, enabled } = useNotedOfferings()
   const user = useProfileStore((s) => s.user)
   const profile = useProfileStore((s) => s.profile)
@@ -85,9 +74,11 @@ export function ExamSchedule() {
   return (
     <>
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger
-          render={<ToolButton title="برنامه امتحانی" icon={CalendarExamIcon} />}
-        />
+        {!hideTrigger && (
+          <DrawerTrigger
+            render={<ToolButton title="برنامه امتحانی" icon={CalendarExamIcon} />}
+          />
+        )}
         <DrawerPopup variant="inset" showBar>
           <DrawerHeader>
             <DrawerTitle>برنامه امتحانی</DrawerTitle>

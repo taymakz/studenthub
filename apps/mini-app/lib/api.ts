@@ -565,6 +565,157 @@ export function fetchChartFile(semester?: string) {
   )
 }
 
+/* ─── Friends (دوستان) ─────────────────────────────────────────────── */
+
+export interface FriendCard {
+  id: number
+  firstName: string
+  lastName: string | null
+  photoUrl: string | null
+  username: string | null
+}
+
+export interface FriendItem extends FriendCard {
+  friendsSince: string
+  profile: string | null
+}
+
+export interface FriendRequestItem {
+  id: string
+  status: "PENDING" | "ACCEPTED" | "DECLINED" | "CANCELED"
+  createdAt: string
+  direction: "incoming" | "outgoing"
+  user: FriendCard
+}
+
+export interface BlockedItem {
+  user: FriendCard
+  blockedAt: string
+}
+
+export interface FriendsSummary {
+  friendsCount: number
+  incomingPendingCount: number
+  outgoingPendingCount: number
+  autoDecline: boolean
+}
+
+export function fetchFriendsSummary() {
+  return apiClient.get<FriendsSummary>("/me/friends/summary")
+}
+
+export function fetchFriends(params?: { page?: number; limit?: number }) {
+  const qs = new URLSearchParams()
+  if (params?.page) qs.set("page", String(params.page))
+  if (params?.limit) qs.set("limit", String(params.limit))
+  const q = qs.toString()
+  return apiClient.get<{
+    friends: FriendItem[]
+    page: number
+    limit: number
+    hasMore: boolean
+  }>(`/me/friends${q ? `?${q}` : ""}`)
+}
+
+export function fetchFriendRequests(params?: {
+  direction?: "incoming" | "outgoing"
+  page?: number
+  limit?: number
+}) {
+  const qs = new URLSearchParams()
+  if (params?.direction) qs.set("direction", params.direction)
+  if (params?.page) qs.set("page", String(params.page))
+  if (params?.limit) qs.set("limit", String(params.limit))
+  const q = qs.toString()
+  return apiClient.get<{
+    requests: FriendRequestItem[]
+    page: number
+    limit: number
+    hasMore: boolean
+  }>(`/me/friends/requests${q ? `?${q}` : ""}`)
+}
+
+export function sendFriendRequest(friendId: number) {
+  return apiClient.post<{ request?: { id: string; status: string }; befriended?: boolean }>(
+    "/me/friends/requests",
+    { friendId }
+  )
+}
+
+export function acceptFriendRequest(id: string) {
+  return apiClient.post<{ befriended: boolean }>(`/me/friends/requests/${id}/accept`)
+}
+
+export function declineFriendRequest(id: string) {
+  return apiClient.post<null>(`/me/friends/requests/${id}/decline`)
+}
+
+export function cancelFriendRequest(id: string) {
+  return apiClient.post<null>(`/me/friends/requests/${id}/cancel`)
+}
+
+export function unfriend(friendId: number) {
+  return apiClient.delete<null>(`/me/friends/${friendId}`)
+}
+
+export function blockFriend(friendId: number) {
+  return apiClient.post<null>("/me/friends/blocks", { friendId })
+}
+
+export function fetchBlocks(params?: { page?: number; limit?: number }) {
+  const qs = new URLSearchParams()
+  if (params?.page) qs.set("page", String(params.page))
+  if (params?.limit) qs.set("limit", String(params.limit))
+  const q = qs.toString()
+  return apiClient.get<{
+    blocked: BlockedItem[]
+    page: number
+    limit: number
+    hasMore: boolean
+  }>(`/me/friends/blocks${q ? `?${q}` : ""}`)
+}
+
+export function unblockFriend(friendId: number) {
+  return apiClient.delete<null>(`/me/friends/blocks/${friendId}`)
+}
+
+export function fetchFriendSettings() {
+  return apiClient.get<{ autoDecline: boolean }>("/me/friends/settings")
+}
+
+export interface FriendDetailData {
+  user: FriendCard
+  profile: {
+    universitySlug: string | null
+    majorSlug: string | null
+    degree: string | null
+    entryYearRange: string | null
+    entrySemester: "MEHR" | "BAHMAN" | "SUMMER" | null
+    currentSemesterCode: string | null
+  } | null
+  noted: { courseIndex: string; year: string | null; semester: string | null }[]
+  passed: string[]
+  failed: string[]
+  chart: {
+    terms: Record<
+      string,
+      { name: string; code?: string; theoreticalUnits?: number; practicalUnits?: number }[]
+    >
+    moaref: { name: string; code?: string; theoreticalUnits?: number; practicalUnits?: number }[]
+    unknown: { name: string; code?: string; theoreticalUnits?: number; practicalUnits?: number }[]
+  } | null
+}
+
+export function fetchFriendDetail(friendId: number) {
+  return apiClient.get<FriendDetailData>(`/me/friends/${friendId}/detail`)
+}
+
+export function patchFriendSettings(autoDecline: boolean) {
+  return apiClient.patch<{ autoDecline: boolean }>("/me/friends/settings", {
+    autoDecline,
+  })
+}
+
 /* ─── Feedback (mini app → admin review queue) ─── */
 
 export type FeedbackKind = "BUG" | "SUGGESTION" | "THANKS" | "SOURCE"
