@@ -34,6 +34,7 @@ import {
   parsePagination,
 } from "@/lib/http/common"
 import { sendMessage } from "@/lib/telegram/bot"
+import { sendAdminMessage } from "@/lib/telegram/admin"
 import type { AppEnv } from "@/middleware/auth"
 import { requireUser, withUser } from "@/middleware/auth"
 
@@ -130,6 +131,31 @@ async function notifyFriendAccepted(
     requesterId,
     `درخواست دوستی شما پذیرفته شد\nاز: ${personLine(accepter)}`
   )
+}
+
+async function personOf(
+  id: number
+): Promise<(PersonInfo & { id: number }) | null> {
+  const [row] = await db
+    .select({
+      id: users.id,
+      firstName: users.firstName,
+      lastName: users.lastName,
+      telegramUsername: users.telegramUsername,
+    })
+    .from(users)
+    .where(eq(users.id, id))
+    .limit(1)
+  return row ?? null
+}
+
+/**
+ * Audit trail to the DEFAULT service topic (who did what to whom).
+ * Fire-and-forget: sendAdminMessage never throws, audit never delays the
+ * user-facing response.
+ */
+function audit(text: string): void {
+  void sendAdminMessage("DEFAULT", text)
 }
 
 /** First year of an entry-cohort directory: "[1403-1404]" -> 1403, "1405" -> 1405. */
@@ -322,6 +348,10 @@ export const meFriendRoutes = new Hono<AppEnv>()
             eq(friendships.userHighId, high)
           )
         )
+      const exFriend = await personOf(friendId)
+      if (exFriend) {
+        audit(`حذف دوست: ${personLine(user)} کاربر ${personLine(exFriend)} را از دوستان حذف کرد`)
+      }
       return ok(c, null, "از لیست دوستان حذف شد")
     }
   )
@@ -603,6 +633,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
         await tx.insert(friendships).values({ userLowId: low, userHighId: high })
       })
       await notifyFriendAccepted(target.id, user)
+      audit(`دوستی متقابل: ${personLine(user)} و ${personLine(target)} دوست شدند`)
       return ok(c, { befriended: true }, "شما با هم دوست شدید")
     }
 
@@ -620,6 +651,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
 
     if (request.status === "PENDING") {
       await notifyFriendRequest(target.id, user)
+      audit(`درخواست دوستی جدید: ${personLine(user)} به ${personLine(target)}`)
     }
 
     return ok(
@@ -683,7 +715,10 @@ export const meFriendRoutes = new Hono<AppEnv>()
         .from(users)
         .where(eq(users.id, request.senderId))
         .limit(1)
-      if (sender) await notifyFriendAccepted(sender.id, user)
+      if (sender) {
+        await notifyFriendAccepted(sender.id, user)
+        audit(`پذیرش دوستی: ${personLine(user)} درخواست ${personLine(sender)} را پذیرفت`)
+      }
 
       return ok(c, { befriended: true }, "درخواست دوستی پذیرفته شد")
     }
@@ -713,6 +748,11 @@ export const meFriendRoutes = new Hono<AppEnv>()
         .set({ status: "DECLINED", respondedAt: now, updatedAt: now })
         .where(eq(friendRequests.id, id))
 
+      const declined = await personOf(request.senderId)
+      if (declined) {
+        audit(`رد دوستی: ${personLine(user)} درخواست ${personLine(declined)} را رد کرد`)
+      }
+
       return ok(c, null, "درخواست دوستی رد شد")
     }
   )
@@ -741,6 +781,11 @@ export const meFriendRoutes = new Hono<AppEnv>()
         .set({ status: "CANCELED", respondedAt: now, updatedAt: now })
         .where(eq(friendRequests.id, id))
 
+      const receiver = await personOf(request.receiverId)
+      if (receiver) {
+        audit(`لغو درخواست دوستی: ${personLine(user)} درخواست به ${personLine(receiver)} را لغو کرد`)
+      }
+
       return ok(c, null, "درخواست دوستی لغو شد")
     }
   )
@@ -752,7 +797,12 @@ export const meFriendRoutes = new Hono<AppEnv>()
       return badRequest(c, "نمی‌توانید خودتان را مسدود کنید")
     }
     const [target] = await db
-      .select({ id: users.id })
+      .select({
+        id: users.id,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        telegramUsername: users.telegramUsername,
+      })
       .from(users)
       .where(eq(users.id, targetId))
       .limit(1)
@@ -791,6 +841,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
         .onConflictDoNothing()
     })
 
+    audit(`مسدودسازی: ${personLine(user)} کاربر ${personLine(target)} را مسدود کرد`)
     return ok(c, null, "کاربر مسدود شد")
   })
   .get("/me/friends/blocks", async (c) => {
@@ -837,6 +888,10 @@ export const meFriendRoutes = new Hono<AppEnv>()
         )
         .returning()
       if (deleted.length === 0) return notFound(c, "این کاربر در لیست مسدود نیست")
+      const unblocked = await personOf(friendId)
+      if (unblocked) {
+        audit(`رفع مسدودیت: ${personLine(user)} کاربر ${personLine(unblocked)} را از مسدودیت خارج کرد`)
+      }
       return ok(c, null, "کاربر از مسدودی خارج شد")
     }
   )
