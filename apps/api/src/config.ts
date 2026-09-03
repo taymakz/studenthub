@@ -21,6 +21,13 @@ export const config = {
     .asString(),
   /** Skip real Bot API calls (local dev) - payloads are logged instead. */
   TELEGRAM_DRY: env.get("TELEGRAM_DRY").default("false").asBool(),
+  /**
+   * Explicit opt-in to hit the real Bot API outside production (local manual
+   * testing). Without it, non-production environments (NODE_ENV !=
+   * "production") are always dry — dev machines usually share the prod bot
+   * token, and test signups must never spam the real admin topics or users.
+   */
+  TELEGRAM_LIVE: env.get("TELEGRAM_LIVE").default("false").asBool(),
   MAX_UPLOAD_MB: env.get("MAX_UPLOAD_MB").default("45").asInt(),
   /** Open-app inline button under notification messages. */
   TELEGRAM_APP_URL: env.get("TELEGRAM_APP_URL").asString(),

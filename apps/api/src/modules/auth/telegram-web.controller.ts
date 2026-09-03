@@ -24,14 +24,9 @@ async function upsertUserFromWidget(data: {
   username?: string
   photoUrl?: string
 }) {
-  const existing = await db
-    .select({ id: users.id })
-    .from(users)
-    .where(eq(users.id, data.id))
-    .limit(1)
-  const isNewUser = existing.length === 0
-
-  const [row] = await db
+  // Atomic "is new" detection (see middleware/auth.ts): only the request
+  // that actually inserts the row counts as a signup.
+  const [inserted] = await db
     .insert(users)
     .values({
       id: data.id,
@@ -40,17 +35,23 @@ async function upsertUserFromWidget(data: {
       telegramUsername: data.username ?? null,
       photoUrl: data.photoUrl ?? null,
     })
-    .onConflictDoUpdate({
-      target: users.id,
-      set: {
-        firstName: data.firstName,
-        lastName: data.lastName ?? null,
-        telegramUsername: data.username ?? null,
-        ...(data.photoUrl ? { photoUrl: data.photoUrl } : {}),
-        updatedAt: new Date(),
-      },
-    })
+    .onConflictDoNothing()
     .returning()
+  const isNewUser = !!inserted
+
+  const [row] = inserted
+    ? [inserted]
+    : await db
+        .update(users)
+        .set({
+          firstName: data.firstName,
+          lastName: data.lastName ?? null,
+          telegramUsername: data.username ?? null,
+          ...(data.photoUrl ? { photoUrl: data.photoUrl } : {}),
+          updatedAt: new Date(),
+        })
+        .where(eq(users.id, data.id))
+        .returning()
 
   if (!row || row.banned) return null
 

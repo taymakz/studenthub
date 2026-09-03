@@ -63,12 +63,15 @@ export function validateTelegramInitData(
     return null
   }
 
-  // Replay guard: initData carries auth_date (unix seconds).
+  // Replay guard: initData carries auth_date (unix seconds). Reject stale
+  // (>24h old) signatures and ones from the future (>5min clock skew) —
+  // a far-future auth_date would otherwise pass the age check forever.
   const authDate = Number.parseInt(params.get("auth_date") ?? "0", 10)
   const ageSeconds = Math.floor(Date.now() / 1000) - authDate
   if (!Number.isFinite(authDate) || authDate <= 0 || ageSeconds > 86_400) {
     return null
   }
+  if (ageSeconds < -300) return null
 
   let rawUser: Record<string, unknown>
   try {

@@ -22,7 +22,21 @@ const REQUEST_TIMEOUT_MS = 30_000
 
 const apiRoot = () => `https://api.telegram.org/bot${config.TELEGRAM_BOT_TOKEN}`
 
-const dry = () => !config.TELEGRAM_BOT_TOKEN || config.TELEGRAM_DRY
+const dry = () => telegramDry()
+
+/**
+ * Single gate for ALL outbound Telegram traffic (user DMs + admin topics).
+ * Live sends happen only with a token AND (TELEGRAM_DRY off) AND
+ * (production OR explicit TELEGRAM_LIVE opt-in) — so local/staging runs
+ * sharing the prod token can never spam real chats or topics.
+ */
+export function telegramDry(): boolean {
+  if (!config.TELEGRAM_BOT_TOKEN) return true
+  if (config.TELEGRAM_DRY) return true
+  if (process.env.NODE_ENV !== "production" && !config.TELEGRAM_LIVE)
+    return true
+  return false
+}
 
 function errorMessage(error: unknown): string {
   if (error instanceof Error) {
