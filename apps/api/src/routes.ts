@@ -20,6 +20,7 @@ import {
 import { adminSettingsRoutes } from "@/modules/admin/settings.controller"
 import { appRegistryRoutes } from "@/modules/app/registry.controller"
 import { meRoutes } from "@/modules/me.controller"
+import { meFriendRoutes } from "@/modules/me-friends.controller"
 import { meVoteRoutes } from "@/modules/me-votes.controller"
 import { telegramWebAuthRoutes } from "@/modules/auth/telegram-web.controller"
 
@@ -53,6 +54,7 @@ const routes = new Hono<AppEnv>()
   .route("/", telegramWebAuthRoutes)
   // Root-level mini-app routers last (their guards must not shadow /app|/admin).
   .route("/", meRoutes)
+  .route("/", meFriendRoutes)
   .route("/", meVoteRoutes)
   .route("/", meFeedbackRoutes)
 
