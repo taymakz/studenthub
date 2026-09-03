@@ -128,7 +128,7 @@ export function CourseDetailDrawer({
               </div>
 
               {/* Professor name with eye icon - center */}
-              <div className="mb-4 text-center text-sm">
+              <div className="text-center text-sm">
                 {o && professorName(o) ? (
                   <button
                     type="button"
