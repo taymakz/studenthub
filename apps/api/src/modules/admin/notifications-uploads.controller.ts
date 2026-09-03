@@ -782,12 +782,9 @@ export const adminNotificationsRoutes = new Hono<AppEnv>()
           "تغییر به‌عنوان انجام‌شده علامت خورد و دیگر نمایش داده نمی‌شود"
         )
       }
-      if (raw.status === "COMPLETED") {
-        return conflict(
-          c,
-          "دسته‌های تکمیل‌شده قابل حذف نیستند - از «اتمام» استفاده کنید"
-        )
-      }
+      // Announcements (no diffId) are removed outright — including COMPLETED
+      // ones, which is exactly when the admin UI offers مخفی کردن. Messages
+      // cascade by FK; already-sent Telegram messages are unaffected.
       await db.delete(notificationBatches).where(eq(notificationBatches.id, id))
       return ok(c, null, "دسته اعلان حذف شد")
     }
