@@ -130,16 +130,14 @@ export function CourseDetailDrawer({
           <DrawerPanel className="space-y-4 p-4 text-sm">
             {/* Friend classmates — same faces, between header and جزئیات */}
             {!matesQuery.isLoading && friendCount > 0 && friendSummary && (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center">
                 <FriendFaces
                   sample={friendSummary.sample}
                   count={friendCount}
                   onClick={() => setFriendsOpen(true)}
                   className="static"
+                  size="lg"
                 />
-                <p className="text-xs text-muted-foreground">
-                  {friendCount} دوست این درس را برداشته‌اند
-                </p>
               </div>
             )}
             {/* جزئیات */}

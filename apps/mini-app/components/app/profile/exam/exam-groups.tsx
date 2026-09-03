@@ -3,7 +3,8 @@
 import { ChevronLeft } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils"
 import type { Offering } from "@/lib/api"
-import { professorName } from "@/lib/api"
+import { professorName, type FriendCard } from "@/lib/api"
+import { FriendFaces } from "@/components/app/friends/friend-faces"
 import { extractTimes, formatDaysRemainInPersian, formatPersianDateLong, getCurrentDatePersian, persianDateDiff, persianWeekDayFromDays } from "./../schedule-util"
 
 function daysRemaining(date: string): number | null {
@@ -15,11 +16,15 @@ export function ExamGroups({
   groups,
   onSelect,
   readOnly = false,
+  matesByIndex,
+  onMatesClick,
 }: {
   groups: { date: string; items: Offering[] }[]
   onSelect?: (o: Offering) => void
   /** Friend view: same UI without chevron or tap handling. */
   readOnly?: boolean
+  matesByIndex?: Map<string, { count: number; sample: FriendCard[] }>
+  onMatesClick?: (o: Offering) => void
 }) {
   return (
     <>
@@ -34,16 +39,29 @@ export function ExamGroups({
             <div className="space-y-2.5">
               {items.map((o) => {
                 const times = extractTimes(o.examSchedule)
+                const mates = matesByIndex?.get(o.index)
                 const body = (
                   <>
                     <div className="mb-2 flex items-center justify-between gap-2"><div className="flex items-center gap-1"><p className="line-clamp-1 text-sm">{o.courseName}</p></div>{!readOnly && <ChevronLeft className="size-4 min-w-fit text-muted-foreground" />}</div>
                     <div className="flex items-center justify-between text-xs"><p className="text-muted-foreground">{professorName(o) ?? "استادی ثبت نشده"}</p>{times.length > 0 && <div className="text-sm font-medium text-warning">{times[0]}{times[1] ? ` تا ${times[1]}` : ""}</div>}</div>
                   </>
                 )
-                return readOnly ? (
-                  <div key={o.index} className="relative flex w-full flex-col gap-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
+                const row = readOnly ? (
+                  <div className="relative flex w-full flex-col gap-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
                 ) : (
-                  <button type="button" key={o.index} className={cn("relative flex w-full cursor-pointer flex-col gap-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
+                  <button type="button" className={cn("relative flex w-full cursor-pointer flex-col gap-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
+                )
+                return (
+                  <div key={o.index} className="relative">
+                    {row}
+                    {mates && mates.count > 0 && (
+                      <FriendFaces
+                        sample={mates.sample}
+                        count={mates.count}
+                        onClick={() => onMatesClick?.(o)}
+                      />
+                    )}
+                  </div>
                 )
               })}
             </div>

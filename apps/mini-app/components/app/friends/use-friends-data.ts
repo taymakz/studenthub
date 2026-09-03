@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-query"
 import { toastManager } from "@workspace/ui/components/toast"
 
+import { useProfileStore } from "@/stores/profile-store"
 import {
   acceptFriendRequest,
   blockFriend,
@@ -332,6 +333,30 @@ export function useCourseMates(
     },
     enabled && !!courseIndex && !!uni && !!major && !!termCode
   )
+}
+
+/**
+ * Mates map for MY current context (profile slugs + selected semester) —
+ * for the noted drawer and the profile schedules. Returns an empty map
+ * until the data loads.
+ */
+export function useMyCourseMatesMap(enabled = true) {
+  const profile = useProfileStore((s) => s.profile)
+  const termCode = useProfileStore((s) => s.termCode)
+  const query = useFriendsCoursesMap(
+    profile?.universitySlug,
+    profile?.majorSlug,
+    termCode,
+    enabled
+  )
+  return {
+    matesByIndex: new Map(
+      (query.data ?? []).map((e) => [e.courseIndex, e])
+    ),
+    uni: profile?.universitySlug ?? null,
+    major: profile?.majorSlug ?? null,
+    termCode: termCode ?? null,
+  }
 }
 
 export function useSendRequest() {

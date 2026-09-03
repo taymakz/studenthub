@@ -23,6 +23,8 @@ import { extractWeekday } from "./schedule-util"
 import { groupByWeekday } from "./export-canvas"
 import { CourseDetailDrawer } from "@/components/app/courses/course-detail-drawer"
 import { ProfessorDrawer } from "@/components/app/courses/professor-drawer"
+import { CourseMatesDrawer } from "@/components/app/friends/friend-course-mates-drawer"
+import { useMyCourseMatesMap } from "@/components/app/friends/use-friends-data"
 import { WeeklyGroups } from "./weekly/weekly-groups"
 import { captureWeeklyScreenshot } from "./weekly/use-weekly-export"
 import { useWeeklyDescription } from "./weekly/use-weekly-description"
@@ -47,6 +49,8 @@ export function WeeklySchedule({ hideTrigger = false }: { hideTrigger?: boolean 
 
   const [themeOpen, setThemeOpen] = useState(false)
   const [selected, setSelected] = useState<Offering | null>(null)
+  const [matesFor, setMatesFor] = useState<Offering | null>(null)
+  const { matesByIndex, uni, major, termCode } = useMyCourseMatesMap(open)
   const [professor, setProfessor] = useState<{
     name: string
     uni: string
@@ -93,10 +97,19 @@ export function WeeklySchedule({ hideTrigger = false }: { hideTrigger?: boolean 
                 خروجی عکس
               </Button>
             )}
-            {!enabled || isLoading || groups.length === 0 ? <OfferingsEmpty enabled={enabled} isLoading={isLoading} /> : <WeeklyGroups groups={groups} onSelect={setSelected} />}
+            {!enabled || isLoading || groups.length === 0 ? <OfferingsEmpty enabled={enabled} isLoading={isLoading} /> : <WeeklyGroups groups={groups} onSelect={setSelected} matesByIndex={matesByIndex} onMatesClick={setMatesFor} />}
           </DrawerPanel>
         </DrawerPopup>
       </Drawer>
+
+      <CourseMatesDrawer
+        offering={matesFor}
+        uni={uni}
+        major={major}
+        termCode={termCode}
+        open={!!matesFor}
+        onOpenChange={(o) => !o && setMatesFor(null)}
+      />
 
       <ThemeDrawer open={themeOpen} onOpenChange={setThemeOpen} onExport={runExport} />
 

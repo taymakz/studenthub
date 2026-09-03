@@ -2,9 +2,10 @@
 
 import { ChevronLeft } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils"
-import { professorName } from "@/lib/api"
+import { professorName, type FriendCard } from "@/lib/api"
 import { extractTimes } from "./../schedule-util"
 import type { Offering } from "@/lib/api"
+import { FriendFaces } from "@/components/app/friends/friend-faces"
 
 const DAY_ORDER = ["شنبه","یکشنبه","دوشنبه","سه شنبه","چهارشنبه","پنج شنبه","جمعه"]
 
@@ -12,11 +13,15 @@ export function WeeklyGroups({
   groups,
   onSelect,
   readOnly = false,
+  matesByIndex,
+  onMatesClick,
 }: {
   groups: { day: string; items: Offering[] }[]
   onSelect?: (o: Offering) => void
   /** Friend view: same UI without chevron or tap handling. */
   readOnly?: boolean
+  matesByIndex?: Map<string, { count: number; sample: FriendCard[] }>
+  onMatesClick?: (o: Offering) => void
 }) {
   return (
     <>
@@ -28,6 +33,7 @@ export function WeeklyGroups({
             <div className="space-y-2.5">
               {items.map((o) => {
                 const times = extractTimes(o.classSchedule)
+                const mates = matesByIndex?.get(o.index)
                 const body = (
                   <>
                     <div className="mb-2 flex items-center justify-between gap-2"><div className="flex items-center gap-1"><p className="line-clamp-1">{o.courseName}</p></div>{!readOnly && <ChevronLeft className="size-4 min-w-fit text-muted-foreground" />}</div>
@@ -35,10 +41,22 @@ export function WeeklyGroups({
                     {o.location && <p className="text-xs text-muted-foreground">{o.location}</p>}
                   </>
                 )
-                return readOnly ? (
-                  <div key={o.index} className="relative w-full space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
+                const row = readOnly ? (
+                  <div className="relative w-full space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
                 ) : (
-                  <button type="button" key={o.index} className={cn("relative w-full cursor-pointer space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
+                  <button type="button" className={cn("relative w-full cursor-pointer space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
+                )
+                return (
+                  <div key={o.index} className="relative">
+                    {row}
+                    {mates && mates.count > 0 && (
+                      <FriendFaces
+                        sample={mates.sample}
+                        count={mates.count}
+                        onClick={() => onMatesClick?.(o)}
+                      />
+                    )}
+                  </div>
                 )
               })}
             </div>
