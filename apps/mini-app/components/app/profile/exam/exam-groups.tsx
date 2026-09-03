@@ -49,10 +49,15 @@ export function ExamGroups({
                 )
                 // With mates the card becomes the bordered container: faces
                 // strip on top (real button, valid sibling), content below.
+                // The strip's empty area opens the card action; only the
+                // avatars themselves (w-fit) open the mates list.
                 if (hasMates) {
                   return (
                     <div key={o.index} className="rounded-lg border bg-card px-4 pt-3 pb-4 text-sm">
-                      <div className="mb-2 flex justify-start">
+                      <div
+                        className="mb-2 flex cursor-pointer justify-start"
+                        onClick={() => onSelect?.(o)}
+                      >
                         <FriendFaces
                           sample={mates.sample}
                           count={mates.count}

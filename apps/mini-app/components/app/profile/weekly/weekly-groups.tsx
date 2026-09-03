@@ -44,10 +44,15 @@ export function WeeklyGroups({
                 )
                 // With mates the card becomes the bordered container: faces
                 // strip on top (real button, valid sibling), content below.
+                // The strip's empty area opens the card action; only the
+                // avatars themselves (w-fit) open the mates list.
                 if (hasMates) {
                   return (
                     <div key={o.index} className="rounded-lg border bg-card px-4 pt-3 pb-4 text-sm">
-                      <div className="mb-2 flex justify-start">
+                      <div
+                        className="mb-2 flex cursor-pointer justify-start"
+                        onClick={() => onSelect?.(o)}
+                      >
                         <FriendFaces
                           sample={mates.sample}
                           count={mates.count}
@@ -66,7 +71,7 @@ export function WeeklyGroups({
                 return readOnly ? (
                   <div key={o.index} className="relative w-full space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
                 ) : (
-                  <button type="button" key={o.index} className={cn("relative w-full cursor-pointer space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
+                  <button type="button" key={o.index} className={cn("relative w-full cursor-pointer space-y-2 rounded-lg border bg-card px-4 py-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
                 )
               })}
             </div>
