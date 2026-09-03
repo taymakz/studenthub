@@ -13,6 +13,8 @@ import { proxyImage } from "@/lib/image-proxy"
 import { CrownStarIcon } from "./tool-icons"
 import { WeeklySchedule } from "./weekly-schedule"
 import { ExamSchedule } from "./exam-schedule"
+import { MySchedule } from "./my-schedule"
+import { FriendsButton } from "./friends-button"
 import { GradeCalculator } from "./grade-calculator"
 
 /**
@@ -72,10 +74,13 @@ export function ProfileHeader() {
 
         {/* Tools */}
         <div className="mx-auto grid max-w-80 grid-cols-3 items-center gap-4">
-          <WeeklySchedule />
-          <ExamSchedule />
+          <MySchedule />
+          <FriendsButton />
           <GradeCalculator />
         </div>
+        {/* Schedule drawers stay mounted — opened via events from برنامه من */}
+        <WeeklySchedule hideTrigger />
+        <ExamSchedule hideTrigger />
       </div>
     </header>
   )

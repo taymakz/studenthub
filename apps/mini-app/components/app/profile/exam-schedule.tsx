@@ -1,6 +1,6 @@
 "use client"
 
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 
 import {
   Drawer,
@@ -45,8 +45,15 @@ function groupByExamDate(notedOfferings: Offering[]) {
   })
 }
 
-export function ExamSchedule() {
+export const OPEN_EXAM_SCHEDULE_EVENT = "open-exam-schedule"
+
+export function ExamSchedule({ hideTrigger = false }: { hideTrigger?: boolean }) {
   const [open, setOpen] = useState(false)
+  useEffect(() => {
+    const handler = () => setOpen(true)
+    window.addEventListener(OPEN_EXAM_SCHEDULE_EVENT, handler)
+    return () => window.removeEventListener(OPEN_EXAM_SCHEDULE_EVENT, handler)
+  }, [])
   const { notedOfferings, isLoading, enabled } = useNotedOfferings()
   const user = useProfileStore((s) => s.user)
   const profile = useProfileStore((s) => s.profile)
@@ -85,9 +92,11 @@ export function ExamSchedule() {
   return (
     <>
       <Drawer open={open} onOpenChange={setOpen}>
-        <DrawerTrigger
-          render={<ToolButton title="برنامه امتحانی" icon={CalendarExamIcon} />}
-        />
+        {!hideTrigger && (
+          <DrawerTrigger
+            render={<ToolButton title="برنامه امتحانی" icon={CalendarExamIcon} />}
+          />
+        )}
         <DrawerPopup variant="inset" showBar>
           <DrawerHeader>
             <DrawerTitle>برنامه امتحانی</DrawerTitle>

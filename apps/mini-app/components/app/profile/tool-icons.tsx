@@ -2,10 +2,12 @@
 
 import type { ComponentType } from "react"
 import {
+  Calendar,
   CalendarDays,
   CalendarSearch3,
   Calculator2,
   CrownStar,
+  Users,
 } from "reicon-react"
 
 /**
@@ -34,3 +36,5 @@ export const CalendarWeekIcon = makeIcon(CalendarDays)
 export const CalendarExamIcon = makeIcon(CalendarSearch3)
 export const CalculatorGradeIcon = makeIcon(Calculator2)
 export const CrownStarIcon = makeIcon(CrownStar)
+export const MyScheduleIcon = makeIcon(Calendar)
+export const FriendsIcon = makeIcon(Users)
