@@ -53,5 +53,16 @@
       "BAHMAN"
     ],
     "path": "universities/azad-malard/majors/computer-engineering/charts/bachelors-degree/[1400-1401]/both.json"
+  },
+  {
+    "uniSlug": "azad-malard",
+    "majorSlug": "english-translation",
+    "degreeSlug": "bachelors-degree",
+    "yearDir": "[1400-1405]",
+    "semesters": [
+      "MEHR",
+      "BAHMAN"
+    ],
+    "path": "universities/azad-malard/majors/english-translation/charts/bachelors-degree/[1400-1405]/both.json"
   }
 ]

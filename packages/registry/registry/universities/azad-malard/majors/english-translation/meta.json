@@ -1,0 +1,9 @@
+{
+  "$schema": "../../../../../schemas/major.json",
+  "type": "major",
+  "slug": "english-translation",
+  "name": {
+    "fa": "مترجمی زبان انگلیسی",
+    "en": "English Translation"
+  }
+}
