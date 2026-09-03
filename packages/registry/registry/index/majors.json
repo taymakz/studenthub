@@ -36,5 +36,24 @@
         "maxTermCount": 12
       }
     ]
+  },
+  {
+    "uniSlug": "azad-malard",
+    "slug": "english-translation",
+    "name": {
+      "fa": "مترجمی زبان انگلیسی",
+      "en": "English Translation"
+    },
+    "degrees": [
+      {
+        "slug": "bachelors-degree",
+        "name": {
+          "fa": "کارشناسی پیوسته",
+          "en": "Bachelor's degree"
+        },
+        "termCount": 8,
+        "maxTermCount": 12
+      }
+    ]
   }
 ]

@@ -108,6 +108,18 @@
     ]
   },
   {
+    "name": "آزمون سازی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "آزمون نرم افزار",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -120,6 +132,42 @@
     ]
   },
   {
+    "name": "آشنایی با ادبیات تطبیقی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آشنایی با بازار ترجمه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آشنایی با شعر انگلیسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "آشنایی با صنعت کامپیوتر (کاربینی)",
     "theoreticalUnits": 1,
     "practicalUnits": 0,
@@ -127,6 +175,30 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آشنایی با محیط های ترجمه شفاهی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "آشنایی با نثر انگلیسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -181,6 +253,47 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ادبیات پایداری",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ادبیات کودک و نوجوان",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ادبیات معاصر فارسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -228,6 +341,42 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اصول و راهکارهای ترجمه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اصول و روش تحقیق",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "اصول و روش تدریس",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -294,6 +443,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -311,6 +465,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -322,6 +481,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -340,6 +504,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -356,6 +525,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -380,6 +554,30 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "بررسی آثار ترجمه شده اسلامی (1)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "بررسی آثار ترجمه شده اسلامی (2)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -433,6 +631,18 @@
     ]
   },
   {
+    "name": "پروژه کارورزی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "پروژه نرم افزار",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -440,6 +650,18 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "پژوهش در مطالعات ترجمه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -470,6 +692,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -487,6 +714,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -498,6 +730,18 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "تحلیل مقابله ای ساخت فارسی و انگلیسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -540,6 +784,191 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه ادبیات",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه اسناد رسمی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه اصطلاحات و عناصرفرهنگی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه تشریحی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه دیداری-شنیداری",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه شفاهی پیاپی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه شفاهی همزمان",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه قراردادها و مکاتبات تجاری",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه متون اسلامی از انگلیسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه متون اسلامی از فارسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه متون رسانه ای و مطبوعاتی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه متون علمی و تخصصی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه متون علوم انسانی از انگلیسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه متون علوم انسانی از فارسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ترجمه و فناوری",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -556,6 +985,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -765,6 +1199,54 @@
     ]
   },
   {
+    "name": "حوزه های نوین ترجمه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "خواندن انگلیسی پایه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "خواندن انگلیسی پیشرفته",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "خواندن متون رسانه ای و مطبوعاتی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "داده ساختارها و الگوریتم ها",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -772,6 +1254,18 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "داستان کوتاه و رمان در ادبیات انگلیسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -789,6 +1283,35 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "دستور انگلیسی پایه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "دستور انگلیسی پیشرفته",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -818,6 +1341,18 @@
     ]
   },
   {
+    "name": "روزنامه نگاری الکترونیک",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "روش پژوهش و ارایه",
     "theoreticalUnits": 2,
     "practicalUnits": 0,
@@ -837,6 +1372,18 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "روش تدریس مهارتها",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -1090,6 +1637,30 @@
     ]
   },
   {
+    "name": "زبانشناسی کاربردی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ساخت زبان فارسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "ساختمان های داده",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -1223,6 +1794,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1239,6 +1815,23 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "فن بیان",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -1369,6 +1962,18 @@
     ]
   },
   {
+    "name": "کیفیت سنجی ترجمه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "گرافیک کامپیوتری",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -1477,6 +2082,18 @@
     ]
   },
   {
+    "name": "مبانی زبان شناسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "مبانی سازمان و کسب و کار",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -1496,6 +2113,18 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مبانی نظری ترجمه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -1609,6 +2238,18 @@
     ]
   },
   {
+    "name": "مکاتبات انگلیسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "مکاتبات تجاری و گزارش نویسی",
     "theoreticalUnits": 1,
     "practicalUnits": 1,
@@ -1616,6 +2257,42 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مهارت های شنیداری و گفتاری پایه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مهارت های شنیداری و گفتاری پیشرفته",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مهارت های مطالعه و یادگیری",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -1681,6 +2358,54 @@
     ]
   },
   {
+    "name": "نگارش انگلیسی پایه",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "نگارش انگلیسی پیشرفته",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "نگارش فارسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "واژه شناسی و اصطلاح شناسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "ورزش 1",
     "theoreticalUnits": 0,
     "practicalUnits": 1,
@@ -1693,6 +2418,23 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "ویرایش فارسی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-malard",
+        "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
       }
     ]

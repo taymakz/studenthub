@@ -1,0 +1,588 @@
+{
+  "isCompleted": true,
+  "terms": {
+    "1": [
+      {
+        "name": "خواندن انگلیسی پایه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "دستور انگلیسی پایه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "مهارت های شنیداری و گفتاری پایه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "مهارت های مطالعه و یادگیری",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "نگارش انگلیسی پایه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "انس با قرآن کریم",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "تربیت بدنی",
+        "theoreticalUnits": 0.5,
+        "practicalUnits": 0.5,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "اندیشه های امامین انقلاب اسلامی و وصایای حضرت امام خمینی(ره)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ],
+    "2": [
+      {
+        "name": "خواندن انگلیسی پیشرفته",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "خواندن انگلیسی پایه"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "دستور انگلیسی پیشرفته",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "دستور انگلیسی پایه"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "مهارت های شنیداری و گفتاری پیشرفته",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مهارت های شنیداری و گفتاری پایه"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "نگارش انگلیسی پیشرفته",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "نگارش انگلیسی پایه"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "نگارش فارسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ادبیات کودک و نوجوان",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ورزش 1",
+        "theoreticalUnits": 0,
+        "practicalUnits": 1,
+        "prerequisites": [
+          "تربیت بدنی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "فارسی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ],
+    "3": [
+      {
+        "name": "مکاتبات انگلیسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "نگارش انگلیسی پیشرفته"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "داستان کوتاه و رمان در ادبیات انگلیسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "خواندن انگلیسی پیشرفته"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "ساخت زبان فارسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "مبانی زبان شناسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "فن بیان",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "اصول و راهکارهای ترجمه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ادبیات معاصر فارسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "علوم و معارف دفاع مقدس و مقاومت",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ],
+    "4": [
+      {
+        "name": "آشنایی با نثر انگلیسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "آشنایی با شعر انگلیسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه و فناوری",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه متون علوم انسانی از انگلیسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اصول و راهکارهای ترجمه"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "زبانشناسی کاربردی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مبانی زبان شناسی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "خواندن متون رسانه ای و مطبوعاتی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "خواندن انگلیسی پیشرفته"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "ادبیات پایداری",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ویرایش فارسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ساخت زبان فارسی"
+        ],
+        "corequisites": []
+      }
+    ],
+    "5": [
+      {
+        "name": "ترجمه متون علوم انسانی از فارسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه متون علوم انسانی از انگلیسی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه دیداری-شنیداری",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه و فناوری",
+          "اصول و راهکارهای ترجمه"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه اصطلاحات و عناصرفرهنگی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه و فناوری",
+          "اصول و راهکارهای ترجمه"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "بررسی آثار ترجمه شده اسلامی (1)",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "مبانی نظری ترجمه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "زبانشناسی کاربردی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "آشنایی با بازار ترجمه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه متون رسانه ای و مطبوعاتی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "واژه شناسی و اصطلاح شناسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مبانی زبان شناسی"
+        ],
+        "corequisites": []
+      }
+    ],
+    "6": [
+      {
+        "name": "بررسی آثار ترجمه شده اسلامی (2)",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "بررسی آثار ترجمه شده اسلامی (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه شفاهی پیاپی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "تحلیل مقابله ای ساخت فارسی و انگلیسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مبانی زبان شناسی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "اصول و روش تدریس",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "حوزه های نوین ترجمه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اصول و راهکارهای ترجمه",
+          "ترجمه و فناوری"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "روزنامه نگاری الکترونیک",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "خواندن متون رسانه ای و مطبوعاتی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه تشریحی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه متون علوم انسانی از فارسی"
+        ],
+        "corequisites": []
+      }
+    ],
+    "7": [
+      {
+        "name": "ترجمه متون اسلامی از فارسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "بررسی آثار ترجمه شده اسلامی (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه شفاهی همزمان",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه شفاهی پیاپی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "روش تدریس مهارتها",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اصول و روش تدریس"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "آزمون سازی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اصول و روش تدریس"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "اصول و روش تحقیق",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه اسناد رسمی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه متون علوم انسانی از فارسی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه ادبیات",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اصول و راهکارهای ترجمه",
+          "ترجمه و فناوری"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "آشنایی با ادبیات تطبیقی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ],
+    "8": [
+      {
+        "name": "ترجمه متون اسلامی از انگلیسی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه متون اسلامی از فارسی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "آشنایی با محیط های ترجمه شفاهی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه شفاهی همزمان"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "کیفیت سنجی ترجمه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "پروژه کارورزی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه اسناد رسمی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "پژوهش در مطالعات ترجمه",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اصول و روش تحقیق"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه متون علمی و تخصصی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه و فناوری",
+          "اصول و راهکارهای ترجمه"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "ترجمه قراردادها و مکاتبات تجاری",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ترجمه اسناد رسمی"
+        ],
+        "corequisites": []
+      }
+    ]
+  },
+  "moaref": [
+    {
+      "name": "اندیشه اسلامی 1 (مبدا ومعاد)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "اندیشه اسلامی 2 (نبوت و امامت)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [
+        "اندیشه اسلامی 1 (مبدا ومعاد)"
+      ],
+      "corequisites": []
+    },
+    {
+      "name": "اخلاق اسلامی (مبانی و مفاهیم)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "انقلاب اسلامی ایران",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "تاریخ فرهنگ و تمدن اسلام و ایران",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "تاریخ تحلیلی صدر اسلام",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "تفسیر موضوعی نهج البلاغه",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "دانش خانواده و جمعیت",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    }
+  ],
+  "unknown": [],
+  "electives": {}
+}
