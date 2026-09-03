@@ -25,6 +25,8 @@ import { cn } from "@workspace/ui/lib/utils"
 
 import { SettingsRow } from "@/components/app/theme/settings-row"
 import { CourseCard } from "@/components/app/courses/course-card"
+import { CourseDetailDrawer } from "@/components/app/courses/course-detail-drawer"
+import { ProfessorDrawer } from "@/components/app/courses/professor-drawer"
 import { useNotedSort } from "@/components/app/courses/noted/use-noted-sort"
 import { ExamGroups } from "@/components/app/profile/exam/exam-groups"
 import { WeeklyGroups } from "@/components/app/profile/weekly/weekly-groups"
@@ -347,7 +349,7 @@ function WeeklyBody({
 }) {
   if (loading) return <FriendsLoading />
   if (groups.length === 0) return <OfferingsEmpty enabled isLoading={false} />
-  return <WeeklyGroups groups={groups} onSelect={() => {}} />
+  return <WeeklyGroups groups={groups} readOnly />
 }
 
 function ExamBody({
@@ -359,7 +361,7 @@ function ExamBody({
 }) {
   if (loading) return <FriendsLoading />
   if (groups.length === 0) return <OfferingsEmpty enabled isLoading={false} />
-  return <ExamGroups groups={groups} onSelect={() => {}} />
+  return <ExamGroups groups={groups} readOnly />
 }
 
 function DangerConfirm({
@@ -390,6 +392,102 @@ function DangerConfirm({
       pending={pending}
       onConfirm={onConfirm}
     />
+  )
+}
+
+/**
+ * Friend's noted list (viewer-term filtered): same CourseCards as /courses.
+ * A card opens the standard detail drawer with MY note toggle, but only when
+ * the course is adoptable — same university + major + selected semester +
+ * entry year as me, and the index exists in my own offerings (the drawer
+ * itself additionally enforces the courses-page fresh-term check).
+ */
+function FriendNotedBody({
+  items,
+  friendProfile,
+}: {
+  items: Offering[]
+  friendProfile: FriendDetailData["profile"]
+}) {
+  const myProfile = useProfileStore((s) => s.profile)
+  const myOfferings = useProfileStore((s) => s.offerings)
+  const myNoted = useProfileStore((s) => s.noted)
+  const myPassed = useProfileStore((s) => s.passed)
+  const myTermCode = useProfileStore((s) => s.termCode)
+  const [selected, setSelected] = useState<Offering | null>(null)
+  const [professor, setProfessor] = useState<{
+    name: string
+    uni: string
+    major: string
+  } | null>(null)
+
+  const sameContext =
+    !!friendProfile?.universitySlug &&
+    !!myProfile?.universitySlug &&
+    friendProfile.universitySlug === myProfile.universitySlug &&
+    friendProfile.majorSlug === myProfile.majorSlug &&
+    friendProfile.currentSemesterCode === myTermCode &&
+    (friendProfile.entryYearRange ?? null) ===
+      (myProfile.entryYearRange ?? null)
+
+  // React Compiler memoizes this automatically (no manual useMemo).
+  const myIndexes = new Set(myOfferings.map((m) => m.index))
+  const isMine = (o: Offering) =>
+    myNoted.some((n) => !n.isDeleted && n.courseIndex === o.index)
+  const isPassed = (o: Offering) =>
+    myPassed.some((p) => p.courseName === o.courseName)
+
+  if (items.length === 0) {
+    return <FriendsEmpty message="درسی در لیست یادداشت این نیم‌سال نیست." />
+  }
+
+  return (
+    <>
+      <div className="space-y-4">
+        {items.map((o) => (
+          <CourseCard
+            key={o.index}
+            offering={o}
+            viewMode="full"
+            onSelect={(c) => {
+              if (sameContext && myIndexes.has(c.index)) setSelected(c)
+            }}
+            flags={{ noted: isMine(o), passed: isPassed(o), new: false }}
+          />
+        ))}
+      </div>
+
+      <CourseDetailDrawer
+        offering={selected}
+        isNoted={selected ? isMine(selected) : false}
+        isPassed={selected ? isPassed(selected) : false}
+        isNew={false}
+        open={!!selected}
+        onOpenChange={(o) => !o && setSelected(null)}
+        onToggleNote={(index) => useProfileStore.getState().toggleNote(index)}
+        onTogglePassed={(name) => useProfileStore.getState().togglePassed(name)}
+        onOpenProfessor={(name) =>
+          setProfessor({
+            name,
+            uni: myProfile?.universitySlug ?? "",
+            major: myProfile?.majorSlug ?? "",
+          })
+        }
+        onSelectCourse={(course) => setSelected(course)}
+      />
+      <ProfessorDrawer
+        open={!!professor}
+        onOpenChange={(o) => !o && setProfessor(null)}
+        professorName={professor?.name ?? ""}
+        uni={professor?.uni ?? ""}
+        major={professor?.major ?? ""}
+        currentCourseIndex={selected?.index ?? null}
+        onCourseSelected={(course) => {
+          setProfessor(null)
+          setSelected(course)
+        }}
+      />
+    </>
   )
 }
 
@@ -499,21 +597,10 @@ export function FriendDetailDrawer({
             : fullName
         }
       >
-        {sortedNoted.length === 0 ? (
-          <FriendsEmpty message="درسی در لیست یادداشت این نیم‌سال نیست." />
-        ) : (
-          <div className="space-y-4">
-            {sortedNoted.map((o) => (
-              <CourseCard
-                key={o.index}
-                offering={o}
-                viewMode="full"
-                onSelect={() => {}}
-                flags={{ noted: true, passed: false, new: false }}
-              />
-            ))}
-          </div>
-        )}
+        <FriendNotedBody
+          items={sortedNoted}
+          friendProfile={detail.data?.profile ?? null}
+        />
       </NestedDrawer>
 
       <NestedDrawer
