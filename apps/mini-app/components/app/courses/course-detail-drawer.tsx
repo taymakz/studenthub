@@ -221,6 +221,14 @@ export function CourseDetailDrawer({
         onOpenChange={setStudentsOpen}
         onParentClose={() => onOpenChange(false)}
       />
+
+      {/* Friend classmates nested drawer */}
+      <StudentsDrawer
+        offering={o}
+        open={friendsOpen}
+        onOpenChange={setFriendsOpen}
+        friendsOnly
+      />
     </>
   )
 }

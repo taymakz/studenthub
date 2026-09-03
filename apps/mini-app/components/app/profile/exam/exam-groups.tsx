@@ -52,15 +52,18 @@ export function ExamGroups({
                   <button type="button" className={cn("relative flex w-full cursor-pointer flex-col gap-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
                 )
                 return (
-                  <div key={o.index} className="relative">
-                    {row}
+                  <div key={o.index}>
                     {mates && mates.count > 0 && (
-                      <FriendFaces
-                        sample={mates.sample}
-                        count={mates.count}
-                        onClick={() => onMatesClick?.(o)}
-                      />
+                      <div className="mb-1 flex justify-start">
+                        <FriendFaces
+                          sample={mates.sample}
+                          count={mates.count}
+                          onClick={() => onMatesClick?.(o)}
+                          className="static"
+                        />
+                      </div>
                     )}
+                    {row}
                   </div>
                 )
               })}

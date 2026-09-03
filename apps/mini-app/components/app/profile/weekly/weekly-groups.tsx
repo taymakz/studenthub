@@ -47,15 +47,18 @@ export function WeeklyGroups({
                   <button type="button" className={cn("relative w-full cursor-pointer space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
                 )
                 return (
-                  <div key={o.index} className="relative">
-                    {row}
+                  <div key={o.index}>
                     {mates && mates.count > 0 && (
-                      <FriendFaces
-                        sample={mates.sample}
-                        count={mates.count}
-                        onClick={() => onMatesClick?.(o)}
-                      />
+                      <div className="mb-1 flex justify-start">
+                        <FriendFaces
+                          sample={mates.sample}
+                          count={mates.count}
+                          onClick={() => onMatesClick?.(o)}
+                          className="static"
+                        />
+                      </div>
                     )}
+                    {row}
                   </div>
                 )
               })}
