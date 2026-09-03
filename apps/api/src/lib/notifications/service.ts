@@ -9,12 +9,14 @@ import {
   notedCourses,
   notificationBatches,
   notificationMessages,
+  offeringNotifyBaselines,
   passedCourses,
   universityProfiles,
   users,
 } from "@workspace/db/schema"
 import {
   type ChartCourse,
+  type OfferingDoc,
   getChart,
   getOfferingDiff,
   getOfferings,
@@ -23,10 +25,14 @@ import {
   yearDirectoryCovers,
 } from "@workspace/registry"
 import type { Semester } from "@workspace/registry"
-import { randomUUID } from "node:crypto"
 
 import { db } from "@/lib/db"
 import { calculateOfferingChanges, diffSummary } from "@/lib/notifications/diff"
+import {
+  contentDiffUuid,
+  diffFileMatchesLive,
+  snapshotContentHash,
+} from "@/lib/notifications/diff-identity"
 import {
   renderAnnouncementMessage,
   renderCourseChangeMessage,
@@ -91,33 +97,77 @@ export async function detectAndCreateBatch(
     input.semester
   )
 
-  const diff = calculateOfferingChanges(current, previous)
+  // Baseline = content already turned into a batch for this term. The DB row
+  // wins (already-notified content); otherwise the CI-rotated old.json
+  // (legacy). Diffing against the baseline — not the possibly-stale old.json
+  // — is what keeps delete/edit/detect incremental without rotation.
+  const [baselineRow] = await db
+    .select()
+    .from(offeringNotifyBaselines)
+    .where(
+      and(
+        eq(offeringNotifyBaselines.universitySlug, input.universitySlug),
+        eq(offeringNotifyBaselines.majorSlug, input.majorSlug),
+        eq(offeringNotifyBaselines.year, String(input.year)),
+        eq(offeringNotifyBaselines.semester, input.semester)
+      )
+    )
+    .limit(1)
+  const diskEmpty =
+    !previous || (previous.offerings?.length ?? 0) === 0
+  if (!baselineRow && diskEmpty) {
+    // First snapshot (or placeholder term): anchor silently, never notify
+    // "everything was added".
+    await upsertNotifyBaseline(input, current)
+    throw new Error("NO_CHANGES")
+  }
+  const baseDoc: OfferingDoc = baselineRow
+    ? {
+        year: input.year,
+        semester: input.semester,
+        scrapedAt: "",
+        offerings: baselineRow.offerings as OfferingDoc["offerings"],
+      }
+    : (previous as OfferingDoc)
+
+  const diff = calculateOfferingChanges(current, baseDoc)
   const summary = diffSummary(diff)
 
-  // First snapshots have no baseline - notifying "everything was added" would
-  // be noise; the old system only notified on real updates too.
-  if (!previous || summary.added + summary.removed + summary.changed === 0) {
+  if (summary.added + summary.removed + summary.changed === 0) {
+    // Nothing pending: anchor the baseline so the next real change diffs
+    // incrementally even if old.json never rotates.
+    await upsertNotifyBaseline(input, current)
     throw new Error("NO_CHANGES")
   }
 
-  // UUID from diff.json is the source of truth (sync script generates fresh UUID per new.json change).
-  // If diff.json missing (legacy term), fallback to summary hash.
+  // Identity: diff.json's random UUID only when the file describes exactly
+  // this content; otherwise a deterministic content UUID. A stale file must
+  // never lend its UUID to new content, or completion/dedup misfires and
+  // deleted batches resurrect combined with new changes.
   const diffDoc = getOfferingDiff(
     input.universitySlug,
     input.majorSlug,
     input.year,
     input.semester
   )
-  const diffIdFromDoc = diffDoc?.id ?? null
-  // Check completed diffs table - once a UUID is marked completed it never shows again
-  if (diffIdFromDoc) {
-    const [completed] = await db
-      .select({ diffId: completedOfferingDiffs.diffId })
-      .from(completedOfferingDiffs)
-      .where(eq(completedOfferingDiffs.diffId, diffIdFromDoc))
-      .limit(1)
-    if (completed) throw new Error("NO_CHANGES")
-  }
+  const fileFresh = !!diffDoc && diffFileMatchesLive(diff, diffDoc)
+  const contentUuid = contentDiffUuid(baseDoc, current)
+  const candidateIds =
+    fileFresh && diffDoc ? [diffDoc.id, contentUuid] : [contentUuid]
+
+  const [existingBatch] = await db
+    .select({ id: notificationBatches.id })
+    .from(notificationBatches)
+    .where(inArray(notificationBatches.diffId, candidateIds))
+    .limit(1)
+  if (existingBatch) throw new Error("NO_CHANGES")
+
+  const [completed] = await db
+    .select({ diffId: completedOfferingDiffs.diffId })
+    .from(completedOfferingDiffs)
+    .where(inArray(completedOfferingDiffs.diffId, candidateIds))
+    .limit(1)
+  if (completed) throw new Error("NO_CHANGES")
 
   const affected = new Set<string>()
   for (const o of diff.added) affected.add(o.index)
@@ -186,14 +236,9 @@ export async function detectAndCreateBatch(
 
   const label = `${input.year}/${input.semester.toLowerCase()}`
   const title = `تغییرات ارائه‌ها - ${input.universitySlug}/${input.majorSlug} (${label})`
-  // Prefer diff.json UUID; fallback to randomUUID for legacy terms without diff.json
-  const diffDocForId = getOfferingDiff(
-    input.universitySlug,
-    input.majorSlug,
-    input.year,
-    input.semester
-  )
-  const diffId = diffDocForId?.id ?? randomUUID()
+  // Identity resolved above: fresh file UUID, else deterministic content UUID.
+  const diffId =
+    fileFresh && diffDoc ? diffDoc.id : contentDiffUuid(baseDoc, current)
 
   const includeGreeting = input.includeGreeting ?? true
   const greetingTemplate = input.greetingTemplate?.trim() || "سلام {name} عزیز"
@@ -290,7 +335,48 @@ export async function detectAndCreateBatch(
     await db.insert(notificationMessages).values(rows.slice(i, i + 500))
   }
 
+  // Advance the baseline to what we just notified about (crash-safe: only
+  // after the batch + messages committed, so a failure retries cleanly).
+  await upsertNotifyBaseline(input, current)
+
   return { batch, summary, recipients: recipients.length }
+}
+
+/** Anchor a term's notified baseline (content snapshot). Idempotent. */
+async function upsertNotifyBaseline(
+  input: Pick<
+    DetectInput,
+    "universitySlug" | "majorSlug" | "year" | "semester"
+  >,
+  current: OfferingDoc
+): Promise<void> {
+  const hash = snapshotContentHash(current)
+  await db
+    .insert(offeringNotifyBaselines)
+    .values({
+      universitySlug: input.universitySlug,
+      majorSlug: input.majorSlug,
+      year: String(input.year),
+      semester: input.semester,
+      contentHash: hash,
+      offerings: current.offerings as unknown[],
+      notifiedAt: new Date(),
+      updatedAt: new Date(),
+    })
+    .onConflictDoUpdate({
+      target: [
+        offeringNotifyBaselines.universitySlug,
+        offeringNotifyBaselines.majorSlug,
+        offeringNotifyBaselines.year,
+        offeringNotifyBaselines.semester,
+      ],
+      set: {
+        contentHash: hash,
+        offerings: current.offerings as unknown[],
+        notifiedAt: new Date(),
+        updatedAt: new Date(),
+      },
+    })
 }
 
 export async function detectAllAndCreateBatches(

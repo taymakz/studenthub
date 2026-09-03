@@ -1,6 +1,12 @@
 import { apiClient } from "@/lib/api/client"
 
 export type InlineButton = { text: string; url: string }
+
+export type PreparedMedia = {
+  fileId: string
+  mediaType: "photo" | "video" | "document"
+  sizeBytes: number
+}
 export type TelegramPayload = {
   chatId?: number
   text: string
@@ -22,6 +28,45 @@ export type TelegramPayload = {
 }
 
 export const telegramService = {
+  /**
+   * One-time media intake: presigned Supabase PUT (browser uploads direct,
+   * bypassing the serverless body limit).
+   */
+  async presignUpload(input: {
+    fileName: string
+    mimeType?: string
+    sizeBytes: number
+  }): Promise<{ uploadUrl: string; key: string }> {
+    const res = await apiClient.post<{ uploadUrl: string; key: string }>(
+      "/admin/uploads/presign",
+      input
+    )
+    return res.data
+  },
+  /**
+   * Push a Supabase object (or download URL) into the private STORAGE topic
+   * and get back a file_id the broadcast reuses for every recipient. The
+   * Supabase object is deleted right after (one-time). The file_id persists
+   * on the batch payload, so pause/unpause and page refreshes never re-upload.
+   */
+  async prepareMedia(input: {
+    key?: string
+    url?: string
+    mediaType: "photo" | "video" | "document"
+    fileName?: string
+  }): Promise<PreparedMedia> {
+    const res = await apiClient.post<PreparedMedia>(
+      "/admin/uploads/prepare",
+      input
+    )
+    return res.data
+  },
+  /** Best-effort orphan cleanup (e.g. cancelled uploads). Idempotent. */
+  async deleteUploadObject(key: string): Promise<void> {
+    await apiClient.delete(
+      `/admin/uploads/object?key=${encodeURIComponent(key)}`
+    )
+  },
   async sendSingle(payload: TelegramPayload & { chatId: number }) {
     const hasFile = Boolean(
       payload.photoFile || payload.videoFile || payload.documentFile
@@ -136,6 +181,10 @@ export const telegramService = {
       if (payload.parseMode) fd.set("parseMode", payload.parseMode)
       if (payload.photoUrl) fd.set("photoUrl", payload.photoUrl)
       if (payload.videoUrl) fd.set("videoUrl", payload.videoUrl)
+      if (payload.photoFileId) fd.set("photoFileId", payload.photoFileId)
+      if (payload.videoFileId) fd.set("videoFileId", payload.videoFileId)
+      if (payload.documentFileId)
+        fd.set("documentFileId", payload.documentFileId)
       if (payload.documentUrl) fd.set("documentUrl", payload.documentUrl)
       if (payload.buttons?.length)
         fd.set("buttons", JSON.stringify(payload.buttons))
@@ -187,6 +236,9 @@ export const telegramService = {
       photoUrl: payload.photoUrl ?? undefined,
       videoUrl: payload.videoUrl ?? undefined,
       documentUrl: payload.documentUrl ?? undefined,
+      photoFileId: payload.photoFileId ?? undefined,
+      videoFileId: payload.videoFileId ?? undefined,
+      documentFileId: payload.documentFileId ?? undefined,
       buttons: payload.buttons ?? undefined,
       disablePreview: payload.disablePreview ?? undefined,
     } as any)

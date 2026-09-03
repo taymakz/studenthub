@@ -7,6 +7,7 @@ import {
   jsonb,
   pgEnum,
   pgTable,
+  primaryKey,
   text,
   timestamp,
   unique,
@@ -160,4 +161,51 @@ export const notificationMessages = pgTable(
 export type NotificationMessage = InferSelectModel<typeof notificationMessages>
 export type NewNotificationMessage = InferInsertModel<
   typeof notificationMessages
+>
+
+/**
+ * Last snapshot content per term that the detect pipeline already turned
+ * into a batch. Detect diffs new.json against THIS (not old.json), so
+ * deleting a batch and editing new.json can never resurrect already-seen
+ * changes as a "combined" batch — no registry rotation required.
+ * First runs fall back to old.json and seed the row implicitly.
+ */
+export const offeringNotifyBaselines = pgTable(
+  "offering_notify_baselines",
+  {
+    universitySlug: varchar("university_slug", { length: 128 }).notNull(),
+    majorSlug: varchar("major_slug", { length: 128 }).notNull(),
+    year: varchar("year", { length: 8 }).notNull(),
+    semester: varchar("semester", { length: 16 }).notNull(),
+
+    /** Canonical content hash (see lib/notifications/diff-identity). */
+    contentHash: varchar("content_hash", { length: 64 }).notNull(),
+    /** Full snapshot the hash was computed from (JSON array of offerings). */
+    offerings: jsonb("offerings").notNull().$type<unknown[]>(),
+
+    notifiedAt: timestamp("notified_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .notNull()
+      .defaultNow(),
+  },
+  (table) => [
+    primaryKey({
+      columns: [
+        table.universitySlug,
+        table.majorSlug,
+        table.year,
+        table.semester,
+      ],
+      name: "offering_notify_baselines_pkey",
+    }),
+  ]
+)
+
+export type OfferingNotifyBaseline = InferSelectModel<
+  typeof offeringNotifyBaselines
+>
+export type NewOfferingNotifyBaseline = InferInsertModel<
+  typeof offeringNotifyBaselines
 >

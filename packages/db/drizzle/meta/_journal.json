@@ -15,6 +15,13 @@
       "when": 1788418002341,
       "tag": "0001_material_kylun",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788457900855,
+      "tag": "0002_illegal_wolverine",
+      "breakpoints": true
     }
   ]
 }
