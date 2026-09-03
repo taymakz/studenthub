@@ -1,59 +1,46 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { ChevronRight, UserPlus } from "lucide-react"
+import { AnimatePresence, m } from "motion/react"
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@workspace/ui/components/avatar"
+import { Badge } from "@workspace/ui/components/badge"
 import { Button } from "@workspace/ui/components/button"
-import { CopyButton } from "@workspace/ui/components/copy-button"
+import { CopyStateIcon } from "@workspace/ui/components/copy-button"
 import { Skeleton } from "@workspace/ui/components/skeleton"
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@workspace/ui/components/tabs"
-import { toastManager } from "@workspace/ui/components/toast"
+import { Tabs, TabsList, TabsTrigger } from "@workspace/ui/components/tabs"
 import { useCopyToClipboard } from "@workspace/ui/hooks/use-copy-to-clipboard"
-import { cn } from "@workspace/ui/lib/utils"
 
 import ContentLayout from "@/components/app/content-layout"
-import { proxyImage } from "@/lib/image-proxy"
 import { useProfileStore } from "@/stores/profile-store"
-import { CrownStarIcon } from "@/components/app/profile/tool-icons"
 import { AddFriendDrawer } from "@/components/app/friends/add-friend-drawer"
 import { FriendsTab, PendingTab } from "@/components/app/friends/friends-lists"
 import { FriendsSettings } from "@/components/app/friends/friends-settings"
 import { useFriendsSummary } from "@/components/app/friends/use-friends-data"
+import { ProfileIdentity } from "@/components/app/profile/profile-identity"
 
 type FriendsTabKey = "friends" | "pending" | "settings"
 
+/** 3-digit comma separator for the friend id (5725800953 -> 5,725,800,953). */
+function formatFriendId(id: number): string {
+  return id.toLocaleString("en-US")
+}
+
 /**
  * Profile-like header (just like /profile): avatar + name, with the friend
- * ID + copy below it. Tapping the id or the copy button copies it.
+ * ID below it. The whole ID pill copies on tap; the icon morphs to a check.
  */
 function FriendsHeader({ onBack }: { onBack: () => void }) {
   const user = useProfileStore((s) => s.user)
   const profile = useProfileStore((s) => s.profile)
   const hydrated = useProfileStore((s) => s.hydrated)
   const gender = profile?.gender ?? null
-  const { copyToClipboard } = useCopyToClipboard()
-
-  const fullName = [user?.firstName, user?.lastName].filter(Boolean).join(" ")
+  const { copyToClipboard, isCopied } = useCopyToClipboard()
 
   const copy = () => {
     if (!user) return
     copyToClipboard(String(user.id))
-    toastManager.add({
-      type: "success",
-      title: "کپی شد!",
-      data: { variant: "x" },
-    })
   }
 
   return (
@@ -71,68 +58,25 @@ function FriendsHeader({ onBack }: { onBack: () => void }) {
           </Button>
         </div>
 
-        {/* Avatar with gender gradient ring (same as /profile) */}
-        <div className="relative mx-auto mb-4 size-fit overflow-hidden rounded-full p-0.75">
-          <div
-            className={cn(
-              "animated-gradient-bg absolute inset-0 rounded-full",
-              gender === "MALE" ? "gradient-male" : "gradient-female"
-            )}
-          />
-          <div className="relative z-10 size-22 overflow-hidden rounded-full">
-            {!hydrated ? (
-              <Skeleton className="size-full rounded-full bg-muted" />
-            ) : (
-              <Avatar className="size-full rounded-full">
-                <AvatarImage
-                  src={proxyImage(user?.photoUrl) ?? ""}
-                  alt={fullName || "پروفایل"}
-                />
-                <AvatarFallback className="bg-muted text-lg">
-                  {fullName.slice(0, 2) || "پ"}
-                </AvatarFallback>
-              </Avatar>
-            )}
-          </div>
-        </div>
-
-        {/* Name + contributor crown (same as /profile) */}
-        <div className="mb-4 flex items-center justify-center gap-1.5">
-          {user?.isContributor && (
-            <CrownStarIcon className="size-5 text-destructive" />
-          )}
-          <div className="line-clamp-1 h-5 font-medium">
-            {!hydrated ? (
-              <Skeleton className="mx-auto h-5 w-28" />
-            ) : (
-              fullName || "دانشجو"
-            )}
-          </div>
-        </div>
+        <ProfileIdentity user={user} gender={gender} hydrated={hydrated} />
 
         {/* Friend ID below the profile */}
         {!hydrated || !user ? (
-          <Skeleton className="mx-auto h-10 w-44 rounded-full" />
+          <Skeleton className="mx-auto h-10 w-52 rounded-full" />
         ) : (
-          <div className="mx-auto flex w-fit items-center gap-2 rounded-full border bg-card px-4 py-1.5" dir="ltr">
-            <button
-              type="button"
-              onClick={copy}
-              aria-label="کپی شناسه دوستی"
-              className="font-mono text-lg font-semibold tracking-wider transition-transform active:scale-95"
-            >
-              {user.id}
-            </button>
-            <CopyButton
-              text={String(user.id)}
-              label="کپی شناسه"
-              size="icon-xs"
-            />
-          </div>
+          <button
+            type="button"
+            onClick={copy}
+            aria-label="کپی شناسه دوستی"
+            dir="ltr"
+            className="mx-auto flex w-fit cursor-pointer items-center gap-2 rounded-full border bg-card px-4 py-1.5 transition-transform active:scale-95"
+          >
+            <span className="font-mono text-lg font-semibold tracking-wider">
+              {formatFriendId(user.id)}
+            </span>
+            <CopyStateIcon copied={isCopied} />
+          </button>
         )}
-        <p className="mt-2 text-center text-xs opacity-80">
-          این شناسه را به دوستانت بده تا درخواست دوستی بفرستند
-        </p>
       </div>
     </header>
   )
@@ -143,6 +87,12 @@ export default function FriendsPage() {
   const [tab, setTab] = useState<FriendsTabKey>("friends")
   const [addOpen, setAddOpen] = useState(false)
   const summary = useFriendsSummary(true)
+  const { refetch } = summary
+
+  // Counts refresh every time the page opens.
+  useEffect(() => {
+    void refetch()
+  }, [refetch])
 
   const incoming = summary.data?.incomingPendingCount ?? 0
   const friendsCount = summary.data?.friendsCount ?? 0
@@ -170,23 +120,40 @@ export default function FriendsPage() {
           >
             <TabsList className="grid w-full grid-cols-3">
               <TabsTrigger value="friends">
-                دوستان{friendsCount > 0 ? ` ${friendsCount}` : ""}
+                <span className="flex items-center gap-1.5">
+                  دوستان
+                  {friendsCount > 0 && <Badge>{friendsCount}</Badge>}
+                </span>
               </TabsTrigger>
               <TabsTrigger value="pending">
-                در انتظار{incoming > 0 ? ` ${incoming}` : ""}
+                <span className="flex items-center gap-1.5">
+                  در انتظار
+                  {incoming > 0 && <Badge>{incoming}</Badge>}
+                </span>
               </TabsTrigger>
               <TabsTrigger value="settings">تنظیمات</TabsTrigger>
             </TabsList>
-            <TabsContent value="friends" className="pt-3">
-              <FriendsTab />
-            </TabsContent>
-            <TabsContent value="pending" className="pt-3">
-              <PendingTab />
-            </TabsContent>
-            <TabsContent value="settings" className="pt-3">
-              <FriendsSettings />
-            </TabsContent>
           </Tabs>
+
+          <div className="min-h-30">
+            <AnimatePresence mode="wait" initial={false}>
+              <m.div
+                key={tab}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.1 }}
+              >
+                {tab === "friends" ? (
+                  <FriendsTab />
+                ) : tab === "pending" ? (
+                  <PendingTab />
+                ) : (
+                  <FriendsSettings />
+                )}
+              </m.div>
+            </AnimatePresence>
+          </div>
         </div>
       </ContentLayout>
     </div>
