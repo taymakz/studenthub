@@ -1,10 +1,14 @@
 import { zValidator } from "@hono/zod-validator"
 import {
   FRIEND_REQUEST_COOLDOWN_DAYS,
+  failedCourses,
   friendBlocks,
   friendRequests,
   friendships,
   friendshipPair,
+  notedCourses,
+  passedCourses,
+  universityProfiles,
   users,
 } from "@workspace/db/schema"
 import { and, desc, eq, gt, or, sql } from "drizzle-orm"
@@ -20,6 +24,7 @@ import {
   ok,
   parsePagination,
 } from "@/lib/http/common"
+import { sendMessage } from "@/lib/telegram/bot"
 import type { AppEnv } from "@/middleware/auth"
 import { requireUser, withUser } from "@/middleware/auth"
 
@@ -70,13 +75,52 @@ function toFriendCard(row: {
   firstName: string
   lastName: string | null
   photoUrl: string | null
+  telegramUsername: string | null
 }) {
   return {
     id: row.id,
     firstName: row.firstName,
     lastName: row.lastName,
     photoUrl: row.photoUrl,
+    username: row.telegramUsername,
   }
+}
+
+interface PersonInfo {
+  firstName: string
+  lastName: string | null
+  telegramUsername: string | null
+}
+
+/** "First Last (@username)" — only these three fields, nothing else. */
+function personLine(u: PersonInfo): string {
+  const name = [u.firstName, u.lastName].filter(Boolean).join(" ")
+  return u.telegramUsername ? `${name} (@${u.telegramUsername})` : name
+}
+
+/**
+ * Telegram DM notifications for the friend flow. Best-effort: sendMessage
+ * never throws (blocked bot / deleted chat just resolve ok:false), so a
+ * failed DM never breaks the friend action itself.
+ */
+async function notifyFriendRequest(
+  receiver: PersonInfo & { id: number },
+  sender: PersonInfo
+): Promise<void> {
+  await sendMessage(
+    receiver.id,
+    `درخواست دوستی جدید\nاز: ${personLine(sender)}\nبه: ${personLine(receiver)}\nبخش پروفایل ← دوستای من`
+  )
+}
+
+async function notifyFriendAccepted(
+  requester: PersonInfo & { id: number },
+  accepter: PersonInfo
+): Promise<void> {
+  await sendMessage(
+    requester.id,
+    `درخواست دوستی شما پذیرفته شد\nاز: ${personLine(accepter)}\nبه: ${personLine(requester)}`
+  )
 }
 
 export const meFriendRoutes = new Hono<AppEnv>()
@@ -134,6 +178,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
         firstName: users.firstName,
         lastName: users.lastName,
         photoUrl: users.photoUrl,
+        telegramUsername: users.telegramUsername,
         friendsSince: friendships.createdAt,
       })
       .from(friendships)
@@ -180,6 +225,87 @@ export const meFriendRoutes = new Hono<AppEnv>()
       return ok(c, null, "از لیست دوستان حذف شد")
     }
   )
+  .get(
+    "/me/friends/:friendId/detail",
+    zValidator("param", friendIdParamSchema),
+    async (c) => {
+      const user = c.get("user")!
+      const { friendId } = c.req.valid("param")
+
+      // Friends only - no friendship, no detail.
+      const [low, high] = friendshipPair(user.id, friendId)
+      const [friendship] = await db
+        .select()
+        .from(friendships)
+        .where(
+          and(
+            eq(friendships.userLowId, low),
+            eq(friendships.userHighId, high)
+          )
+        )
+        .limit(1)
+      if (!friendship) return notFound(c, "دوست یافت نشد")
+
+      const [friend] = await db
+        .select({
+          id: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          photoUrl: users.photoUrl,
+          telegramUsername: users.telegramUsername,
+        })
+        .from(users)
+        .where(eq(users.id, friendId))
+        .limit(1)
+      if (!friend) return notFound(c, "دوست یافت نشد")
+
+      const [profile] = await db
+        .select({
+          universitySlug: universityProfiles.universitySlug,
+          majorSlug: universityProfiles.majorSlug,
+          currentSemesterCode: universityProfiles.currentSemesterCode,
+        })
+        .from(universityProfiles)
+        .where(eq(universityProfiles.userId, friendId))
+        .limit(1)
+
+      const noted = await db
+        .select({
+          courseIndex: notedCourses.courseIndex,
+          year: notedCourses.year,
+          semester: notedCourses.semester,
+        })
+        .from(notedCourses)
+        .where(
+          and(
+            eq(notedCourses.userId, friendId),
+            eq(notedCourses.isDeleted, false)
+          )
+        )
+        .orderBy(desc(notedCourses.createdAt))
+        .limit(200)
+
+      const passed = await db
+        .select({ courseName: passedCourses.courseName })
+        .from(passedCourses)
+        .where(eq(passedCourses.userId, friendId))
+        .limit(500)
+
+      const failed = await db
+        .select({ courseName: failedCourses.courseName })
+        .from(failedCourses)
+        .where(eq(failedCourses.userId, friendId))
+        .limit(500)
+
+      return ok(c, {
+        user: toFriendCard(friend),
+        profile: profile ?? null,
+        noted,
+        passed: passed.map((p) => p.courseName),
+        failed: failed.map((f) => f.courseName),
+      })
+    }
+  )
   .get("/me/friends/requests", async (c) => {
     const user = c.get("user")!
     const direction = c.req.query("direction") ?? "incoming"
@@ -198,6 +324,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
         firstName: users.firstName,
         lastName: users.lastName,
         photoUrl: users.photoUrl,
+        telegramUsername: users.telegramUsername,
       })
       .from(friendRequests)
       .innerJoin(
@@ -228,6 +355,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
         firstName: r.firstName,
         lastName: r.lastName,
         photoUrl: r.photoUrl,
+        telegramUsername: r.telegramUsername,
       }),
     }))
 
@@ -246,6 +374,9 @@ export const meFriendRoutes = new Hono<AppEnv>()
         id: users.id,
         banned: users.banned,
         autoDecline: users.autoDeclineFriendRequests,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        telegramUsername: users.telegramUsername,
       })
       .from(users)
       .where(eq(users.id, targetId))
@@ -333,6 +464,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
           .where(eq(friendRequests.id, reverse.id))
         await tx.insert(friendships).values({ userLowId: low, userHighId: high })
       })
+      await notifyFriendAccepted(target, user)
       return ok(c, { befriended: true }, "شما با هم دوست شدید")
     }
 
@@ -347,6 +479,10 @@ export const meFriendRoutes = new Hono<AppEnv>()
       })
       .returning()
     if (!request) return notFound(c, "ثبت درخواست ممکن نشد")
+
+    if (request.status === "PENDING") {
+      await notifyFriendRequest(target, user)
+    }
 
     return ok(
       c,
@@ -398,6 +534,18 @@ export const meFriendRoutes = new Hono<AppEnv>()
           .values({ userLowId: low, userHighId: high })
           .onConflictDoNothing()
       })
+
+      const [sender] = await db
+        .select({
+          id: users.id,
+          firstName: users.firstName,
+          lastName: users.lastName,
+          telegramUsername: users.telegramUsername,
+        })
+        .from(users)
+        .where(eq(users.id, request.senderId))
+        .limit(1)
+      if (sender) await notifyFriendAccepted(sender, user)
 
       return ok(c, { befriended: true }, "درخواست دوستی پذیرفته شد")
     }
@@ -517,6 +665,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
         firstName: users.firstName,
         lastName: users.lastName,
         photoUrl: users.photoUrl,
+        telegramUsername: users.telegramUsername,
         blockedAt: friendBlocks.createdAt,
       })
       .from(friendBlocks)
