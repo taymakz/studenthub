@@ -25,12 +25,13 @@ export function useStudentsList(
   open: boolean,
   visible: boolean,
   hasProfile: boolean,
-  courseIndex: string | null
+  courseIndex: string | null,
+  friendsOnly = false
 ) {
   return useInfiniteQuery({
-    queryKey: ["course-students", courseIndex],
+    queryKey: ["course-students", courseIndex, friendsOnly ? "friends" : "all"],
     queryFn: async ({ pageParam }) => {
-      const res = await fetchCourseStudents({ courseIndex: courseIndex!, page: pageParam as number, limit: 25 })
+      const res = await fetchCourseStudents({ courseIndex: courseIndex!, page: pageParam as number, limit: 25, friendsOnly })
       return res.data
     },
     initialPageParam: 1,

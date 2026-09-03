@@ -5,6 +5,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from "@workspace/ui/components/avatar"
+import { cn } from "@workspace/ui/lib/utils"
 
 import type { FriendCard } from "@/lib/api"
 
@@ -17,12 +18,15 @@ export function FriendFaces({
   sample,
   count,
   onClick,
+  className,
 }: {
   sample: FriendCard[]
   count: number
   onClick: () => void
+  /** Override positioning (default absolute top-right overlay). */
+  className?: string
 }) {
-  const shown = sample.slice(0, 3)
+  const shown = sample.slice(0, 5)
   const extra = count - shown.length
   return (
     <button
@@ -32,7 +36,10 @@ export function FriendFaces({
         e.stopPropagation()
         onClick()
       }}
-      className="absolute top-1 right-2 z-10 flex cursor-pointer items-center transition-transform active:scale-95 isolate"
+      className={cn(
+        "absolute top-1 right-4 z-10 flex cursor-pointer items-center transition-transform active:scale-95 isolate",
+        className
+      )}
     >
       <span className="flex -space-x-2">
         {shown.map((u) => (

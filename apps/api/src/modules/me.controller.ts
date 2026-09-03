@@ -2,6 +2,7 @@ import { zValidator } from "@hono/zod-validator"
 import {
   chartFiles,
   failedCourses,
+  friendships,
   notedCourses,
   passedCourses,
   universityProfiles,
@@ -10,7 +11,7 @@ import {
 } from "@workspace/db/schema"
 import type { ChartDoc, Offering, Semester } from "@workspace/registry"
 import { formatYearDirectory } from "@workspace/registry"
-import { and, desc, eq, inArray, sql } from "drizzle-orm"
+import { and, desc, eq, inArray, or, sql } from "drizzle-orm"
 import { createHash } from "node:crypto"
 import { readFileSync } from "node:fs"
 import { join, relative, resolve, sep } from "node:path"
@@ -976,6 +977,7 @@ export const meRoutes = new Hono<AppEnv>()
     }
 
     const { page, limit, offset } = parsePagination(c)
+    const friendsOnly = c.req.query("friendsOnly") === "1"
 
     // Same university only (major-agnostic), pinned this offering index in
     // their noted list, visible, not banned, not self
@@ -985,26 +987,42 @@ export const meRoutes = new Hono<AppEnv>()
       eq(users.banned, false),
       sql`${users.id} != ${user.id}`
     )
+    const notedJoin = and(
+      eq(notedCourses.userId, users.id),
+      eq(notedCourses.courseIndex, courseIndex),
+      eq(notedCourses.universitySlug, profile.universitySlug),
+      eq(notedCourses.isDeleted, false)
+    )
+    const friendJoin = or(
+      and(
+        eq(friendships.userLowId, user.id),
+        eq(friendships.userHighId, users.id)
+      ),
+      and(
+        eq(friendships.userHighId, user.id),
+        eq(friendships.userLowId, users.id)
+      )
+    )
 
     // Privacy: classmates expose only a name and avatar — nothing else.
-    const rows = await db
+    // isFriend flags mutual friends (no new identity: viewers know their own
+    // friends; matching by name alone would be ambiguous).
+    const base = db
       .selectDistinct({
         firstName: users.firstName,
         lastName: users.lastName,
         photoUrl: users.photoUrl,
+        isFriend: sql<boolean>`exists(select 1 from friendships f where (f.user_low_id = ${user.id} and f.user_high_id = ${users.id}) or (f.user_high_id = ${user.id} and f.user_low_id = ${users.id}))`,
       })
       .from(users)
       .innerJoin(universityProfiles, eq(users.id, universityProfiles.userId))
-      .innerJoin(
-        notedCourses,
-        and(
-          eq(notedCourses.userId, users.id),
-          eq(notedCourses.courseIndex, courseIndex),
-          eq(notedCourses.universitySlug, profile.universitySlug),
-          eq(notedCourses.isDeleted, false)
-        )
-      )
+      .innerJoin(notedCourses, notedJoin)
       .where(where)
+      .$dynamic()
+    const rows = await (friendsOnly
+      ? base.innerJoin(friendships, friendJoin)
+      : base
+    )
       // DISTINCT requires ordering by selected columns — alphabetical it is.
       .orderBy(users.lastName, users.firstName)
       .limit(limit + 1)
@@ -1013,11 +1031,39 @@ export const meRoutes = new Hono<AppEnv>()
     const hasMore = rows.length > limit
     const students = hasMore ? rows.slice(0, limit) : rows
 
+    // Friend-classmates summary for the avatar group (same filtered set).
+    const [countRow] = await db
+      .select({ count: sql<number>`count(distinct ${users.id})::int` })
+      .from(users)
+      .innerJoin(universityProfiles, eq(users.id, universityProfiles.userId))
+      .innerJoin(notedCourses, notedJoin)
+      .innerJoin(friendships, friendJoin)
+      .where(where)
+    const sample = await db
+      .selectDistinct({
+        id: users.id,
+        firstName: users.firstName,
+        lastName: users.lastName,
+        photoUrl: users.photoUrl,
+        telegramUsername: users.telegramUsername,
+      })
+      .from(users)
+      .innerJoin(universityProfiles, eq(users.id, universityProfiles.userId))
+      .innerJoin(notedCourses, notedJoin)
+      .innerJoin(friendships, friendJoin)
+      .where(where)
+      .orderBy(users.lastName, users.firstName)
+      .limit(5)
+
     return ok(c, {
       students,
       page,
       limit,
       hasMore,
+      friends: {
+        count: countRow?.count ?? 0,
+        sample,
+      },
     })
   })
 

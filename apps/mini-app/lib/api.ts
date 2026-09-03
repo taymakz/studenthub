@@ -528,23 +528,32 @@ export interface CourseStudent {
   firstName: string
   lastName: string | null
   photoUrl: string | null
+  isFriend: boolean
+}
+
+export interface CourseStudentFriends {
+  count: number
+  sample: FriendCard[]
 }
 
 export function fetchCourseStudents(params?: {
   courseIndex?: string
   page?: number
   limit?: number
+  friendsOnly?: boolean
 }) {
   const qs = new URLSearchParams()
   if (params?.courseIndex) qs.set("courseIndex", params.courseIndex)
   if (params?.page) qs.set("page", String(params.page))
   if (params?.limit) qs.set("limit", String(params.limit))
+  if (params?.friendsOnly) qs.set("friendsOnly", "1")
   const q = qs.toString()
   return apiClient.get<{
     students: CourseStudent[]
     page: number
     limit: number
     hasMore: boolean
+    friends: CourseStudentFriends
   }>(`/me/students${q ? `?${q}` : ""}`)
 }
 

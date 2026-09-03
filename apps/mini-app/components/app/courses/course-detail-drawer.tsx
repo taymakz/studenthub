@@ -22,6 +22,8 @@ import { useProfileStore } from "@/stores/profile-store"
 import { CourseTable, CourseTags } from "./sections"
 import { courseLine } from "./course-format"
 import { StudentsDrawer } from "./students-drawer"
+import { useStudentsList, useStudentsVisibility } from "./students/use-students-data"
+import { FriendFaces } from "@/components/app/friends/friend-faces"
 import { useCourseDetailClose, useCourseDetailDerived } from "./course-detail/use-course-detail"
 import { ChangesSection, CoreqSection, PrereqSection } from "./course-detail/detail-sections"
 import { DetailActions } from "./course-detail/detail-actions"
@@ -73,9 +75,17 @@ export function CourseDetailDrawer({
   onSelectCourse?: (offering: Offering) => void
 }) {
   const [studentsOpen, setStudentsOpen] = useState(false)
+  const [friendsOpen, setFriendsOpen] = useState(false)
   const o = offering
   useCourseDetailClose(open, onOpenChange, studentsOpen, setStudentsOpen)
   const { canEditNoted, otherProfessors, passedNames, failedNames, chartCourse, chart } = useCourseDetailDerived(offering)
+
+  // Friend classmates for the avatar group (same query the drawers share,
+  // so opening them later reuses the cache instead of refetching).
+  const { visible, hasProfile } = useStudentsVisibility(open && !!o)
+  const matesQuery = useStudentsList(open && !!o, visible, hasProfile, o?.index ?? null)
+  const friendSummary = matesQuery.data?.pages[0]?.friends
+  const friendCount = friendSummary?.count ?? 0
 
   const passedUnits = sumPassedUnits(getProfileState().chart, passedNames)
 
@@ -118,6 +128,20 @@ export function CourseDetailDrawer({
             </DrawerTitle>
           </DrawerHeader>
           <DrawerPanel className="space-y-4 p-4 text-sm">
+            {/* Friend classmates — same faces, between header and جزئیات */}
+            {!matesQuery.isLoading && friendCount > 0 && friendSummary && (
+              <div className="flex items-center gap-3">
+                <FriendFaces
+                  sample={friendSummary.sample}
+                  count={friendCount}
+                  onClick={() => setFriendsOpen(true)}
+                  className="static"
+                />
+                <p className="text-xs text-muted-foreground">
+                  {friendCount} دوست این درس را برداشته‌اند
+                </p>
+              </div>
+            )}
             {/* جزئیات */}
             <div>
               <div className="mb-2 flex items-center gap-2">
