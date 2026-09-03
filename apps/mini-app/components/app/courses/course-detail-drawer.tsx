@@ -31,6 +31,34 @@ import { DetailActions } from "./course-detail/detail-actions"
 // Module-scope alias: hooks must be called, not referenced inside callbacks.
 const getProfileState = useProfileStore.getState
 
+/** Friend-classmates faces group (top of the panel, opens the friends list). */
+function CourseFriendsGroup({
+  courseIndex,
+  enabled,
+  onOpen,
+}: {
+  courseIndex: string | null
+  enabled: boolean
+  onOpen: () => void
+}) {
+  const { visible, hasProfile } = useStudentsVisibility(enabled)
+  const matesQuery = useStudentsList(enabled, visible, hasProfile, courseIndex)
+  const summary = matesQuery.data?.pages[0]?.friends
+  const count = summary?.count ?? 0
+  if (matesQuery.isLoading || count === 0 || !summary) return null
+  return (
+    <div className="flex items-center justify-center">
+      <FriendFaces
+        sample={summary.sample}
+        count={count}
+        onClick={onOpen}
+        className="static"
+        size="lg"
+      />
+    </div>
+  )
+}
+
 /** Sum of units for every passed course that has prerequisites left to take. */
 function sumPassedUnits(
   chart: ReturnType<typeof getProfileState>["chart"],
@@ -80,13 +108,6 @@ export function CourseDetailDrawer({
   useCourseDetailClose(open, onOpenChange, studentsOpen, setStudentsOpen)
   const { canEditNoted, otherProfessors, passedNames, failedNames, chartCourse, chart } = useCourseDetailDerived(offering)
 
-  // Friend classmates for the avatar group (same query the drawers share,
-  // so opening them later reuses the cache instead of refetching).
-  const { visible, hasProfile } = useStudentsVisibility(open && !!o)
-  const matesQuery = useStudentsList(open && !!o, visible, hasProfile, o?.index ?? null)
-  const friendSummary = matesQuery.data?.pages[0]?.friends
-  const friendCount = friendSummary?.count ?? 0
-
   const passedUnits = sumPassedUnits(getProfileState().chart, passedNames)
 
   // Always render, control via open prop for animation
@@ -129,17 +150,11 @@ export function CourseDetailDrawer({
           </DrawerHeader>
           <DrawerPanel className="space-y-4 p-4 text-sm">
             {/* Friend classmates — same faces, between header and جزئیات */}
-            {!matesQuery.isLoading && friendCount > 0 && friendSummary && (
-              <div className="flex items-center justify-center">
-                <FriendFaces
-                  sample={friendSummary.sample}
-                  count={friendCount}
-                  onClick={() => setFriendsOpen(true)}
-                  className="static"
-                  size="lg"
-                />
-              </div>
-            )}
+            <CourseFriendsGroup
+              courseIndex={o?.index ?? null}
+              enabled={open && !!o}
+              onOpen={() => setFriendsOpen(true)}
+            />
             {/* جزئیات */}
             <div>
               <div className="mb-2 flex items-center gap-2">
