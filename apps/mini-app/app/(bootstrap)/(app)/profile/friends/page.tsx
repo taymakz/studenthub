@@ -111,7 +111,7 @@ export default function FriendsPage() {
             <UserPlus className="size-4" />
             افزودن دوست با شناسه
           </Button>
-          <AddFriendDrawer open={addOpen} onOpenChange={setAddOpen} />
+          <AddFriendDrawer open={addOpen} onOpenChange={setAddOpen} onSent={(outcome) => setTab(outcome === "befriended" ? "friends" : "pending")} />
 
           <Tabs
             value={tab}

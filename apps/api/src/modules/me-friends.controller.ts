@@ -544,6 +544,7 @@ export const meFriendRoutes = new Hono<AppEnv>()
         autoDecline: users.autoDeclineFriendRequests,
         firstName: users.firstName,
         lastName: users.lastName,
+        photoUrl: users.photoUrl,
         telegramUsername: users.telegramUsername,
       })
       .from(users)
@@ -656,7 +657,16 @@ export const meFriendRoutes = new Hono<AppEnv>()
 
     return ok(
       c,
-      { request: { id: request.id, status: request.status } },
+      {
+        // Full card so clients can insert it into the pending list instantly.
+        request: {
+          id: request.id,
+          status: request.status,
+          createdAt: request.createdAt,
+          direction: "outgoing" as const,
+          user: toFriendCard(target),
+        },
+      },
       target.autoDecline
         ? "این کاربر درخواست‌ها را خودکار رد می‌کند"
         : "درخواست دوستی ارسال شد"

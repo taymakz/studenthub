@@ -635,11 +635,21 @@ export function fetchFriendRequests(params?: {
   }>(`/me/friends/requests${q ? `?${q}` : ""}`)
 }
 
+export interface SendRequestResult {
+  request?: {
+    id: string
+    status: "PENDING" | "ACCEPTED" | "DECLINED" | "CANCELED"
+    createdAt: string
+    direction: "outgoing"
+    user: FriendCard
+  }
+  befriended?: boolean
+}
+
 export function sendFriendRequest(friendId: number) {
-  return apiClient.post<{ request?: { id: string; status: string }; befriended?: boolean }>(
-    "/me/friends/requests",
-    { friendId }
-  )
+  return apiClient.post<SendRequestResult>("/me/friends/requests", {
+    friendId,
+  })
 }
 
 export function acceptFriendRequest(id: string) {
