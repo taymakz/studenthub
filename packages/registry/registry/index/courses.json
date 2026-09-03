@@ -480,6 +480,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       },
@@ -772,8 +777,8 @@
   },
   {
     "name": "تربیت بدنی",
-    "theoreticalUnits": 0,
-    "practicalUnits": 0,
+    "theoreticalUnits": 0.5,
+    "practicalUnits": 0.5,
     "refs": [
       {
         "uniSlug": "azad-malard",
@@ -1891,8 +1896,8 @@
   },
   {
     "name": "کاربینی",
-    "theoreticalUnits": 0,
-    "practicalUnits": 0,
+    "theoreticalUnits": 0.5,
+    "practicalUnits": 0.5,
     "refs": [
       {
         "uniSlug": "azad-malard",
