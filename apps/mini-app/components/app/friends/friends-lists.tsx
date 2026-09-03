@@ -63,7 +63,12 @@ function IncomingSection({
   return (
     <div className="space-y-2">
       {items.map((r) => (
-        <PersonRow key={r.id} user={r.user} subtitle={userSubtitle(r.user)}>
+        <PersonRow
+          key={r.id}
+          user={r.user}
+          subtitle={userSubtitle(r.user)}
+          subtitleLtr
+        >
           <AcceptAction onClick={() => onAccept(r)} />
           <DeclineAction onClick={() => onDecline(r)} />
           <BlockAction onClick={() => onBlock(r)} />
@@ -101,7 +106,12 @@ function OutgoingSection({
   return (
     <div className="space-y-2">
       {items.map((r) => (
-        <PersonRow key={r.id} user={r.user} subtitle={userSubtitle(r.user)}>
+        <PersonRow
+          key={r.id}
+          user={r.user}
+          subtitle={userSubtitle(r.user)}
+          subtitleLtr
+        >
           <Button
             type="button"
             variant="ghost"
