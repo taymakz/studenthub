@@ -398,9 +398,10 @@ function DangerConfirm({
 /**
  * Friend's noted list (viewer-term filtered): same CourseCards as /courses.
  * A card opens the standard detail drawer with MY note toggle, but only when
- * the course is adoptable — same university + major + selected semester +
- * entry year as me, and the index exists in my own offerings (the drawer
- * itself additionally enforces the courses-page fresh-term check).
+ * the course is adoptable — same university + major + selected semester as
+ * me, and the index exists in my own offerings. The friend's entry year is
+ * intentionally NOT part of the gate (it says nothing about MY note), and
+ * the drawer itself additionally enforces the courses-page fresh-term check.
  */
 function FriendNotedBody({
   items,
@@ -426,9 +427,9 @@ function FriendNotedBody({
     !!myProfile?.universitySlug &&
     friendProfile.universitySlug === myProfile.universitySlug &&
     friendProfile.majorSlug === myProfile.majorSlug &&
-    friendProfile.currentSemesterCode === myTermCode &&
-    (friendProfile.entryYearRange ?? null) ===
-      (myProfile.entryYearRange ?? null)
+    !!friendProfile.currentSemesterCode &&
+    friendProfile.currentSemesterCode ===
+      (myTermCode ?? myProfile?.currentSemesterCode ?? null)
 
   // React Compiler memoizes this automatically (no manual useMemo).
   const myIndexes = new Set(myOfferings.map((m) => m.index))
