@@ -34,7 +34,6 @@
     "zustand": "^5.0.15"
   },
   "devDependencies": {
-    "@iconify/json": "^2.2.522",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
