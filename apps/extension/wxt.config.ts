@@ -9,9 +9,11 @@ export default defineConfig({
     description:
       "استخراج لیست دروس ارائه‌شده از سامانه آموزشیار و ساخت خروجی JSON آماده برای رجیستری StudentHub",
 
-    // Programmatic injection only (activeTab) - no persistent content script,
-    // no host permissions. The extension does nothing until the user clicks.
+    // Programmatic injection only (activeTab) - no persistent content script.
+    // Host permissions are required to access nested iframe documents across
+    // university subdomains and internal framesets (e.g. Golestan).
     permissions: ["activeTab", "scripting", "storage"],
+    host_permissions: ["<all_urls>"],
 
     icons: {
       "16": "/icons/icon-16.png",

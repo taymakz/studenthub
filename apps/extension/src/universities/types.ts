@@ -33,4 +33,12 @@ export interface UniversityAdapter {
 
   /** Injected menu fix for portals hiding the course-list page (optional). */
   replaceMenu?(): void;
+
+  /**
+   * Optional custom navigation handlers for portals where pagination runs
+   * inside nested iframes or through ASP.NET postbacks (e.g. Golestan).
+   */
+  navigateNext?(tabId: number): Promise<boolean>;
+  navigatePrev?(tabId: number): Promise<boolean>;
 }
+

@@ -3,6 +3,7 @@ import {
   azad,
   readAzadPaging,
 } from "./azad";
+import { golestan } from "./golestan";
 import { scrapeOfferingsFromPage } from "./azad/scrape";
 
 export type { UniversityAdapter } from "./types";
@@ -13,6 +14,7 @@ export type { UniversityAdapter } from "./types";
  * so put specific portals before the generic fallback.
  */
 export const UNIVERSITIES: UniversityAdapter[] = [
+  golestan,
   azad,
 ];
 
