@@ -10,9 +10,12 @@ html {
   color-scheme: light dark;
   scrollbar-gutter: stable;
   overflow-y: scroll;
+  overflow-x: clip;
+  overscroll-behavior-x: none;
 }
 body {
   scrollbar-gutter: stable;
+  overflow-x: clip;
 }
 .dark {
   color-scheme: dark;

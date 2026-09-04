@@ -1,7 +1,12 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { createPortal } from "react-dom"
+import { motion } from "motion/react"
 import { Bookmark, ConfusedSquare } from "reicon-react"
+
+import { cn } from "@workspace/ui/lib/utils"
+import { useRoutePageContext } from "@/lib/route-preview-context"
 
 /**
  * Floating pill buttons with Emil Kowalski animation principles:
@@ -21,12 +26,16 @@ export function FloatingButtons({
   onOpenNoted: () => void
   onOpenConflicts: () => void
 }) {
+  const { interactive, isPreview, overlayHost, overlayX } =
+    useRoutePageContext()
   const [isScrollingDown, setIsScrollingDown] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const lastScrollPosition = useRef(0)
   const ticking = useRef(false)
 
   useEffect(() => {
+    if (isPreview) return
+
     const handleScroll = () => {
       // Use requestAnimationFrame for smooth scroll detection
       if (!ticking.current) {
@@ -50,14 +59,21 @@ export function FloatingButtons({
 
     window.addEventListener("scroll", handleScroll, { passive: true })
     return () => window.removeEventListener("scroll", handleScroll)
-  }, [])
+  }, [isPreview])
 
-  return (
+  if (!overlayHost || !overlayX) return null
+
+  const controls = (
     <>
       {/* Noted Button */}
       {notedCount > 0 && (
         <div
-          className="fixed bottom-22 z-20 transition-transform duration-150 ease-out"
+          className={cn(
+            "absolute bottom-22 z-20 transition-transform duration-150 ease-out",
+            interactive && !isPreview
+              ? "pointer-events-auto"
+              : "pointer-events-none"
+          )}
           style={{
             right: "1.5rem",
           }}
@@ -120,7 +136,12 @@ export function FloatingButtons({
 
       {/* Scroll to Top Button - CSS transition for smooth feel */}
       <div
-        className="fixed bottom-22 left-4 z-20 transition-[transform,opacity] duration-200 ease-out"
+        className={cn(
+          "absolute bottom-22 left-4 z-20 transition-[transform,opacity] duration-200 ease-out",
+          interactive && !isPreview
+            ? "pointer-events-auto"
+            : "pointer-events-none"
+        )}
         style={{
           transform: showScrollTop ? "scale(1)" : "scale(0)",
           opacity: showScrollTop ? 1 : 0,
@@ -149,5 +170,17 @@ export function FloatingButtons({
         </button>
       </div>
     </>
+  )
+
+  return createPortal(
+    <motion.div
+      aria-hidden={isPreview || undefined}
+      inert={isPreview || !interactive}
+      className="pointer-events-none absolute inset-0"
+      style={{ x: overlayX }}
+    >
+      {controls}
+    </motion.div>,
+    overlayHost
   )
 }

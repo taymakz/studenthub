@@ -2,6 +2,7 @@
 
 import { BottomNav } from "@/components/bottom-nav"
 import { EffectOverlay } from "@/components/effects/effect-overlay"
+import { RouteSwipeShell } from "@/components/app/route-swipe-shell"
 
 /**
  * Main app shell (post-onboarding): pages render inside the padded column,
@@ -12,8 +13,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative flex min-h-dvh flex-col safe-bottom-padding">
       <EffectOverlay />
-      <main className="relative grow">{children}</main>
-      <BottomNav />
+      <RouteSwipeShell navigation={<BottomNav />}>{children}</RouteSwipeShell>
     </div>
   )
 }

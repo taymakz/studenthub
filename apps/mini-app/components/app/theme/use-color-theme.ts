@@ -58,8 +58,8 @@ export function useColorTheme() {
     const stored = readStored()
     if (stored !== "studenthub") {
       setColorThemeState(stored)
-      applyToRoot(stored)
     }
+    applyToRoot(stored)
   }, [])
 
   const setColorTheme = React.useCallback((next: string) => {
@@ -72,11 +72,6 @@ export function useColorTheme() {
     // Apply immediately for snappy feedback (also handled by effect on mount).
     applyToRoot(next)
   }, [])
-
-  // Re-apply whenever state changes AND after hydration of stored value.
-  React.useEffect(() => {
-    applyToRoot(colorTheme)
-  }, [colorTheme])
 
   return { colorTheme, setColorTheme }
 }

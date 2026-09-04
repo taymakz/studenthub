@@ -18,6 +18,7 @@ import { SettingsRow } from "@/components/app/theme/settings-row"
 import { fetchMe, toggleVisibility } from "@/lib/api"
 import { useProfileStore } from "@/stores/profile-store"
 import { Badge } from "@workspace/ui/components/badge"
+import { useIsRoutePreview } from "@/lib/route-preview-context"
 
 /** Visibility may change once every 2 weeks (abuse-resistant). */
 function getRemainingDays(lastUpdated: string | null): number {
@@ -29,10 +30,16 @@ function getRemainingDays(lastUpdated: string | null): number {
 }
 
 export default function CourseVisibility() {
+  const isRoutePreview = useIsRoutePreview()
   const [open, setOpen] = useState(false)
   const qc = useQueryClient()
-  const meQuery = useQuery({ queryKey: ["me"], queryFn: fetchMe })
-  const user = meQuery.data?.data?.user ?? null
+  const storeUser = useProfileStore((state) => state.user)
+  const meQuery = useQuery({
+    queryKey: ["me"],
+    queryFn: fetchMe,
+    enabled: !isRoutePreview,
+  })
+  const user = meQuery.data?.data?.user ?? storeUser
   const visible = user?.visibleInCourseLists ?? true
   const lastUpdated = user?.visibleInCourseListsLastUpdated ?? null
   const remainingDays = getRemainingDays(lastUpdated)

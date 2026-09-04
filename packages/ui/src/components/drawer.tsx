@@ -11,6 +11,7 @@ import * as React from "react"
 
 import { Button } from "@workspace/ui/components/button"
 import { ScrollArea } from "@workspace/ui/components/scroll-area"
+import { useDrawerDirectionObserverEnabled } from "@workspace/ui/components/drawer-direction-observer"
 import { cn } from "@workspace/ui/lib/utils"
 
 const DrawerCreateHandle: typeof DrawerPrimitive.createHandle =
@@ -86,6 +87,7 @@ function Drawer({
       ? "rtl"
       : "ltr"
   )
+  const observeDocumentDirection = useDrawerDirectionObserverEnabled()
   const dirContextValue = React.useMemo(() => ({ dir, setDir }), [dir])
   const positionContextValue = React.useMemo(() => ({ position }), [position])
   const resolvedPosition = resolvePosition(position, dir)
@@ -108,13 +110,15 @@ function Drawer({
     }
 
     update()
+    if (!observeDocumentDirection) return
+
     const observer = new MutationObserver(update)
     observer.observe(document.documentElement, {
       attributes: true,
       attributeFilter: ["dir"],
     })
     return () => observer.disconnect()
-  }, [])
+  }, [observeDocumentDirection])
 
   return (
     <DrawerDirContext.Provider value={dirContextValue}>
@@ -145,6 +149,7 @@ const DrawerPortal = DrawerPrimitive.Portal
 function DrawerTrigger({ className, ...props }: DrawerPrimitive.Trigger.Props) {
   const ref = React.useRef<HTMLButtonElement>(null)
   const { setDir } = React.useContext(DrawerDirContext)
+  const observeDocumentDirection = useDrawerDirectionObserverEnabled()
 
   React.useEffect(() => {
     function update() {
@@ -153,6 +158,7 @@ function DrawerTrigger({ className, ...props }: DrawerPrimitive.Trigger.Props) {
     }
 
     update()
+    if (!observeDocumentDirection) return
 
     const observer = new MutationObserver(update)
     observer.observe(document.documentElement, {
@@ -162,7 +168,7 @@ function DrawerTrigger({ className, ...props }: DrawerPrimitive.Trigger.Props) {
     })
 
     return () => observer.disconnect()
-  }, [setDir])
+  }, [observeDocumentDirection, setDir])
 
   return (
     <DrawerPrimitive.Trigger

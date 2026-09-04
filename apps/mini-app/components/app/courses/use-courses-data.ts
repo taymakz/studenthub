@@ -7,6 +7,7 @@ import { flattenChart } from "@/lib/chart"
 import { parseTermCode } from "@/lib/term"
 
 import { useProfileStore } from "@/stores/profile-store"
+import { useIsRoutePreview } from "@/lib/route-preview-context"
 
 type ChartRequisiteCourse = {
   name: string
@@ -76,6 +77,7 @@ function canEditTermNoted(
  * are still fetched separately - everything else is in the store.
  */
 export function useCoursesData() {
+  const isRoutePreview = useIsRoutePreview()
   const profile = useProfileStore((s) => s.profile)
   const offerings = useProfileStore((s) => s.offerings)
   const noted = useProfileStore((s) => s.noted)
@@ -97,12 +99,12 @@ export function useCoursesData() {
   const unisQuery = useQuery({
     queryKey: ["universities"],
     queryFn: async () => (await fetchUniversities()).data.universities,
-    enabled: Boolean(uni),
+    enabled: !isRoutePreview && Boolean(uni),
   })
   const majorsQuery = useQuery({
     queryKey: ["majors", uni],
     queryFn: async () => (await fetchMajors(uni!)).data.majors,
-    enabled: Boolean(uni),
+    enabled: !isRoutePreview && Boolean(uni),
   })
   const uniName = unisQuery.data?.find((u) => u.slug === uni)?.name.fa ?? uni
   const majorEntry = majorsQuery.data?.find((m) => m.slug === major) ?? null

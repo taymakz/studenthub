@@ -5,18 +5,22 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { toastManager } from "@workspace/ui/components/toast"
 
 import { fetchChartFile, fetchMe } from "@/lib/api"
+import { useIsRoutePreview } from "@/lib/route-preview-context"
 import { apiClient } from "@/lib/request"
 
 export function useChartProfile() {
+  const isRoutePreview = useIsRoutePreview()
   const meQuery = useQuery({
     queryKey: ["me"],
     queryFn: fetchMe,
+    enabled: !isRoutePreview,
   })
   const profile = meQuery.data?.data?.profile ?? null
   return { profile }
 }
 
 export function useChartStatus(profile: ReturnType<typeof useChartProfile>["profile"]) {
+  const isRoutePreview = useIsRoutePreview()
   const statusQuery = useQuery({
     queryKey: [
       "chart-status",
@@ -28,13 +32,15 @@ export function useChartStatus(profile: ReturnType<typeof useChartProfile>["prof
     ],
     queryFn: async () =>
       (await apiClient.get<{ available: boolean }>("/me/chart-file/status")).data,
-    enabled: Boolean(
-      profile?.universitySlug &&
-        profile?.majorSlug &&
-        profile?.degree &&
-        profile?.entryYearRange &&
-        profile?.entrySemester
-    ),
+    enabled:
+      !isRoutePreview &&
+      Boolean(
+        profile?.universitySlug &&
+          profile?.majorSlug &&
+          profile?.degree &&
+          profile?.entryYearRange &&
+          profile?.entrySemester
+      ),
   })
   return {
     isAvailable: statusQuery.data?.available ?? null,

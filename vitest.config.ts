@@ -10,6 +10,7 @@ export default defineConfig({
       "apps/admin/tests/**/*.test.ts",
       "packages/registry/tests/**/*.test.ts",
       "apps/extension/tests/**/*.test.ts",
+      "apps/mini-app/tests/**/*.test.ts",
       "packages/ui/src/lib/**/*.test.ts",
     ],
     exclude: ["node_modules", "dist", ".turbo", "_ignore"],

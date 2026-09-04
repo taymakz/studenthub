@@ -13,6 +13,7 @@ import {
 import { cn } from "@workspace/ui/lib/utils"
 import { proxyImage } from "@/lib/image-proxy"
 import { useProfileStore } from "@/stores/profile-store"
+import { useRouteSwipeNavigation } from "@/components/app/route-swipe-shell"
 
 /**
  * Floating pill bottom nav — 280px, equal 4×70px cells, RTL-aware, hardware-accelerated.
@@ -32,6 +33,7 @@ const navLinks = [
 
 export function BottomNav() {
   const pathname = usePathname() ?? ""
+  const routeSwipe = useRouteSwipeNavigation()
   const [showLabels, setShowLabels] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
@@ -129,8 +131,23 @@ export function BottomNav() {
               }}
               href={item.to}
               prefetch={true}
+              aria-disabled={routeSwipe?.isNavigating || undefined}
               aria-label={item.title}
               aria-current={active ? "page" : undefined}
+              onClick={(event) => {
+                if (
+                  event.defaultPrevented ||
+                  event.button !== 0 ||
+                  event.metaKey ||
+                  event.ctrlKey ||
+                  event.shiftKey ||
+                  event.altKey
+                ) {
+                  return
+                }
+
+                if (routeSwipe?.navigate(item.to)) event.preventDefault()
+              }}
               className={cn(
                 "relative flex min-h-12 flex-1 touch-manipulation flex-col items-center justify-center gap-1 rounded-full px-4 py-2.5 text-[10px] font-medium transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:outline-none",
                 active

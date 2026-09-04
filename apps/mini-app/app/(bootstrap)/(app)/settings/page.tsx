@@ -1,3 +1,5 @@
+"use client"
+
 import ContentLayout from "@/components/app/content-layout"
 import { LightRays } from "@/components/ui/light-rays"
 
@@ -16,8 +18,18 @@ import Feedback from "@/components/app/settings/feedback"
 import LogoutRow from "@/components/app/settings/logout"
 import { GraduationCap } from "lucide-react"
 import { SettingsRow } from "@/components/app/theme/settings-row"
+import { useIsRoutePreview } from "@/lib/route-preview-context"
 
 export default function SettingsPage() {
+  const isRoutePreview = useIsRoutePreview()
+  const studentAccountRow = (
+    <SettingsRow
+      icon={<GraduationCap className="size-5" />}
+      title="حساب دانشجویی"
+      description="سال و نیم‌سال ورود، مقطع و ..."
+    />
+  )
+
   return (
     <>
       <div className="relative flex h-70 items-center justify-center safe-top-padding pb-[calc(var(--tg-safe-area-inset-top)+var(--tg-content-safe-area-inset-top))]">
@@ -33,15 +45,13 @@ export default function SettingsPage() {
             <h2 className="mb-2 px-6 text-sm font-medium text-muted-foreground">
               عمومی
             </h2>
-            <StudentAccount>
-              <SettingsRow
-                icon={<GraduationCap className="size-5" />}
-                title="حساب دانشجویی"
-                description="سال و نیم‌سال ورود، مقطع و ..."
-              />
-            </StudentAccount>
+            {isRoutePreview ? (
+              studentAccountRow
+            ) : (
+              <StudentAccount>{studentAccountRow}</StudentAccount>
+            )}
             <CourseVisibility />
-            <LogoutRow />
+            {!isRoutePreview && <LogoutRow />}
           </div>
 
           {/* شخصی‌سازی */}
