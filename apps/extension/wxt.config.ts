@@ -4,6 +4,10 @@ import { defineConfig } from "wxt";
 export default defineConfig({
   modules: ["@wxt-dev/module-react"],
   srcDir: "src",
+  zip: {
+    // Single release artifact per build (deflate level 9 is the default).
+    artifactTemplate: "extention-{{packageVersion}}.zip",
+  },
   manifest: {
     name: "StudentHub | استخراج دروس",
     description:
