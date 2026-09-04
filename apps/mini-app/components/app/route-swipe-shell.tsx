@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation"
 import {
   animate,
-  motion,
+  m,
   type MotionValue,
   useMotionValue,
   useReducedMotion,
@@ -143,7 +143,7 @@ function RoutePreview({
   )
 
   return (
-    <motion.div
+    <m.div
       aria-hidden
       inert
       className="pointer-events-none absolute inset-x-0 min-h-dvh bg-background"
@@ -162,7 +162,7 @@ function RoutePreview({
           </RoutePageProvider>
         </DrawerDirectionObserverProvider>
       </React.Suspense>
-    </motion.div>
+    </m.div>
   )
 }
 
@@ -597,7 +597,7 @@ export function RouteSwipeShell({
           />
         ))}
 
-        <motion.div
+        <m.div
           className="relative z-10 min-h-full bg-background"
           data-route-swipe-page
           style={{
@@ -613,7 +613,7 @@ export function RouteSwipeShell({
           <RoutePageProvider value={routePageContext}>
             {children}
           </RoutePageProvider>
-        </motion.div>
+        </m.div>
       </main>
       <div
         ref={setOverlayHost}

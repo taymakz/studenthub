@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react"
 import { createPortal } from "react-dom"
-import { motion } from "motion/react"
+import { m } from "motion/react"
 import { Bookmark, ConfusedSquare } from "reicon-react"
 
 import { cn } from "@workspace/ui/lib/utils"
@@ -173,14 +173,14 @@ export function FloatingButtons({
   )
 
   return createPortal(
-    <motion.div
+    <m.div
       aria-hidden={isPreview || undefined}
       inert={isPreview || !interactive}
       className="pointer-events-none absolute inset-0"
       style={{ x: overlayX }}
     >
       {controls}
-    </motion.div>,
+    </m.div>,
     overlayHost
   )
 }
