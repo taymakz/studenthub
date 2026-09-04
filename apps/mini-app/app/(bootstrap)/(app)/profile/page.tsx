@@ -1,5 +1,3 @@
-"use client"
-
 import ContentLayout from "@/components/app/content-layout"
 import { ProfileHeader } from "@/components/app/profile/profile-header"
 import { GraduateProgress } from "@/components/app/profile/graduate-progress"
@@ -7,7 +5,6 @@ import { FailedCourses } from "@/components/app/profile/failed-courses"
 import { CourseChanges } from "@/components/app/profile/course-changes"
 import { NewTermToast } from "@/components/app/profile/new-term-toast"
 import { SemesterDrawer } from "@/components/app/semester-drawer"
-import { useIsRoutePreview } from "@/lib/route-preview-context"
 
 /**
  * Profile tab = the old "home" page minus the YouTube course banner. Header +
@@ -16,13 +13,11 @@ import { useIsRoutePreview } from "@/lib/route-preview-context"
  * handled by React Query, which caches across the session.
  */
 export default function Page() {
-  const isRoutePreview = useIsRoutePreview()
-
   return (
     <>
       <ProfileHeader />
-      {!isRoutePreview && <NewTermToast />}
-      {!isRoutePreview && <SemesterDrawer />}
+      <NewTermToast />
+      <SemesterDrawer />
       <ContentLayout>
         <div className="container mx-auto mt-4 space-y-6 px-4">
           <GraduateProgress />

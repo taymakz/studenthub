@@ -21,11 +21,9 @@ import { useCoursesConflicts } from "@/components/app/courses/hooks/use-courses-
 import { CoursesContent } from "@/components/app/courses/courses-content"
 import { CoursesToolbar } from "@/components/app/courses/courses-toolbar"
 import { useTimeAgo } from "@/hooks/use-time-ago"
-import { useIsRoutePreview } from "@/lib/route-preview-context"
 import type { Offering } from "@/lib/api"
 
 export default function CoursesPage() {
-  const isRoutePreview = useIsRoutePreview()
   const d = useCoursesData()
   const {
     complete,
@@ -160,8 +158,6 @@ export default function CoursesPage() {
         onOpenConflicts={() => setConflictsOpen(true)}
       />
 
-      {!isRoutePreview && (
-        <>
       <NotedDrawer
         open={notedOpen}
         onOpenChange={setNotedOpen}
@@ -212,8 +208,6 @@ export default function CoursesPage() {
         isChartComplete={isChartComplete}
       />
       <ViewModeDrawer open={viewOpen} onOpenChange={setViewOpen} viewMode={viewMode} onViewModeChange={setViewMode} />
-        </>
-      )}
     </>
   )
 }

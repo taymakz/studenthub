@@ -20,26 +20,32 @@ import { buildApiUrl } from "@/lib/request"
 import { clearWebToken } from "@/lib/auth/web-token"
 
 /** Detect whether we run inside Telegram Mini App. Module-scope so the
-    dynamic import + nested fallbacks stay out of the Compiler's graph. */
-async function detectIsTMA(): Promise<boolean> {
-  try {
-    const { isTMA: check } = await import("@tma.js/bridge")
-    // Prefer complete mode for reliable detection (100ms), fallback to simple
+    dynamic import + nested fallbacks stay out of the Compiler's graph, and
+    memoized so every settings mount (canonical + swipe preview) reuses the
+    same resolved answer instead of re-detecting and flashing the row. */
+let tmaDetection: Promise<boolean> | null = null
+function detectIsTMA(): Promise<boolean> {
+  tmaDetection ??= (async () => {
     try {
-      return await (check as unknown as (
-        mode: string,
-        opts?: { timeout: number }
-      ) => Promise<boolean>)("complete", { timeout: 120 })
-    } catch {
+      const { isTMA: check } = await import("@tma.js/bridge")
+      // Prefer complete mode for reliable detection (100ms), fallback to simple
       try {
-        return (check as unknown as () => boolean)()
+        return await (check as unknown as (
+          mode: string,
+          opts?: { timeout: number }
+        ) => Promise<boolean>)("complete", { timeout: 120 })
       } catch {
-        return false
+        try {
+          return (check as unknown as () => boolean)()
+        } catch {
+          return false
+        }
       }
+    } catch {
+      return false
     }
-  } catch {
-    return false
-  }
+  })()
+  return tmaDetection
 }
 
 export default function LogoutRow() {
