@@ -2,6 +2,13 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import {
+  animate,
+  m,
+  useMotionValue,
+  useMotionValueEvent,
+  useReducedMotion,
+} from "motion/react"
 import { useEffect, useLayoutEffect, useRef, useState } from "react"
 import { Book2, Grid, Settings } from "reicon-react"
 
@@ -14,6 +21,9 @@ import { cn } from "@workspace/ui/lib/utils"
 import { proxyImage } from "@/lib/image-proxy"
 import { useProfileStore } from "@/stores/profile-store"
 import { useRouteSwipeNavigation } from "@/components/app/route-swipe-shell"
+
+/** Same release curve the swipe shell uses, so tap moves match page slides. */
+const PILL_RELEASE_EASING = [0.32, 0.72, 0, 1] as const
 
 /**
  * Floating pill bottom nav — 280px, equal 4×70px cells, RTL-aware, hardware-accelerated.
@@ -34,12 +44,25 @@ const navLinks = [
 export function BottomNav() {
   const pathname = usePathname() ?? ""
   const routeSwipe = useRouteSwipeNavigation()
+  const slide = routeSwipe?.slide ?? null
+  const slideSourceIndex = routeSwipe?.slideSourceIndex ?? null
+  const slideTargetIndex = routeSwipe?.slideTargetIndex ?? null
+  const shouldReduceMotion = useReducedMotion() === true
   const [showLabels, setShowLabels] = useState(false)
   const containerRef = useRef<HTMLDivElement>(null)
   const itemRefs = useRef<(HTMLAnchorElement | null)[]>([])
-  const [pill, setPill] = useState({ left: 0, width: 0, ready: false })
+  // Visual left offset of every item, measured against the padding edge —
+  // direction-independent, so translateX math works the same in RTL.
+  const leftsRef = useRef<(number | null)[]>([])
+  const pillX = useMotionValue(0)
+  const prevActiveRef = useRef(-1)
+  // Stand-in when the shell is absent (hook must be called unconditionally);
+  // its change event never fires.
+  const noopSlide = useMotionValue(0)
+  const [pillWidth, setPillWidth] = useState(0)
   // The pill appears instantly on first measure; only later moves animate.
-  const [interactive, setInteractive] = useState(false)
+  const [pillReady, setPillReady] = useState(false)
+  const placedRef = useRef(false)
 
   const user = useProfileStore((s) => s.user)
   const photoUrl = user?.photoUrl ?? null
@@ -62,18 +85,34 @@ export function BottomNav() {
   // so the math stays correct without reordering anything.
   useLayoutEffect(() => {
     const update = () => {
-      if (activeIndex < 0) {
-        setPill((p) => ({ ...p, ready: false }))
-        return
-      }
-      const el = itemRefs.current[activeIndex]
       const container = containerRef.current
-      if (!el || !container) return
+      if (!container) return
       const containerRect = container.getBoundingClientRect()
-      const rect = el.getBoundingClientRect()
-      const padLeft = parseFloat(getComputedStyle(container).paddingLeft || "0")
-      const left = rect.left - containerRect.left - padLeft
-      setPill({ left, width: rect.width, ready: true })
+      const padLeft = parseFloat(
+        getComputedStyle(container).paddingLeft || "0"
+      )
+      const lefts = itemRefs.current.map((el) =>
+        el ? el.getBoundingClientRect().left - containerRect.left - padLeft : null
+      )
+      leftsRef.current = lefts
+
+      const activeLeft = activeIndex >= 0 ? (lefts[activeIndex] ?? null) : null
+      const activeWidth =
+        activeIndex >= 0
+          ? (itemRefs.current[activeIndex]?.getBoundingClientRect().width ?? 0)
+          : 0
+      if (activeLeft === null || activeWidth <= 0) return
+
+      setPillWidth(activeWidth)
+      setPillReady(true)
+
+      // Reposition instantly on measurement changes (resize, labels) — but
+      // never on tab changes: the resting effect below eases those moves.
+      const activeIndexChanged = prevActiveRef.current !== activeIndex
+      prevActiveRef.current = activeIndex
+      if (slideSourceIndex === null && placedRef.current && !activeIndexChanged) {
+        pillX.set(activeLeft)
+      }
     }
     update()
     const ro = new ResizeObserver(update)
@@ -84,14 +123,54 @@ export function BottomNav() {
       ro.disconnect()
       window.removeEventListener("resize", update)
     }
-  }, [activeIndex, pathname, showLabels])
+  }, [activeIndex, pillX, showLabels, slideSourceIndex])
 
-  // Let the first paint land without a transition, then enable moves.
+  // Park the pill on the active tab whenever no transition owns it. First
+  // placement is instant; tab changes ease out on the shared release curve.
+  useLayoutEffect(() => {
+    if (slideSourceIndex !== null) return
+    const left = activeIndex >= 0 ? leftsRef.current[activeIndex] : null
+    if (left === null || left === undefined) return
+
+    if (!placedRef.current || shouldReduceMotion) {
+      placedRef.current = true
+      pillX.set(left)
+      return
+    }
+    const controls = animate(pillX, left, {
+      duration: 0.2,
+      ease: PILL_RELEASE_EASING,
+    })
+    return () => controls.stop()
+  }, [activeIndex, pillReady, pillX, shouldReduceMotion, slideSourceIndex])
+
+  // While a swipe owns the shell, the pill follows the exact same slide
+  // progress the page translates with — drag, hold and release stay in
+  // lockstep because both read the single pageX MotionValue.
+  useMotionValueEvent(slide ?? noopSlide, "change", (value) => {
+    if (slideSourceIndex === null || slideTargetIndex === null) return
+    const from = leftsRef.current[slideSourceIndex]
+    const to = leftsRef.current[slideTargetIndex]
+    if (from === null || from === undefined) return
+    if (to === null || to === undefined) return
+
+    const progress = Math.min(1, Math.abs(value))
+    pillX.set(from + (to - from) * progress)
+  })
+
+  // A gesture that activates a cold preview mid-drag (or a tap landing while
+  // the pill is parked) must place the pill at the current progress at once —
+  // the change event above only fires on the next pageX frame.
   useEffect(() => {
-    if (!pill.ready || interactive) return
-    const t = setTimeout(() => setInteractive(true), 0)
-    return () => clearTimeout(t)
-  }, [pill.ready, interactive])
+    if (!slide || slideSourceIndex === null || slideTargetIndex === null) return
+    const from = leftsRef.current[slideSourceIndex]
+    const to = leftsRef.current[slideTargetIndex]
+    if (from === null || from === undefined) return
+    if (to === null || to === undefined) return
+
+    const progress = Math.min(1, Math.abs(slide.get()))
+    pillX.set(from + (to - from) * progress)
+  }, [pillX, slide, slideSourceIndex, slideTargetIndex])
 
   return (
     <nav
@@ -105,18 +184,16 @@ export function BottomNav() {
       >
         {/* Active pill — origin pinned to the physical left padding edge (`left-1`),
             so translateX is direction-independent; only transform animates. */}
-        <div
+        <m.div
           aria-hidden
           className={cn(
             "pointer-events-none absolute top-1 bottom-1 left-1 rounded-full bg-primary will-change-transform",
-            pill.ready ? "opacity-100" : "opacity-0"
+            pillReady ? "opacity-100" : "opacity-0"
           )}
           style={{
-            transform: `translateX(${pill.left}px)`,
-            width: pill.width,
-            transition: interactive
-              ? "transform 200ms cubic-bezier(0.32,0.72,0,1), opacity 150ms ease-out"
-              : "none",
+            x: pillX,
+            width: pillWidth,
+            transition: "opacity 150ms ease-out",
           }}
         />
         {navLinks.map((item, idx) => {

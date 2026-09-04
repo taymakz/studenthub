@@ -1,7 +1,13 @@
 "use client"
 
 import { usePathname } from "next/navigation"
-import { m, useMotionValue, useReducedMotion, useTransform } from "motion/react"
+import {
+  m,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+  type MotionValue,
+} from "motion/react"
 import * as React from "react"
 
 import { MAIN_TAB_ROUTE_COMPONENTS } from "@/lib/main-tab-route-preload"
@@ -17,6 +23,12 @@ import { useSwipeGesture } from "./route-swipe/use-swipe-gesture"
 interface RouteSwipeNavigationValue {
   navigate: (path: MainTabRoute) => boolean
   isNavigating: boolean
+  /** Signed slide progress: pageX / viewportWidth. 0 when idle, ±1 at commit. */
+  slide: MotionValue<number>
+  /** Tab index the gesture started from; null when no transition owns the pill. */
+  slideSourceIndex: number | null
+  /** Tab index under the finger; null while rubber-banding a boundary. */
+  slideTargetIndex: number | null
 }
 
 const RouteSwipeNavigationContext =
@@ -54,19 +66,24 @@ export function RouteSwipeShell({
     pageX,
     pathname,
     currentIndex,
-    exactCurrentIndex,
     viewportWidth,
     shouldReduceMotion,
     ensureRoutePreviewReady: warmup.ensureRoutePreviewReady,
     isRoutePreviewReady: warmup.isRoutePreviewReady,
   })
 
+  const slide = useTransform(pageX, (value) =>
+    viewportWidth > 0 ? value / viewportWidth : 0
+  )
   const sourceIndex = gesture.visualSourceIndex ?? currentIndex
   const isVisualTransition =
     gesture.isMoving && gesture.visualSourceIndex !== null && !shouldReduceMotion
   const contextValue: RouteSwipeNavigationValue = {
     navigate: gesture.navigate,
     isNavigating: gesture.isMoving,
+    slide,
+    slideSourceIndex: gesture.visualSourceIndex,
+    slideTargetIndex: gesture.activeTargetIndex,
   }
   const routePageContext = {
     isPreview: false,

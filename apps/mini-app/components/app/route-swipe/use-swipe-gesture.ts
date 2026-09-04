@@ -108,7 +108,6 @@ export function useSwipeGesture({
   pageX,
   pathname,
   currentIndex,
-  exactCurrentIndex,
   viewportWidth,
   shouldReduceMotion,
   ensureRoutePreviewReady,
@@ -118,7 +117,6 @@ export function useSwipeGesture({
   pageX: MotionValue<number>
   pathname: string
   currentIndex: number
-  exactCurrentIndex: number
   viewportWidth: number
   shouldReduceMotion: boolean
   ensureRoutePreviewReady: (index: number) => Promise<void>
@@ -146,7 +144,7 @@ export function useSwipeGesture({
   > | null>(null)
   const transitionAttemptRef = React.useRef(0)
   const suppressClickUntilRef = React.useRef(0)
-  const scrollPositionsRef = React.useRef(new Map<MainTabRoute, number>())
+  const scrollPositionsRef = React.useRef(new Map<string, number>())
   const stabilizationFrameRef = React.useRef<number | null>(null)
 
   function setMovingState(moving: boolean) {
@@ -180,14 +178,15 @@ export function useSwipeGesture({
   function prepareTarget(sourceIndex: number, targetIndex: number): boolean {
     if (!isRoutePreviewReady(targetIndex)) return false
 
-    const sourceRoute = MAIN_TAB_ROUTES[sourceIndex]!
     const targetRoute = MAIN_TAB_ROUTES[targetIndex]!
     const currentScrollY = window.scrollY
 
     // Motion values update outside React. Commit the preview first so moving
     // the source page can never reveal the shell background for one frame.
+    // Scroll memory is keyed by the full pathname so a nested page such as
+    // /profile/friends restores its own offset without clobbering /profile.
     flushSync(() => {
-      scrollPositionsRef.current.set(sourceRoute, currentScrollY)
+      scrollPositionsRef.current.set(pathname, currentScrollY)
       setVisualSourceIndex(sourceIndex)
       setActiveTargetIndex(targetIndex)
       setPreviewTop(
@@ -304,15 +303,11 @@ export function useSwipeGesture({
     const sourceIndex = currentIndex
     if (
       sourceIndex < 0 ||
-      exactCurrentIndex < 0 ||
       Math.abs(targetIndex - sourceIndex) !== 1 ||
       shouldReduceMotion
     ) {
-      if (exactCurrentIndex >= 0) {
-        scrollPositionsRef.current.set(
-          MAIN_TAB_ROUTES[exactCurrentIndex]!,
-          window.scrollY
-        )
+      if (currentIndex >= 0) {
+        scrollPositionsRef.current.set(pathname, window.scrollY)
       }
       setMovingState(true)
       pushPreparedRoute(targetIndex)
@@ -333,7 +328,9 @@ export function useSwipeGesture({
       event.pointerType !== "touch" ||
       !event.isPrimary ||
       event.button !== 0 ||
-      exactCurrentIndex < 0 ||
+      // Nested pages such as /profile/friends belong to their parent tab, so
+      // the prefix match lets them participate in tab swipes too.
+      currentIndex < 0 ||
       movingRef.current ||
       effectiveWidth <= 0
     ) {
@@ -345,7 +342,7 @@ export function useSwipeGesture({
     controlsRef.current?.stop()
     gestureRef.current = {
       pointerId: event.pointerId,
-      sourceIndex: exactCurrentIndex,
+      sourceIndex: currentIndex,
       startX: event.clientX,
       startY: event.clientY,
       lastX: event.clientX,
@@ -504,11 +501,12 @@ export function useSwipeGesture({
     finishPointer(event, true)
   }
 
-  // Per-tab scroll memory: remember the latest scroll offset while the tab
-  // is the canonical route and the swipe transition is not in flight.
+  // Per-route scroll memory: remember the latest scroll offset while the
+  // route belongs to a main tab and the swipe transition is not in flight.
+  // Keyed by the full pathname so nested pages keep their own offset.
   React.useEffect(() => {
-    if (exactCurrentIndex < 0 || movingRef.current) return
-    const route = MAIN_TAB_ROUTES[exactCurrentIndex]!
+    if (currentIndex < 0 || movingRef.current) return
+    const route = pathname
     const rememberScroll = () => {
       if (!movingRef.current) {
         scrollPositionsRef.current.set(route, window.scrollY)
@@ -518,7 +516,7 @@ export function useSwipeGesture({
     rememberScroll()
     window.addEventListener("scroll", rememberScroll, { passive: true })
     return () => window.removeEventListener("scroll", rememberScroll)
-  }, [exactCurrentIndex])
+  }, [currentIndex, pathname])
 
   // After a swipe-driven router.push the canonical page mounts behind its
   // warmed preview. Restore the destination scroll, then atomically swap the
