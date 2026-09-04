@@ -104,17 +104,26 @@ function NotedFloatingButton({
 function ConflictsFloatingButton({
   conflictsCount,
   isScrollingDown,
+  interactive,
+  isPreview,
   onOpenConflicts,
 }: {
   conflictsCount: number
   isScrollingDown: boolean
+  interactive: boolean
+  isPreview: boolean
   onOpenConflicts: () => void
 }) {
   if (conflictsCount <= 0) return null
 
   return (
     <div
-      className="fixed bottom-34 z-20 transition-transform duration-150 ease-out"
+      className={cn(
+        "absolute bottom-34 z-20 transition-transform duration-150 ease-out",
+        interactive && !isPreview
+          ? "pointer-events-auto"
+          : "pointer-events-none"
+      )}
       style={{
         right: "1.5rem",
       }}
@@ -236,6 +245,8 @@ export function FloatingButtons({
       <ConflictsFloatingButton
         conflictsCount={conflictsCount}
         isScrollingDown={isScrollingDown}
+        interactive={interactive}
+        isPreview={isPreview}
         onOpenConflicts={onOpenConflicts}
       />
       <ScrollTopFloatingButton
