@@ -361,12 +361,13 @@ export async function runExtraction(
           throw new Error("جدول دروس در این صفحه پیدا نشد");
         }
 
-        if (result.paging.from === 1) anchorSeen = true;
-        if (result.paging.to && result.paging.from) {
-          pageSize = Math.max(
-            pageSize,
-            result.paging.to - result.paging.from + 1,
-          );
+        // Cache paging reads once per page - repeated property access
+        // inside the loop is wasted work.
+        const { from, to, totalRecords } = result.paging;
+
+        if (from === 1) anchorSeen = true;
+        if (to && from) {
+          pageSize = Math.max(pageSize, to - from + 1);
         }
         pages++;
         totalDuplicateCount += result.duplicateCount;
@@ -376,18 +377,14 @@ export async function runExtraction(
         await offeringsStorage.setValue(merged);
 
         const isLastPage =
-          result.paging.totalRecords !== null &&
-          result.paging.to !== null &&
-          result.paging.to >= result.paging.totalRecords;
+          totalRecords !== null && to !== null && to >= totalRecords;
 
         const totalPages =
-          result.paging.totalRecords && pageSize > 0
-            ? Math.ceil(result.paging.totalRecords / pageSize)
+          totalRecords && pageSize > 0
+            ? Math.ceil(totalRecords / pageSize)
             : null;
         const computedPage =
-          result.paging.from !== null && pageSize > 0
-            ? Math.ceil(result.paging.from / pageSize)
-            : pages;
+          from !== null && pageSize > 0 ? Math.ceil(from / pageSize) : pages;
 
         const showNumbers = !isLastPage || anchorSeen;
         lastProgress = {

@@ -13,30 +13,41 @@ export interface JalaliDate {
   jd: number;
 }
 
+// Built once at module load - Intl formatter construction is expensive and
+// the Persian calendar never changes between calls.
+let persianFormatter: Intl.DateTimeFormat | null = null;
+try {
+  persianFormatter = new Intl.DateTimeFormat("en-US-u-ca-persian", {
+    year: "numeric",
+    month: "numeric",
+    day: "numeric",
+  });
+} catch {
+  // Persian calendar unavailable (should not happen in Chromium).
+  persianFormatter = null;
+}
+
 export function currentJalali(now: Date = new Date()): JalaliDate {
   try {
-    const parts = new Intl.DateTimeFormat("en-US-u-ca-persian", {
-      year: "numeric",
-      month: "numeric",
-      day: "numeric",
-    }).formatToParts(now);
+    const parts = persianFormatter?.formatToParts(now);
+    if (parts) {
+      const get = (type: string) =>
+        Number(parts.find((p) => p.type === type)?.value ?? NaN);
 
-    const get = (type: string) =>
-      Number(parts.find((p) => p.type === type)?.value ?? NaN);
+      const jy = get("year");
+      const jm = get("month");
+      const jd = get("day");
 
-    const jy = get("year");
-    const jm = get("month");
-    const jd = get("day");
-
-    if (
-      Number.isFinite(jy) &&
-      Number.isFinite(jm) &&
-      Number.isFinite(jd)
-    ) {
-      return { jy, jm, jd };
+      if (
+        Number.isFinite(jy) &&
+        Number.isFinite(jm) &&
+        Number.isFinite(jd)
+      ) {
+        return { jy, jm, jd };
+      }
     }
   } catch {
-    // Persian calendar unavailable (should not happen in Chromium).
+    // Formatter threw at runtime - fall through to the approximation.
   }
 
   // Fallback approximation: good enough for a year dropdown.
