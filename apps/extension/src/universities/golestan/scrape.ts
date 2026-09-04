@@ -228,13 +228,21 @@ export function scrapeGolestanOfferings(): ScrapeResult {
         let theoreticalUnits =
             toFloat(cleanText(cells[2]?.textContent ?? "")) ?? 0;
         let practicalUnits = toFloat(cleanText(cells[3]?.textContent ?? "")) ?? 0;
-        // Golestan often stores lab courses as 1 نظری + 1 عملی (sum 2) while the
-        // official chart defines labs as a standalone 0+1 unit. Example:
-        // "آزمایشگاه مدارهای منطقی (ورودی 98 و بعد از آن)" scraped as 1/1
-        // but the chart expects 0/1. Normalize the mis-reported case.
-        if (/آزمایشگاه/.test(courseName) && theoreticalUnits === 1 && practicalUnits === 1) {
-            theoreticalUnits = 0;
-            practicalUnits = 1;
+        // Golestan inflates some 1-unit courses to 1+1 (total 2) while the
+        // official chart defines them as 1 total unit. Normalize the common
+        // cases: labs/workshops -> 0+1, physical education -> 1+0.
+        if (theoreticalUnits === 1 && practicalUnits === 1) {
+            const isLab = /آزمایشگاه|کارگاه/.test(courseName);
+            const isPE = /تربیت بدنی|تربیت|ورزش/.test(courseName);
+            if (isLab || isPE) {
+                if (isPE) {
+                    theoreticalUnits = 1;
+                    practicalUnits = 0;
+                } else {
+                    theoreticalUnits = 0;
+                    practicalUnits = 1;
+                }
+            }
         }
         const maxCapacity = toInt(cleanText(cells[4]?.textContent ?? ""));
         const currentEnrollment = toInt(cleanText(cells[5]?.textContent ?? ""));
