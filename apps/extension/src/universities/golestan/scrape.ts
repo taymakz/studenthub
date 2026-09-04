@@ -225,9 +225,17 @@ export function scrapeGolestanOfferings(): ScrapeResult {
         seenIndexes.add(index);
 
         const courseName = cleanText(cells[1]?.textContent ?? "");
-        const theoreticalUnits =
+        let theoreticalUnits =
             toFloat(cleanText(cells[2]?.textContent ?? "")) ?? 0;
-        const practicalUnits = toFloat(cleanText(cells[3]?.textContent ?? "")) ?? 0;
+        let practicalUnits = toFloat(cleanText(cells[3]?.textContent ?? "")) ?? 0;
+        // Golestan often stores lab courses as 1 نظری + 1 عملی (sum 2) while the
+        // official chart defines labs as a standalone 0+1 unit. Example:
+        // "آزمایشگاه مدارهای منطقی (ورودی 98 و بعد از آن)" scraped as 1/1
+        // but the chart expects 0/1. Normalize the mis-reported case.
+        if (/آزمایشگاه/.test(courseName) && theoreticalUnits === 1 && practicalUnits === 1) {
+            theoreticalUnits = 0;
+            practicalUnits = 1;
+        }
         const maxCapacity = toInt(cleanText(cells[4]?.textContent ?? ""));
         const currentEnrollment = toInt(cleanText(cells[5]?.textContent ?? ""));
         const presentationType = cleanText(cells[7]?.textContent ?? "") || null;
