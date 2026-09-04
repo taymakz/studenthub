@@ -14,12 +14,14 @@ if (!existsSync(outDir)) {
   mkdirSync(outDir, { recursive: true });
 }
 
-for (const size of SIZES) {
-  await sharp(svg, { density: 512 })
-    .resize(size, size)
-    .png({ compressionLevel: 9 })
-    .toFile(join(outDir, `icon-${size}.png`));
-  console.log(`icon-${size}.png`);
-}
+await Promise.all(
+  SIZES.map(async (size) => {
+    await sharp(svg, { density: 512 })
+      .resize(size, size)
+      .png({ compressionLevel: 9 })
+      .toFile(join(outDir, `icon-${size}.png`));
+    console.log(`icon-${size}.png`);
+  }),
+);
 
 console.log("done");
