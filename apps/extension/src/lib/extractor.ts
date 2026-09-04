@@ -218,8 +218,36 @@ export async function runExtraction(
   try {
     if (adapter.navigateNext) {
       // ── Frame-based pagination workflow (e.g. Golestan) ───────────────
+      // The report opens on whatever page the user is viewing - rewind to
+      // page 1 first so the full dataset gets collected, then walk forward.
+      if (adapter.navigatePrev) {
+        let paging = await readPaging(tabId, adapter.readPaging);
+        let guard = 0;
+        while (paging.hasPrev && guard < 300) {
+          if (await isStopped()) throw new StopSignal();
+          await broadcast({
+            type: "EXTRACTION_PROGRESS",
+            progress: {
+              phase: "rewind",
+              page: 0,
+              totalPages: null,
+              collectedRows: 0,
+              addedRows: 0,
+              message: "برگشت به صفحه اول…",
+            },
+          });
+
+          const clicked = await adapter.navigatePrev(tabId);
+          if (!clicked) break;
+          await sleep(400);
+          paging = await readPaging(tabId, adapter.readPaging);
+          guard++;
+        }
+      }
+
       // Portals operating inside nested iframes without full-page reloads
       // progress sequentially until navigateNext reports end-of-records.
+      let moreAhead = true;
       while (true) {
         if (await isStopped()) throw new StopSignal();
 
@@ -235,13 +263,22 @@ export async function runExtraction(
         const { merged, added } = mergeRows(stored, result.rows);
         await offeringsStorage.setValue(merged);
 
+        // Golestan renders no page counter - estimate one page ahead while
+        // navigation keeps succeeding so the bar creeps toward 100%. If a
+        // deployment does render "صفحه X از Y", prefer the real total.
+        const realTotal = result.paging.totalPages ?? null;
+        const currentPage = result.paging.page ?? pages;
+        const progressTotal = realTotal ?? (moreAhead ? currentPage + 1 : currentPage);
+
         lastProgress = {
           phase: "collect",
-          page: pages,
-          totalPages: null,
+          page: currentPage,
+          totalPages: progressTotal,
           collectedRows: merged.length,
           addedRows: added,
-          message: `استخراج صفحه ${pages}… (${merged.length} درس ذخیره شد)`,
+          message: realTotal !== null
+            ? `استخراج صفحه ${currentPage} از ${realTotal}… (${merged.length} درس ذخیره شد)`
+            : `استخراج صفحه ${pages}… (${merged.length} درس ذخیره شد)`,
         };
         await setState({ running: true, progress: lastProgress });
         await broadcast({ type: "EXTRACTION_PROGRESS", progress: lastProgress });
@@ -254,9 +291,19 @@ export async function runExtraction(
           break;
         }
 
-        const hasNext = await adapter.navigateNext(tabId);
-        if (!hasNext) break;
+        moreAhead = await adapter.navigateNext(tabId);
+        if (!moreAhead) break;
         await sleep(400);
+      }
+
+      // Final tick so the bar reaches 100% before the done event lands.
+      if (lastProgress) {
+        lastProgress = {
+          ...lastProgress,
+          page: lastProgress.page || pages,
+          totalPages: lastProgress.page || pages,
+        };
+        await broadcast({ type: "EXTRACTION_PROGRESS", progress: lastProgress });
       }
     } else {
       // ── Full-page reload pagination workflow (e.g. Amoozeshyar) ────────

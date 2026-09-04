@@ -7,6 +7,10 @@ export interface PagingInfo {
   to: number | null;
   hasNext: boolean;
   hasPrev: boolean;
+  /** Current page number when the portal renders a counter (Golestan "صفحه X از Y"). */
+  page?: number | null;
+  /** Total page count from the counter, when rendered. */
+  totalPages?: number | null;
 }
 
 export interface ScrapedOffering {
