@@ -2,7 +2,7 @@
 
 import * as React from "react"
 
-interface MainTabWarmupContextValue {
+export interface MainTabWarmupContextValue {
   enabled: boolean
   reportStarted: () => void
   reportReady: () => void
