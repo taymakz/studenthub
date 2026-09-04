@@ -8,12 +8,35 @@ export const MAIN_TAB_ROUTES = [
 export type MainTabRoute = (typeof MAIN_TAB_ROUTES)[number]
 export type GestureAxis = "pending" | "horizontal" | "vertical"
 
+const ROUTE_SWIPE_OVERLAY_PREFIXES = [
+  "drawer-",
+  "dialog-",
+  "alert-dialog-",
+] as const
+
+const ROUTE_SWIPE_OVERLAY_TRIGGERS = new Set([
+  "drawer-trigger",
+  "dialog-trigger",
+  "alert-dialog-trigger",
+])
+
 const AXIS_LOCK_DISTANCE = 10
 const HORIZONTAL_INTENT_RATIO = 1.25
 const DISTANCE_THRESHOLD_RATIO = 0.18
 const MAX_DISTANCE_THRESHOLD = 72
 const VELOCITY_THRESHOLD = 0.35
 const VELOCITY_DECAY_MS = 140
+
+/**
+ * Open overlays own their gestures, but their closed triggers are still part
+ * of the page swipe surface. A drag that begins on a trigger must therefore
+ * be able to become a route swipe while a tap continues to open the overlay.
+ */
+export function isRouteSwipeBlockingOverlaySlot(slot: string | null): boolean {
+  if (!slot || ROUTE_SWIPE_OVERLAY_TRIGGERS.has(slot as string)) return false
+
+  return ROUTE_SWIPE_OVERLAY_PREFIXES.some((prefix) => slot.startsWith(prefix))
+}
 
 export function mainTabIndex(pathname: string, exact = false): number {
   return MAIN_TAB_ROUTES.findIndex((route) =>

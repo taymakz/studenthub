@@ -5,6 +5,9 @@ import { usePathname, useRouter } from "next/navigation"
 import { AnimatePresence } from "motion/react"
 
 import { TelegramLoginWidget } from "@/components/auth/telegram-login-widget"
+import { MAIN_TAB_ROUTES, mainTabIndex } from "@/lib/route-swipe"
+import { preloadMainTabRoutes } from "@/lib/main-tab-route-preload"
+import { MainTabWarmupProvider } from "@/lib/main-tab-warmup-context"
 import { useProfileStore } from "@/stores/profile-store"
 import { useSdkReady } from "@/providers/sdk-init"
 
@@ -20,6 +23,10 @@ import {
   useBootstrapRedirects,
   useBootstrapStaleToken,
 } from "./app-bootstrap/use-bootstrap-redirects"
+
+import { isProfileComplete } from "@/lib/api"
+
+const MAIN_TAB_WARMUP_TIMEOUT_MS = 5000
 
 function getStaleToken(ready: boolean, checked: boolean, hydrated: boolean, err: unknown, user: unknown, sdk: boolean) {
   if (!ready) return false
@@ -91,6 +98,8 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
   const sdkReady = useSdkReady()
   const ready = useBootstrapReady()
   const [visible, setVisible] = React.useState(false)
+  const [mainTabsReady, setMainTabsReady] = React.useState(false)
+  const [mainTabWarmupExpired, setMainTabWarmupExpired] = React.useState(false)
   const redirectedRef = React.useRef(false)
   const prevPathnameRef = React.useRef(pathname)
 
@@ -114,11 +123,66 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
   const maintenance = useProfileStore((s) => s.maintenance)
   const banned = useProfileStore((s) => s.banned)
   const booted = hydrated && !storeError
+  const profileComplete = isProfileComplete(profile ?? null)
 
   useBootstrapHydrate()
 
   const { webAuthChecked, needsWebAuth, setNeedsWebAuth } =
     useBootstrapWebAuth(ready, sdkReady, user, hydrated)
+
+  const mainTabWarmupEnabled =
+    booted &&
+    Boolean(user) &&
+    profileComplete &&
+    !maintenance &&
+    !banned &&
+    !needsWebAuth
+  const isMainTabRoute = mainTabIndex(pathname ?? "") >= 0
+  const reportMainTabsReady = React.useCallback(
+    () => setMainTabsReady(true),
+    []
+  )
+  const reportMainTabsStarted = React.useCallback(() => {
+    // The `(app)` layout can unmount while the user edits setup and mount
+    // again later. Its retained preview trees are new in that case, so this
+    // warmup generation must earn readiness again before the cover leaves.
+    setMainTabsReady(false)
+    setMainTabWarmupExpired(false)
+  }, [])
+  const mainTabWarmupContext = React.useMemo(
+    () => ({
+      enabled: mainTabWarmupEnabled,
+      reportStarted: reportMainTabsStarted,
+      reportReady: reportMainTabsReady,
+    }),
+    [mainTabWarmupEnabled, reportMainTabsReady, reportMainTabsStarted]
+  )
+
+  // Start every main-tab chunk as soon as a valid profile is known. This also
+  // runs while the entry route is still "/", before its redirect mounts the
+  // swipe shell. The shell shares this exact cache and performs the real DOM
+  // warmup after landing on a tab.
+  React.useEffect(() => {
+    if (!mainTabWarmupEnabled) return
+
+    for (const route of MAIN_TAB_ROUTES) router.prefetch(route)
+    void preloadMainTabRoutes()
+  }, [mainTabWarmupEnabled, router])
+
+  // A slow or failed chunk must never trap the user behind the splash. Normal
+  // startup waits for all four preview trees to commit; this cap releases the
+  // app and lets the existing per-route retry path handle an early gesture.
+  React.useEffect(() => {
+    if (!visible || !mainTabWarmupEnabled || !isMainTabRoute || mainTabsReady) {
+      return
+    }
+
+    const timeout = setTimeout(
+      () => setMainTabWarmupExpired(true),
+      MAIN_TAB_WARMUP_TIMEOUT_MS
+    )
+    return () => clearTimeout(timeout)
+  }, [isMainTabRoute, mainTabWarmupEnabled, mainTabsReady, visible])
 
   useBootstrapGating({
     booted,
@@ -168,20 +232,27 @@ export function AppBootstrap({ children }: { children: React.ReactNode }) {
 
   useBootstrapStaleToken(hasStaleWebToken, setNeedsWebAuth)
 
+  const holdSplashForMainTabs =
+    visible &&
+    mainTabWarmupEnabled &&
+    isMainTabRoute &&
+    !mainTabsReady &&
+    !mainTabWarmupExpired
+
   if (showWebLogin) {
     return <TelegramLoginWidget />
   }
 
   return (
-    <>
+    <MainTabWarmupProvider value={mainTabWarmupContext}>
       {children}
       <AnimatePresence mode="wait">
         {errored ? (
           <BootstrapErrorView />
-        ) : !visible ? (
+        ) : !visible || holdSplashForMainTabs ? (
           <BootstrapSplashView />
         ) : null}
       </AnimatePresence>
-    </>
+    </MainTabWarmupProvider>
   )
 }

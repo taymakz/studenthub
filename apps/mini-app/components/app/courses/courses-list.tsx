@@ -1,8 +1,13 @@
 "use client"
 
+import * as React from "react"
+
 import { Virtuoso } from "react-virtuoso"
 
 import type { FriendCard, Offering } from "@/lib/api"
+
+import { cn } from "@workspace/ui/lib/utils"
+import { useRoutePageContext } from "@/lib/route-preview-context"
 
 import { CourseCard } from "./course-card"
 import { FriendFaces } from "@/components/app/friends/friend-faces"
@@ -28,19 +33,28 @@ export function CoursesList({
   matesByIndex?: Map<string, { count: number; sample: FriendCard[] }>
   onMatesClick?: (o: Offering) => void
 }) {
+  const { interactive, isPreview: isRoutePreview } = useRoutePageContext()
+  // Canonical pages reached through swipe first mount behind their retained
+  // preview. Do not start a delayed row entrance after that cover is removed.
+  const [animateItems] = React.useState(() => interactive && !isRoutePreview)
   return (
     <Virtuoso
       useWindowScroll
       data={filtered}
+      defaultItemHeight={188}
       computeItemKey={(_, o) => o.index}
       overscan={6}
       itemContent={(index, o) => (
         <div
-          className="relative animate-fadeIn py-1.5"
-          style={{
-            animationDelay: `${Math.min(index * 30, 300)}ms`,
-            animationFillMode: "backwards",
-          }}
+          className={cn(animateItems && "animate-fadeIn", "relative py-1.5")}
+          style={
+            animateItems
+              ? {
+                  animationDelay: `${Math.min(index * 30, 300)}ms`,
+                  animationFillMode: "backwards",
+                }
+              : undefined
+          }
         >
           <CourseCard
             offering={o}

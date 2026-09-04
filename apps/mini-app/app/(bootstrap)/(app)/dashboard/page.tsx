@@ -11,6 +11,7 @@ import {
 import ContentLayout from "@/components/app/content-layout"
 import { Badge } from "@workspace/ui/components/badge"
 import { LightRays } from "@/components/ui/light-rays"
+import { useIsRoutePreview } from "@/lib/route-preview-context"
 import ChartDrawer from "./_components/chart-drawer"
 
 const items = [
@@ -47,13 +48,15 @@ const items = [
 ]
 
 export default function DashboardPage() {
+  const isRoutePreview = useIsRoutePreview()
+
   return (
     <>
       <div className="relative flex h-70 items-center justify-center safe-top-padding pb-[calc(var(--tg-safe-area-inset-top)+var(--tg-content-safe-area-inset-top))]">
         <h1 className="z-10 font-semibold tracking-[0.35em] text-slate-800/60 uppercase dark:text-slate-200/60">
           Dashboard
         </h1>
-        <LightRays />
+        <LightRays count={isRoutePreview ? 0 : 5} />
       </div>
       <ContentLayout>
         <div className="container mx-auto grid grid-cols-4 gap-x-4 gap-y-8 px-4 pt-6">

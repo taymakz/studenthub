@@ -36,7 +36,7 @@ export default function SettingsPage() {
         <h1 className="z-10 font-semibold tracking-[0.35em] text-slate-800/60 uppercase dark:text-slate-200/60">
           Settings
         </h1>
-        <LightRays />
+        <LightRays count={isRoutePreview ? 0 : 5} />
       </div>
       <ContentLayout>
         <div className="mx-auto max-w-screen-sm space-y-6 pt-4">

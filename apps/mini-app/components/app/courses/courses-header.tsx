@@ -13,6 +13,7 @@ import {
   InputGroupInput,
 } from "@workspace/ui/components/input-group"
 import { cn } from "@workspace/ui/lib/utils"
+import { useIsRoutePreview } from "@/lib/route-preview-context"
 
 function CellIcon({
   icon: Icon,
@@ -42,6 +43,7 @@ export function CoursesHeader({
   onOpenFilter: () => void
   onOpenViewMode: () => void
 }) {
+  const isRoutePreview = useIsRoutePreview()
   const [expanded, setExpanded] = React.useState(false)
   const containerRef = React.useRef<HTMLDivElement>(null)
   const inputRef = React.useRef<HTMLInputElement>(null)
@@ -81,7 +83,7 @@ export function CoursesHeader({
                 <m.button
                   key="search-btn"
                   initial={false}
-                  layoutId="courses-search"
+                  layoutId={isRoutePreview ? undefined : "courses-search"}
                   className="flex size-16 cursor-pointer items-center justify-center rounded-full bg-neutral-200 dark:bg-secondary/80"
                   onClick={() => setExpanded(true)}
                   whileTap={{ scale: 0.95 }}
@@ -106,7 +108,7 @@ export function CoursesHeader({
                 <m.div
                   key="search-input"
                   ref={containerRef}
-                  layoutId="courses-search"
+                  layoutId={isRoutePreview ? undefined : "courses-search"}
                   className="absolute start-0 top-0 z-50 w-full"
                   transition={{ type: "spring", bounce: 0, duration: 0.2 }}
                 >
