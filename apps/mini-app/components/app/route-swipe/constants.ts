@@ -1,0 +1,10 @@
+import { MAIN_TAB_ROUTES } from "@/lib/route-swipe"
+
+export const RELEASE_EASING = [0.32, 0.72, 0, 1] as const
+export const ROUTE_TRANSITION_TIMEOUT_MS = 4000
+export const ROUTE_PREVIEW_READY_TIMEOUT_MS = 4000
+export const COURSES_ROUTE_INDEX = MAIN_TAB_ROUTES.indexOf("/courses")
+export const ROUTE_STABILIZATION_FRAMES = 3
+export const COURSES_STABILIZATION_FRAMES = 6
+export const ROUTE_PREVIEW_MAX_STABILIZATION_FRAMES = 12
+export const COURSES_PREVIEW_MIN_RENDERED_ITEMS = 3
