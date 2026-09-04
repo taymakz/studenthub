@@ -10,5 +10,17 @@
       "fa": "تهران",
       "en": "Tehran"
     }
+  },
+  {
+    "slug": "azad-neyshabur",
+    "name": {
+      "fa": "دانشگاه آزاد نیشابور",
+      "en": "Neyshabur Azad University"
+    },
+    "type": "azad",
+    "location": {
+      "fa": "نیشابور",
+      "en": "Neyshabur"
+    }
   }
 ]
