@@ -7,6 +7,7 @@ import { CopyButton } from "@workspace/ui/components/copy-button"
 import { cn } from "@workspace/ui/lib/utils"
 
 import { type Offering, professorName } from "@/lib/api"
+import { joinLocations, joinSchedules } from "@/components/app/profile/schedule-util"
 import { fmt, unitClass } from "./course-format"
 
 export type ErrorCourseType =
@@ -141,10 +142,10 @@ export function CourseTable({
       {!hideClassCode && (
         <TableRow label="کد ارائه" value={fmt(offering.classCode)} ltr />
       )}
-      <TableRow label="مکان" value={offering.location || "ثبت نشده"} ltr />
+      <TableRow label="مکان" value={joinLocations(offering.location) || "ثبت نشده"} ltr />
       <TableRow
         label="زمان تشکیل کلاس"
-        value={offering.classSchedule || "ثبت نشده"}
+        value={joinSchedules(offering.classSchedule) || "ثبت نشده"}
         ltr
         error={errorType === "class_schedule"}
       />

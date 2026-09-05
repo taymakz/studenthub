@@ -1,6 +1,7 @@
 "use client"
 
 import type { Offering } from "@/lib/api"
+import { classSessions, type ClassSession } from "./schedule-util"
 
 /**
  * Shared canvas renderer pieces for the خروجی عکس feature
@@ -235,34 +236,41 @@ function toMinutes(time: string): number | null {
   return h * 60 + m
 }
 
-/** Groups noted offerings by weekday (fixed order, sorted by start time). */
+/** One weekly-schedule card: a SINGLE session of an offering (a course that
+ *  meets twice a week appears under both days). */
+export interface WeeklyEntry extends ClassSession {
+  offering: Offering
+  /** start parsed to minutes-of-day (null when unparsable). */
+  startMin: number | null
+}
+
+/**
+ * Groups noted offerings by weekday (fixed order, sorted by start time),
+ * expanding multi-session courses into one entry per session.
+ */
 export function groupByWeekday(
-  offerings: Offering[],
-  weekdayOf: (o: Offering) => string | null
-): Array<{ day: string; items: Offering[] }> {
-  const map = new Map<string, Offering[]>()
+  offerings: Offering[]
+): Array<{ day: string; items: WeeklyEntry[] }> {
+  const map = new Map<string, WeeklyEntry[]>()
   for (const o of offerings) {
-    const day = weekdayOf(o)
-    if (!day) continue
-    map.set(day, [...(map.get(day) ?? []), o])
+    for (const s of classSessions(o)) {
+      if (!s.day) continue
+      const entry: WeeklyEntry = {
+        ...s,
+        offering: o,
+        startMin: s.start ? toMinutes(s.start) : null,
+      }
+      map.set(s.day, [...(map.get(s.day) ?? []), entry])
+    }
   }
-  const startTime = (o: Offering): number => {
-    const times = [
-      ...(o.classSchedule?.matchAll(/\b(\d{1,2}:\d{2})\b/g) ?? []),
-    ].map((m) => m[1]!)
-    const s = times[0]
-    if (!s) return 0
-    const [hStr, mStr] = s.split(":")
-    const h = Number(hStr)
-    const m = Number(mStr)
-    if (!Number.isFinite(h) || !Number.isFinite(m)) return 0
-    return h * 60 + m
-  }
-  const result: Array<{ day: string; items: Offering[] }> = []
+  const result: Array<{ day: string; items: WeeklyEntry[] }> = []
   for (const day of PERSIAN_WEEKDAYS) {
     const items = map.get(day)
     if (!items || items.length === 0) continue
-    result.push({ day, items: items.sort((a, b) => startTime(a) - startTime(b)) })
+    result.push({
+      day,
+      items: items.sort((a, b) => (a.startMin ?? 0) - (b.startMin ?? 0)),
+    })
   }
   return result
 }
@@ -272,10 +280,7 @@ export function groupByWeekday(
  * getSoonestCourseClassSchedule (الان / X دقیقه دیگه / فردا HH:MM / …).
  */
 export function soonestClassMessage(
-  groups: Array<{ day: string; items: Offering[] }>,
-  startMinutesOf: (o: Offering) => number | null,
-  endMinutesOf: (o: Offering) => number | null,
-  startTimeOf: (o: Offering) => string | null
+  groups: Array<{ day: string; items: WeeklyEntry[] }>
 ): string {
   const today = currentPersianWeekday()
   const now = toMinutes(currentTimeHHMM()) ?? 0
@@ -291,13 +296,13 @@ export function soonestClassMessage(
 
     if (i === 0) {
       let soonest: { m: number; str: string } | null = null
-      for (const o of group.items) {
-        const s = startMinutesOf(o)
-        const e = endMinutesOf(o)
+      for (const entry of group.items) {
+        const s = entry.startMin
+        const e = entry.end ? toMinutes(entry.end) : null
         if (s == null || e == null) continue
         if (now >= s && now <= e) return "الان"
         if (now < s && (soonest == null || s < soonest.m)) {
-          soonest = { m: s, str: startTimeOf(o) ?? "" }
+          soonest = { m: s, str: entry.start ?? "" }
         }
       }
       if (soonest) {
@@ -315,7 +320,7 @@ export function soonestClassMessage(
       }
     } else {
       const first = group.items[0]
-      const str = first ? startTimeOf(first) : null
+      const str = first?.start ?? null
       if (str) {
         if (i === 1) return `کلاس بعدی فردا ${str}`
         if (i === 2) return `کلاس بعدی پس فردا ${str}`

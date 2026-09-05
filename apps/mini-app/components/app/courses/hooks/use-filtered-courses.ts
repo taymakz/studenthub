@@ -1,6 +1,6 @@
 "use client"
 
-import { extractWeekday, normalizeDay } from "@/components/app/profile/schedule-util"
+import { classSessions, joinSchedules, normalizeDay } from "@/components/app/profile/schedule-util"
 import type { Offering } from "@/lib/api"
 import type { CoursesFilters } from "../filter-drawer"
 
@@ -59,10 +59,9 @@ export function useFilteredCourses(opts: {
       return t != null && chartTermFilter.has(t)
     })
   if (filters.days.length)
-    list = list.filter((o) => {
-      const day = extractWeekday(o.classSchedule)
-      return day != null && dayFilter.has(day)
-    })
+    list = list.filter((o) =>
+      classSessions(o).some((s) => s.day != null && dayFilter.has(s.day))
+    )
   if (filters.onlyCanTake && isChartComplete) list = list.filter((o) => canTake(o))
   if (term)
     list = list.filter((o) => {
@@ -71,7 +70,7 @@ export function useFilteredCourses(opts: {
           ? o.professor
           : ((o.professor as { fa?: string } | null)?.fa ?? "")
       return words.every((w) =>
-        `${o.courseName} ${prof} ${o.courseCode} ${o.classSchedule ?? ""}`.toLowerCase().includes(w)
+        `${o.courseName} ${prof} ${o.courseCode} ${joinSchedules(o.classSchedule) ?? ""}`.toLowerCase().includes(w)
       )
     })
   const filtered = list

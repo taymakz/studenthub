@@ -31,10 +31,7 @@ import { useNotedSort } from "@/components/app/courses/noted/use-noted-sort"
 import { ExamGroups } from "@/components/app/profile/exam/exam-groups"
 import { WeeklyGroups } from "@/components/app/profile/weekly/weekly-groups"
 import { groupByWeekday } from "@/components/app/profile/export-canvas"
-import {
-  extractWeekday,
-  groupByExamDate,
-} from "@/components/app/profile/schedule-util"
+import { groupByExamDate } from "@/components/app/profile/schedule-util"
 import { OfferingsEmpty } from "@/components/app/profile/use-noted-offerings"
 import { flattenChart, uniqueTerms, type ChartCourseItem } from "@/lib/chart"
 import { parseTermCode } from "@/lib/term"
@@ -235,10 +232,7 @@ function useFriendSchedule(
   const notedOfferings: Offering[] = offerings.filter((o) =>
     viewerNotedIdx.has(o.index)
   )
-  const weekly = groupByWeekday(
-    notedOfferings,
-    (o) => extractWeekday(o.classSchedule) ?? "نامشخص"
-  )
+  const weekly = groupByWeekday(notedOfferings)
   const exams = groupByExamDate(notedOfferings)
   const sortedNoted = useNotedSort(notedOfferings)
   const totalUnits = sortedNoted.reduce(

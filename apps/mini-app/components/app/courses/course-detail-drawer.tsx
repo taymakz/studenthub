@@ -19,6 +19,7 @@ import {
   professorName,
 } from "@/lib/api"
 import { useProfileStore } from "@/stores/profile-store"
+import { joinSchedules } from "@/components/app/profile/schedule-util"
 import { CourseTable, CourseTags } from "./sections"
 import { courseLine } from "./course-format"
 import { StudentsDrawer } from "./students-drawer"
@@ -210,10 +211,10 @@ export function CourseDetailDrawer({
                           </p>
                           <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
                             <span>{x.classCode}</span>
-                            {x.classSchedule && (
+                            {joinSchedules(x.classSchedule) && (
                               <>
                                 <span>•</span>
-                                <span>{x.classSchedule}</span>
+                                <span>{joinSchedules(x.classSchedule)}</span>
                               </>
                             )}
                           </div>

@@ -19,7 +19,6 @@ import { useProfileStore } from "@/stores/profile-store"
 import { ToolButton } from "./tool-card"
 import { CalendarWeekIcon } from "./tool-icons"
 import { useNotedOfferings, OfferingsEmpty } from "./use-noted-offerings"
-import { extractWeekday } from "./schedule-util"
 import { groupByWeekday } from "./export-canvas"
 import { CourseDetailDrawer } from "@/components/app/courses/course-detail-drawer"
 import { ProfessorDrawer } from "@/components/app/courses/professor-drawer"
@@ -58,7 +57,7 @@ export function WeeklySchedule({ hideTrigger = false }: { hideTrigger?: boolean 
   } | null>(null)
   const cancelRef = useRef<(() => void) | null>(null)
 
-  const groups = groupByWeekday(notedOfferings, (o) => extractWeekday(o.classSchedule))
+  const groups = groupByWeekday(notedOfferings)
 
   const isNoted = (o: Offering) => noted.some((n) => !n.isDeleted && n.courseIndex === o.index)
   const description = useWeeklyDescription(groups)
