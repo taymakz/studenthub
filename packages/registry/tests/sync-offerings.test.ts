@@ -27,7 +27,13 @@ function professorName(p: any): string | null {
 }
 function fieldValue(o: any, key: string): string | null {
   if (key === "professor") return professorName(o.professor)
-  return o[key] == null ? null : String(o[key])
+  const v = o[key]
+  if (v == null) return null
+  if (Array.isArray(v)) {
+    const joined = v.filter(Boolean).join(" ، ")
+    return joined || null
+  }
+  return String(v)
 }
 function calculateDiff(current: OfferingDoc, previous: OfferingDoc | null) {
   if (!previous || previous.offerings.length === 0)
@@ -78,10 +84,10 @@ function off(
     classCode: "01",
     theoreticalUnits: 2,
     practicalUnits: 0,
-    classSchedule: null,
+    classSchedule: [],
     examSchedule: null,
     professor: null,
-    location: null,
+    location: [],
     ...overrides,
   }
 }

@@ -138,7 +138,7 @@ packages/registry/
 {
   "year": 1405,
   "semester": "MEHR",
-  "offerings": [{ "index": "123", "courseCode": "...", "courseName": "...", "theoreticalUnits": 3, "practicalUnits": 1, "professor": { "fa": "..." }, "classSchedule": "...", "examSchedule": "..." }]
+  "offerings": [{ "index": "123", "courseCode": "...", "courseName": "...", "theoreticalUnits": 3, "practicalUnits": 1, "professor": { "fa": "..." }, "classSchedule": ["یکشنبه از 07:30 تا 09:30", "سه شنبه از 09:30 تا 11:30"], "location": ["کلاس 202", null], "examSchedule": "..." }]
 }
 ```
 
