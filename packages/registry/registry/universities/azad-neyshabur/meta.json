@@ -1,0 +1,13 @@
+{
+  "$schema": "../../../schemas/university.json",
+  "type": "azad",
+  "slug": "azad-neyshabur",
+  "name": {
+    "fa": "دانشگاه آزاد نیشابور",
+    "en": "Neyshabur Azad University"
+  },
+  "location": {
+    "fa": "نیشابور",
+    "en": "Neyshabur"
+  }
+}

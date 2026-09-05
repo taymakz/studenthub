@@ -32,6 +32,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -44,6 +49,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -54,6 +64,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -72,12 +87,29 @@
     ]
   },
   {
+    "name": "آزمایشگاه مدارهای الکتریکی و الکترونیکی",
+    "theoreticalUnits": 0,
+    "practicalUnits": 1,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "آزمایشگاه مدارهای منطقی",
     "theoreticalUnits": 1,
     "practicalUnits": 0,
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -96,12 +128,29 @@
     ]
   },
   {
+    "name": "آزمایشگاه معماری کامپیوتر",
+    "theoreticalUnits": 0,
+    "practicalUnits": 1,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "آزمایشگاه مهندسی نرم افزار",
     "theoreticalUnits": 1,
     "practicalUnits": 0,
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -156,6 +205,18 @@
     ]
   },
   {
+    "name": "آشنایی با دفاع مقدس",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "آشنایی با شعر انگلیسی",
     "theoreticalUnits": 2,
     "practicalUnits": 0,
@@ -174,6 +235,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -216,12 +282,29 @@
     ]
   },
   {
+    "name": "آمار و احتمال (پیش نیاز دانشگاهی)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "آمار و احتمال مهندسی",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -257,6 +340,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -448,6 +536,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -469,6 +562,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -492,6 +590,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -514,6 +617,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -535,6 +643,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -559,6 +672,18 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "بازیابی اطلاعات",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -596,6 +721,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -630,6 +760,18 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "پروژه",
+    "theoreticalUnits": 0,
+    "practicalUnits": 3,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -702,6 +844,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -723,6 +870,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -772,6 +924,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -793,6 +950,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -978,6 +1140,18 @@
     ]
   },
   {
+    "name": "تفسیر موضوعی قرآن",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "تفسیر موضوعی نهج البلاغه",
     "theoreticalUnits": 2,
     "practicalUnits": 0,
@@ -1018,6 +1192,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1260,6 +1439,23 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "داده کاوی",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1293,6 +1489,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -1358,6 +1559,18 @@
     ]
   },
   {
+    "name": "روش پژوهش و ارائه",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "روش پژوهش و ارایه",
     "theoreticalUnits": 2,
     "practicalUnits": 0,
@@ -1414,6 +1627,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1424,6 +1642,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1448,6 +1671,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1484,6 +1712,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1556,6 +1789,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1573,6 +1811,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1588,6 +1831,11 @@
       },
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1630,12 +1878,36 @@
     ]
   },
   {
+    "name": "زبان تخصصی کامپیوتر",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "زبان خارجی",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "زبان فارسی (پیش نیاز دانشگاهی)",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1686,6 +1958,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1696,6 +1973,18 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "سیستمهای اطلاعات مدیریت",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1722,6 +2011,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1732,6 +2026,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1746,6 +2045,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1756,6 +2060,23 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "طراحی سیستم های دیجیتال",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1826,6 +2147,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1850,6 +2176,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1860,6 +2191,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1877,6 +2213,11 @@
       },
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1927,6 +2268,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1937,6 +2283,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -2063,6 +2414,18 @@
     ]
   },
   {
+    "name": "مباحث ویژه 2",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "مبانی حسابداری بخش عمومی",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -2099,6 +2462,18 @@
     ]
   },
   {
+    "name": "مبانی ساخت بازی های رایانه ای",
+    "theoreticalUnits": 3,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "مبانی سازمان و کسب و کار",
     "theoreticalUnits": 3,
     "practicalUnits": 0,
@@ -2117,6 +2492,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -2167,6 +2547,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2177,6 +2562,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -2227,6 +2617,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2237,6 +2632,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -2311,6 +2711,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2335,6 +2740,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2357,6 +2767,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -2429,6 +2844,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2451,6 +2871,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }

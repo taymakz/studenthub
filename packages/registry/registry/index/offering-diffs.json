@@ -40,5 +40,19 @@
       "changed": 0
     },
     "hasPrevious": true
+  },
+  {
+    "id": "ccd306c2-2948-4ab8-a649-4d9f9c5560c2",
+    "uniSlug": "azad-neyshabur",
+    "majorSlug": "computer-engineering",
+    "year": 1405,
+    "semester": "MEHR",
+    "createdAt": "2026-09-04T13:20:58.964Z",
+    "summary": {
+      "added": 0,
+      "removed": 0,
+      "changed": 0
+    },
+    "hasPrevious": true
   }
 ]
