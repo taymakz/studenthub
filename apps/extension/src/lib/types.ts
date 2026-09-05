@@ -26,10 +26,12 @@ export interface ScrapedOffering {
   minCapacity: number | null;
   maxCapacity: number | null;
   currentEnrollment: number | null;
-  classSchedule: string | null;
+  /** Sessions per week: ["یکشنبه از 07:30 تا 09:30", "سه شنبه از 09:30 تا 11:30"]. */
+  classSchedule: string[];
+  /** Index-matched with classSchedule when lengths align; single element broadcasts. */
+  location: Array<string | null>;
   examSchedule: string | null;
   professor: string | null;
-  location: string | null;
 }
 
 export interface ScrapeResult {
