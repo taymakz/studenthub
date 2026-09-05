@@ -49,6 +49,22 @@ export function useSetupWizard() {
   const profile = useProfileStore((s) => s.profile)
   const isSetupComplete = isProfileComplete(profile ?? null)
 
+  // Auto-advance/submit timers (Semester/Gender/Term/CurrentSemester/IsLastTerm
+  // steps select + then advance/submit after a short delay). A double-click
+  // fires the select handler TWICE — without the dedup below each call
+  // schedules its own timer and the wizard skips TWO steps (or submits twice).
+  const advanceTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const submittingRef = React.useRef(false)
+
+  const clearAdvanceTimer = React.useCallback(() => {
+    if (advanceTimerRef.current !== null) {
+      clearTimeout(advanceTimerRef.current)
+      advanceTimerRef.current = null
+    }
+  }, [])
+
+  React.useEffect(() => clearAdvanceTimer, [clearAdvanceTimer])
+
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior })
   }, [stepIndex])
@@ -149,21 +165,72 @@ export function useSetupWizard() {
 
   const submitMut = useMutation({
     mutationFn: async () => {
-      if (!data.university || !data.majorSlug || !data.degree || !data.entryYearRange || !data.entrySemester || !data.gender) {
-        throw new Error("لطفا همه گزینه‌ها را کامل کنید")
+      // Chain-safe resolution: a field falls back to the SAVED profile only
+      // while its whole upstream chain is untouched. Once the user picks a
+      // different upstream value (e.g. a new university), downstream fields
+      // MUST come from the wizard — the gated steps guarantee they were
+      // re-picked. This makes the completeness guard structurally unable to
+      // submit a mismatched mix of new and saved values, and unable to fail
+      // spuriously for editing users.
+      const uniChanged =
+        data.university != null && data.university.slug !== profile?.universitySlug
+      const majorChanged =
+        data.majorSlug != null && data.majorSlug !== profile?.majorSlug
+      const degreeChanged = data.degree != null && data.degree !== profile?.degree
+      const yearChanged =
+        data.entryYearRange != null && data.entryYearRange !== profile?.entryYearRange
+      const uniUpstreamClean = !uniChanged
+      const majorUpstreamClean = uniUpstreamClean && !majorChanged
+      const degreeUpstreamClean = majorUpstreamClean && !degreeChanged
+      const yearUpstreamClean = degreeUpstreamClean && !yearChanged
+
+      const universitySlug = data.university?.slug ?? profile?.universitySlug ?? undefined
+      const majorSlug =
+        data.majorSlug ?? (uniUpstreamClean ? profile?.majorSlug : undefined) ?? undefined
+      const degree =
+        data.degree ??
+        (majorUpstreamClean ? profile?.degree : undefined)
+      const entryYearRange =
+        data.entryYearRange ??
+        (degreeUpstreamClean ? profile?.entryYearRange : undefined)
+      const entrySemester =
+        data.entrySemester ??
+        (yearUpstreamClean ? profile?.entrySemester : undefined)
+      const gender = data.gender ?? profile?.gender ?? undefined
+
+      // Guarding each const directly lets TS narrow them for the payload.
+      const missing: string[] = []
+      if (!universitySlug) missing.push("دانشگاه")
+      if (!majorSlug) missing.push("رشته")
+      if (!degree) missing.push("مقطع")
+      if (!entryYearRange) missing.push("سال ورود")
+      if (!entrySemester) missing.push("ترم ورود")
+      if (!gender) missing.push("جنسیت")
+      if (
+        !universitySlug ||
+        !majorSlug ||
+        !degree ||
+        !entryYearRange ||
+        !entrySemester ||
+        !gender
+      ) {
+        throw new Error(`لطفا همه گزینه‌ها را کامل کنید: ${missing.join("، ")}`)
       }
-      const termNumber = data.termNumber ?? undefined
-      const currentSemesterCode = data.currentSemesterCode ?? effectiveCurrentSemesterCode
+
+      const termNumber = data.termNumber ?? profile?.termNumber ?? undefined
+      const currentSemesterCode =
+        data.currentSemesterCode ?? effectiveCurrentSemesterCode
+      const isLastTerm = data.isLastTerm ?? (profile?.isLastTerm || undefined)
       return updateProfile({
-        universitySlug: data.university.slug,
-        majorSlug: data.majorSlug,
-        degree: data.degree,
-        entryYearRange: data.entryYearRange,
-        entrySemester: data.entrySemester,
-        gender: data.gender,
+        universitySlug,
+        majorSlug,
+        degree,
+        entryYearRange,
+        entrySemester,
+        gender,
         ...(termNumber !== undefined ? { termNumber } : {}),
         ...(currentSemesterCode ? { currentSemesterCode } : {}),
-        ...(data.isLastTerm !== undefined ? { isLastTerm: data.isLastTerm } : {}),
+        ...(isLastTerm !== undefined ? { isLastTerm } : {}),
       })
     },
     onSuccess: async () => {
@@ -173,15 +240,49 @@ export function useSetupWizard() {
     },
   })
 
-  const submit = () => {
-    if (!canGoForward()) return
+  const submit = React.useCallback(() => {
+    if (submittingRef.current) return
+    submittingRef.current = true
+    submitMut.mutate(undefined, {
+      onSettled: () => {
+        submittingRef.current = false
+        setSaving(false)
+      },
+    })
     setSaving(true)
-    submitMut.mutate(undefined, { onSettled: () => setSaving(false) })
-  }
+  }, [submitMut])
 
   const selectAndMaybeAdvance = (patch: Partial<WizardData>) => {
     setData((prev) => ({ ...prev, ...patch }))
   }
+
+  /** Select + auto-advance exactly ONCE, no matter how many times the
+   *  select handler fires (single click, double-click, chip re-tap). */
+  const selectAndAdvance = (patch: Partial<WizardData>, delayMs = 120) => {
+    setData((prev) => ({ ...prev, ...patch }))
+    clearAdvanceTimer()
+    advanceTimerRef.current = setTimeout(() => {
+      advanceTimerRef.current = null
+      setDirection(1)
+      setStepIndex((i) => Math.min(i + 1, STEPS.length - 1))
+    }, delayMs)
+  }
+
+  /** Select + submit exactly once (last step). */
+  const selectAndSubmit = (patch: Partial<WizardData>, delayMs = 120) => {
+    setData((prev) => ({ ...prev, ...patch }))
+    clearAdvanceTimer()
+    advanceTimerRef.current = setTimeout(() => {
+      advanceTimerRef.current = null
+      submitRef.current()
+    }, delayMs)
+  }
+
+  // Stable ref so the timer callback always reaches the latest submit.
+  const submitRef = React.useRef(submit)
+  React.useEffect(() => {
+    submitRef.current = submit
+  }, [submit])
 
   const advanceOnDoubleTap = () => {
     if (isLastStep) submit()
@@ -204,6 +305,8 @@ export function useSetupWizard() {
     submit,
     submitMut,
     selectAndMaybeAdvance,
+    selectAndAdvance,
+    selectAndSubmit,
     advanceOnDoubleTap,
     currentSemesterTerms,
     currentSemesterTermsQuery,

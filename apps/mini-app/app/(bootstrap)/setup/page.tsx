@@ -9,6 +9,7 @@ import { useUniversityData } from "./_hooks/use-university-data"
 import { useMajorData } from "./_hooks/use-major-data"
 import { useYearData, useAvailableSemesters } from "./_hooks/use-year-data"
 import { STEPS, useSetupWizard } from "./_hooks/use-setup-wizard"
+import { useProfileStore } from "@/stores/profile-store"
 import { SetupSteps } from "./_components/setup-steps"
 
 const STEP_TITLES: Record<string, string> = {
@@ -35,6 +36,51 @@ export default function SetupPage() {
   const degrees = selectedMajor?.degrees ?? []
   const { yearDirsQuery, yearOptions } = useYearData(data.university?.slug, data.majorSlug, data.degree)
   const availableSemesters = useAvailableSemesters(yearDirsQuery.data, data.entryYearRange)
+
+  // One-shot prefill from the SAVED profile so editing users start with their
+  // current choices selected (and submit can never fail for an untouched
+  // field). Two phases: university (needs the unis list), then the rest
+  // (needs that university's majors). Skipped entirely for first-time setup,
+  // and downstream fields are NOT prefilled when the user switched to a
+  // different university — those must be freshly picked (gated steps).
+  const profile = useProfileStore((s) => s.profile)
+  const prefilledUniRef = React.useRef(false)
+  const prefilledRestRef = React.useRef(false)
+
+  React.useEffect(() => {
+    if (prefilledUniRef.current || !wizard.isSetupComplete || !profile) return
+    if (universities.length === 0) return
+    prefilledUniRef.current = true
+    const uni = universities.find((u) => u.slug === profile.universitySlug)
+    if (uni) wizard.setData((prev) => ({ ...prev, university: prev.university ?? uni }))
+  }, [universities, profile, wizard])
+
+  React.useEffect(() => {
+    if (prefilledRestRef.current || !prefilledUniRef.current || !wizard.isSetupComplete || !profile) return
+    if (!data.university) return
+    if (allMajors.length === 0 && majorsQuery.isLoading) return
+    prefilledRestRef.current = true
+    // User switched to a DIFFERENT university → downstream stays empty on
+    // purpose; the gated steps make them re-pick everything fresh.
+    if (data.university.slug !== profile.universitySlug) return
+    const majorEntry = allMajors.find((m) => m.slug === profile.majorSlug)
+    wizard.setData((prev) => ({
+      ...prev,
+      majorSlug: prev.majorSlug ?? majorEntry?.slug,
+      majorName: prev.majorName ?? majorEntry?.name?.fa,
+      degree: prev.degree ?? profile.degree ?? undefined,
+      degreeName:
+        prev.degreeName ??
+        majorEntry?.degrees.find((d) => d.slug === profile.degree)?.name?.fa,
+      entryYearRange: prev.entryYearRange ?? profile.entryYearRange ?? undefined,
+      entrySemester: prev.entrySemester ?? profile.entrySemester ?? undefined,
+      gender: prev.gender ?? profile.gender ?? undefined,
+      termNumber: prev.termNumber ?? profile.termNumber ?? undefined,
+      currentSemesterCode:
+        prev.currentSemesterCode ?? profile.currentSemesterCode ?? undefined,
+      isLastTerm: prev.isLastTerm ?? (profile.isLastTerm || undefined),
+    }))
+  }, [data.university, allMajors, majorsQuery.isLoading, profile, wizard])
 
   const wrappedMove = (delta: number) => {
     moveSteps(delta)
@@ -159,32 +205,17 @@ export default function SetupPage() {
               }}
               yearLoading={yearDirsQuery.isLoading}
               availableSemesters={availableSemesters}
-              onSelectSemester={(v) => {
-                wizard.selectAndMaybeAdvance({ entrySemester: v })
-                setTimeout(() => wrappedMove(1), 120)
-              }}
-              onSelectGender={(v) => {
-                wizard.selectAndMaybeAdvance({ gender: v })
-                setTimeout(() => wrappedMove(1), 120)
-              }}
+              onSelectSemester={(v) => wizard.selectAndAdvance({ entrySemester: v })}
+              onSelectGender={(v) => wizard.selectAndAdvance({ gender: v })}
               degreeForTerm={selectedMajor?.degrees.find((d) => d.slug === data.degree)}
               onSelectTerm={(n) => wizard.selectAndMaybeAdvance({ termNumber: n })}
-              onDoubleClickTerm={(n) => {
-                wizard.selectAndMaybeAdvance({ termNumber: n })
-                setTimeout(() => wrappedMove(1), 120)
-              }}
+              onDoubleClickTerm={(n) => wizard.selectAndAdvance({ termNumber: n })}
               currentSemesterTerms={wizard.currentSemesterTerms}
               selectedCurrentSemester={wizard.effectiveCurrentSemesterCode}
               onSelectCurrentSemester={(v) => wizard.selectAndMaybeAdvance({ currentSemesterCode: v })}
-              onDoubleClickCurrentSemester={(v) => {
-                wizard.selectAndMaybeAdvance({ currentSemesterCode: v })
-                setTimeout(() => wrappedMove(1), 120)
-              }}
+              onDoubleClickCurrentSemester={(v) => wizard.selectAndAdvance({ currentSemesterCode: v })}
               currentSemesterLoading={wizard.currentSemesterTermsQuery.isLoading}
-              onSelectIsLastTerm={(v) => {
-                wizard.selectAndMaybeAdvance({ isLastTerm: v })
-                setTimeout(() => submit(), 120)
-              }}
+              onSelectIsLastTerm={(v) => wizard.selectAndSubmit({ isLastTerm: v })}
             />
           </m.div>
         </AnimatePresence>
