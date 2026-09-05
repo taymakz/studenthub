@@ -188,7 +188,16 @@ export async function runExtraction(
   tabId: number,
   universityId?: string,
 ): Promise<void> {
-  const adapter = getUniversityAdapter(universityId ?? "generic");
+  // Resolve university adapter from explicit parameter or active tab URL fallback.
+  let resolvedUniId = universityId;
+  if (!resolvedUniId || resolvedUniId === "generic") {
+    const tab = await browser.tabs.get(tabId).catch(() => null);
+    if (tab?.url) {
+      resolvedUniId = getUniversityAdapter(tab.url).id;
+    }
+  }
+
+  const adapter = getUniversityAdapter(resolvedUniId ?? "generic");
   const current = await extractStateStorage.getValue();
   if (current?.running) {
     await broadcast({
@@ -207,124 +216,207 @@ export async function runExtraction(
   let lastProgress: ExtractionProgress | null = null;
 
   try {
-    // ── Direction: last page collects backward, otherwise rewind+forward ──
-    const initialPaging = await readPaging(tabId, adapter.readPaging);
-    // Last page = the next button is disabled, or the record range ends at
-    // the total ("ركورد 201 تا 222 از 222").
-    const startOnLastPage =
-      !initialPaging.hasNext ||
-      (initialPaging.to !== null &&
-        initialPaging.totalRecords !== null &&
-        initialPaging.to >= initialPaging.totalRecords);
-    const direction: "forward" | "backward" = startOnLastPage
-      ? "backward"
-      : "forward";
+    if (adapter.navigateNext) {
+      // ── Frame-based pagination workflow (e.g. Golestan) ───────────────
+      // The report opens on whatever page the user is viewing - rewind to
+      // page 1 first so the full dataset gets collected, then walk forward.
+      if (adapter.navigatePrev) {
+        let paging = await readPaging(tabId, adapter.readPaging);
+        let guard = 0;
+        while (paging.hasPrev && guard < 300) {
+          if (await isStopped()) throw new StopSignal();
+          await broadcast({
+            type: "EXTRACTION_PROGRESS",
+            progress: {
+              phase: "rewind",
+              page: 0,
+              totalPages: null,
+              collectedRows: 0,
+              addedRows: 0,
+              message: "برگشت به صفحه اول…",
+            },
+          });
 
-    if (direction === "forward") {
-      // ── Rewind to page 1 ───────────────────────────────────────────────
-      let paging = initialPaging;
-      let guard = 0;
+          const clicked = await adapter.navigatePrev(tabId);
+          if (!clicked) break;
+          await sleep(400);
+          paging = await readPaging(tabId, adapter.readPaging);
+          guard++;
+        }
+      }
 
-      while (paging?.hasPrev && guard < 50) {
+      // Portals operating inside nested iframes without full-page reloads
+      // progress sequentially until navigateNext reports end-of-records.
+      let moreAhead = true;
+      while (true) {
         if (await isStopped()) throw new StopSignal();
-        await broadcast({
-          type: "EXTRACTION_PROGRESS",
-          progress: {
-            phase: "rewind",
-            page: 0,
-            totalPages: null,
-            collectedRows: 0,
-            addedRows: 0,
-            message: "برگشت به صفحه اول…",
-          },
-        });
+
+        const result = await inject(tabId, adapter.scrape);
+        if (result.rows.length === 0 && result.matchedFields === 0) {
+          throw new Error("جدول دروس در این صفحه پیدا نشد");
+        }
+
+        pages++;
+        totalDuplicateCount += result.duplicateCount;
+
+        const stored = await offeringsStorage.getValue();
+        const { merged, added } = mergeRows(stored, result.rows);
+        await offeringsStorage.setValue(merged);
+
+        // Golestan renders no page counter - estimate one page ahead while
+        // navigation keeps succeeding so the bar creeps toward 100%. If a
+        // deployment does render "صفحه X از Y", prefer the real total.
+        const realTotal = result.paging.totalPages ?? null;
+        const currentPage = result.paging.page ?? pages;
+        const progressTotal = realTotal ?? (moreAhead ? currentPage + 1 : currentPage);
+
+        lastProgress = {
+          phase: "collect",
+          page: currentPage,
+          totalPages: progressTotal,
+          collectedRows: merged.length,
+          addedRows: added,
+          message: realTotal !== null
+            ? `استخراج صفحه ${currentPage} از ${realTotal}… (${merged.length} درس ذخیره شد)`
+            : `استخراج صفحه ${pages}… (${merged.length} درس ذخیره شد)`,
+        };
+        await setState({ running: true, progress: lastProgress });
+        await broadcast({ type: "EXTRACTION_PROGRESS", progress: lastProgress });
+
+        if (await isStopped()) throw new StopSignal();
+
+        // Stagnation guard: if past page 1 and no new unique records were added,
+        // we have looped or reached the final identical view.
+        if (pages > 1 && added === 0) {
+          break;
+        }
+
+        moreAhead = await adapter.navigateNext(tabId);
+        if (!moreAhead) break;
+        await sleep(400);
+      }
+
+      // Final tick so the bar reaches 100% before the done event lands.
+      if (lastProgress) {
+        lastProgress = {
+          ...lastProgress,
+          page: lastProgress.page || pages,
+          totalPages: lastProgress.page || pages,
+        };
+        await broadcast({ type: "EXTRACTION_PROGRESS", progress: lastProgress });
+      }
+    } else {
+      // ── Full-page reload pagination workflow (e.g. Amoozeshyar) ────────
+      // Direction: last page collects backward, otherwise rewind+forward
+      const initialPaging = await readPaging(tabId, adapter.readPaging);
+      const startOnLastPage =
+        !initialPaging.hasNext ||
+        (initialPaging.to !== null &&
+          initialPaging.totalRecords !== null &&
+          initialPaging.to >= initialPaging.totalRecords);
+      const direction: "forward" | "backward" = startOnLastPage
+        ? "backward"
+        : "forward";
+
+      if (direction === "forward") {
+        // Rewind to page 1
+        let paging = initialPaging;
+        let guard = 0;
+
+        while (paging?.hasPrev && guard < 50) {
+          if (await isStopped()) throw new StopSignal();
+          await broadcast({
+            type: "EXTRACTION_PROGRESS",
+            progress: {
+              phase: "rewind",
+              page: 0,
+              totalPages: null,
+              collectedRows: 0,
+              addedRows: 0,
+              message: "برگشت به صفحه اول…",
+            },
+          });
+
+          const epoch = (await readDocState(tabId))?.epoch ?? 0;
+          const clicked = await clickPaginator(
+            tabId,
+            adapter.prevPageSelector || "span#prePage button",
+          );
+          if (!clicked) break;
+          await waitForNewPage(tabId, epoch);
+          paging = await readPaging(tabId, adapter.readPaging);
+          guard++;
+        }
+      }
+
+      // Collect page by page in the chosen direction
+      let pageSize = 0;
+      let anchorSeen = false;
+
+      while (true) {
+        if (await isStopped()) throw new StopSignal();
+
+        const result = await inject(tabId, adapter.scrape);
+        if (result.rows.length === 0 && result.matchedFields === 0) {
+          throw new Error("جدول دروس در این صفحه پیدا نشد");
+        }
+
+        // Cache paging reads once per page - repeated property access
+        // inside the loop is wasted work.
+        const { from, to, totalRecords } = result.paging;
+
+        if (from === 1) anchorSeen = true;
+        if (to && from) {
+          pageSize = Math.max(pageSize, to - from + 1);
+        }
+        pages++;
+        totalDuplicateCount += result.duplicateCount;
+
+        const stored = await offeringsStorage.getValue();
+        const { merged, added } = mergeRows(stored, result.rows);
+        await offeringsStorage.setValue(merged);
+
+        const isLastPage =
+          totalRecords !== null && to !== null && to >= totalRecords;
+
+        const totalPages =
+          totalRecords && pageSize > 0
+            ? Math.ceil(totalRecords / pageSize)
+            : null;
+        const computedPage =
+          from !== null && pageSize > 0 ? Math.ceil(from / pageSize) : pages;
+
+        const showNumbers = !isLastPage || anchorSeen;
+        lastProgress = {
+          phase: "collect",
+          page: showNumbers ? computedPage : 0,
+          totalPages: showNumbers ? totalPages : null,
+          collectedRows: merged.length,
+          addedRows: added,
+          message: showNumbers
+            ? `استخراج صفحه ${computedPage} از ${totalPages ?? "?"}…`
+            : "استخراج صفحه آخر…",
+        };
+        await setState({ running: true, progress: lastProgress });
+        await broadcast({ type: "EXTRACTION_PROGRESS", progress: lastProgress });
+
+        const hasMore =
+          direction === "forward"
+            ? result.paging.hasNext
+            : result.paging.hasPrev;
+        if (!hasMore) break;
+        if (await isStopped()) throw new StopSignal();
 
         const epoch = (await readDocState(tabId))?.epoch ?? 0;
-        const clicked = await clickPaginator(tabId, "span#prePage button");
+        const clicked = await clickPaginator(
+          tabId,
+          direction === "forward"
+            ? adapter.nextPageSelector || "span#nextPage button"
+            : adapter.prevPageSelector || "span#prePage button",
+        );
         if (!clicked) break;
         await waitForNewPage(tabId, epoch);
-        paging = await readPaging(tabId, adapter.readPaging);
-        guard++;
       }
-    }
-
-    // ── Collect page by page in the chosen direction ────────────────────
-    // pageSize = largest observed page. A short LAST page (e.g. 201..222 of
-    // 222) must not shrink it - otherwise page math derails (ceil(201/22)).
-    let pageSize = 0;
-    let anchorSeen = false; // saw a page starting at record 1
-
-    while (true) {
-      if (await isStopped()) throw new StopSignal();
-
-      const result = await inject(tabId, adapter.scrape);
-      if (result.rows.length === 0 && result.matchedFields === 0) {
-        throw new Error("جدول دروس در این صفحه پیدا نشد");
-      }
-
-      if (result.paging.from === 1) anchorSeen = true;
-      if (result.paging.to && result.paging.from) {
-        pageSize = Math.max(
-          pageSize,
-          result.paging.to - result.paging.from + 1,
-        );
-      }
-      pages++;
-      totalDuplicateCount += result.duplicateCount;
-
-      const stored = await offeringsStorage.getValue();
-      const { merged, added } = mergeRows(stored, result.rows);
-      await offeringsStorage.setValue(merged); // auto-save after every page
-
-      const isLastPage =
-        result.paging.totalRecords !== null &&
-        result.paging.to !== null &&
-        result.paging.to >= result.paging.totalRecords;
-
-      const totalPages =
-        result.paging.totalRecords && pageSize > 0
-          ? Math.ceil(result.paging.totalRecords / pageSize)
-          : null;
-      const computedPage =
-        result.paging.from !== null && pageSize > 0
-          ? Math.ceil(result.paging.from / pageSize)
-          : pages;
-
-      // Numbers are only trustworthy once a full page anchored pageSize.
-      // Backward runs start ON the short last page - show a plain label
-      // there instead of "صفحه 10 از 11" nonsense.
-      const showNumbers = !isLastPage || anchorSeen;
-      lastProgress = {
-        phase: "collect",
-        page: showNumbers ? computedPage : 0,
-        totalPages: showNumbers ? totalPages : null,
-        collectedRows: merged.length,
-        addedRows: added,
-        message: showNumbers
-          ? `استخراج صفحه ${computedPage} از ${totalPages ?? "?"}…`
-          : "استخراج صفحه آخر…",
-      };
-      await setState({ running: true, progress: lastProgress });
-      await broadcast({ type: "EXTRACTION_PROGRESS", progress: lastProgress });
-
-      const hasMore =
-        direction === "forward"
-          ? result.paging.hasNext
-          : result.paging.hasPrev;
-      if (!hasMore) break; // reached the end in this direction
-      if (await isStopped()) throw new StopSignal();
-
-      // Fingerprint THIS document before clicking so the wait can prove the
-      // new page actually arrived (tab status alone is stale after clicks).
-      const epoch = (await readDocState(tabId))?.epoch ?? 0;
-      const clicked = await clickPaginator(
-        tabId,
-        direction === "forward"
-          ? "span#nextPage button"
-          : "span#prePage button",
-      );
-      if (!clicked) break; // paginator vanished - treat as last page
-      await waitForNewPage(tabId, epoch);
     }
 
     // Prune junk rows (empty index) left over from older buggy runs.

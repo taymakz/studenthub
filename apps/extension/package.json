@@ -5,8 +5,8 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "build": "wxt build && node -e \"const fs=require('fs');const p=require('path');const s=p.join('.output','chrome-mv3');const d=p.join('.output','extention');if(fs.existsSync(s)){fs.rmSync(d,{recursive:true,force:true});fs.mkdirSync(p.dirname(d),{recursive:true});fs.cpSync(s,d,{recursive:true});console.log('copied chrome-mv3 -> extention')}\"",
-    "zip": "wxt zip",
+    "build": "wxt zip && node scripts/post-build.mjs",
+    "zip": "wxt zip && node scripts/post-build.mjs",
     "icons": "node scripts/generate-icons.mjs",
     "typecheck": "wxt prepare && tsc --noEmit"
   },

@@ -188,8 +188,9 @@ export function scrapeOfferingsFromPage(): ScrapeResult {
     const pattern =
       /(شنبه|یکشنبه|دوشنبه|سه شنبه|چهارشنبه|پنج شنبه|جمعه)\s+از\s+\d{1,2}:\d{2}\s+تا\s+\d{1,2}:\d{2}/g;
     const matches = [...cleaned.matchAll(pattern)];
-    if (matches.length > 0) {
-      return matches[0][0]!;
+    const first = matches[0];
+    if (first) {
+      return first[0]!;
     }
     return cleaned;
   }
