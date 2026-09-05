@@ -7,6 +7,8 @@
  * Fails (exit 1) if any `درس(` session marker does not parse — that means
  * the source format drifted and excel.ts needs updating before exporting.
  */
+import { existsSync } from "node:fs";
+import { dirname, resolve } from "node:path";
 import { loadRtlState, setRtlReverse, t } from "../../rtl.ts";
 import { parseGolestanExcel, parseScheduleCell } from "./excel.ts";
 
@@ -17,7 +19,20 @@ function flag(name: string): string | null {
   return i === -1 ? null : (process.argv[i + 1] ?? null);
 }
 
-const excel = flag("excel") ?? "./export.xlsx";
+/** pnpm runs this with cwd = packages/cli; relative paths resolve from the
+ *  workspace root (same convention as import-excel.ts). */
+function findWorkspaceRoot(): string {
+  let dir = process.cwd();
+  while (true) {
+    if (existsSync(resolve(dir, "pnpm-workspace.yaml"))) return dir;
+    const parent = dirname(dir);
+    if (parent === dir) return process.cwd();
+    dir = parent;
+  }
+}
+
+const raw = flag("excel") ?? "./export.xlsx";
+const excel = resolve(findWorkspaceRoot(), raw);
 const { rows } = parseGolestanExcel(excel);
 
 let sessions = 0;
