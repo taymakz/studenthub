@@ -55,5 +55,24 @@
         "maxTermCount": 12
       }
     ]
+  },
+  {
+    "uniSlug": "azad-neyshabur",
+    "slug": "computer-engineering",
+    "name": {
+      "fa": "مهندسی کامپیوتر",
+      "en": "Computer Engineering"
+    },
+    "degrees": [
+      {
+        "slug": "bachelors-degree",
+        "name": {
+          "fa": "کارشناسی پیوسته",
+          "en": "Bachelor's degree"
+        },
+        "termCount": 8,
+        "maxTermCount": 12
+      }
+    ]
   }
 ]
