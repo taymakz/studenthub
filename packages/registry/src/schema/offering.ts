@@ -16,6 +16,23 @@ import {
  *
  * `<year>` is the academic year folder (plain single year, e.g. 1404).
  */
+/**
+ * Tolerant schedule/location input: legacy snapshots store `null` or a
+ * single string; canonical data (Golestan Excel importer onward) stores
+ * arrays — `classSchedule[i]` pairs with `location[i]`. Everything is
+ * normalized to an array on parse, so old files keep validating.
+ */
+function toArray(v: unknown): unknown {
+  if (v == null) return []
+  if (typeof v === "string") {
+    const s = v.trim()
+    return s ? [s] : []
+  }
+  return v
+}
+
+const scheduleItem = z.string().min(1).max(255)
+
 export const offeringSchema = z.object({
   /** Offering index (شماره) - THE identity used for change detection. */
   index: z.string().min(1).max(64),
@@ -33,7 +50,8 @@ export const offeringSchema = z.object({
   maxCapacity: z.number().int().min(0).nullish(),
   currentEnrollment: z.number().int().min(0).nullish(),
 
-  classSchedule: z.string().max(255).nullable().default(null),
+  /** Sessions per week: `["یکشنبه از 07:30 تا 09:30", "سه شنبه از 09:30 تا 11:30"]`. */
+  classSchedule: z.preprocess(toArray, z.array(scheduleItem).max(50)),
   examSchedule: z.string().max(255).nullable().default(null),
   professor: z
     .union([
@@ -41,7 +59,9 @@ export const offeringSchema = z.object({
       localizedTextSchema.pick({ fa: true }).partial({ fa: true }),
     ])
     .nullish(),
-  location: z.string().max(255).nullable().default(null),
+  /** Index-matched with classSchedule when lengths align; a single-element
+   *  array broadcasts to every session; nulls = unknown. */
+  location: z.preprocess(toArray, z.array(scheduleItem.nullable()).max(50)),
 })
 
 export type Offering = z.infer<typeof offeringSchema>

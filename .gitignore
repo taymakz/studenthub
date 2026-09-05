@@ -62,3 +62,6 @@ FUTURE.md
 coverage/
 .sentry/
 *.log
+
+# @workspace/cli exporter output — raw university data, never commit
+packages/cli/output/

@@ -58,16 +58,16 @@ function parseCode(rawCode: string): { courseCode: string; classCode: string; in
 }
 
 function parseScheduleLocation(schedRaw: string): {
-  classSchedule: string | null;
-  location: string | null;
+  classSchedule: string[];
+  location: Array<string | null>;
 } {
-  let classSchedule: string | null = null;
-  let locationStr: string | null = null;
+  let classSchedule: string[] = [];
+  let locationStr: Array<string | null> = [];
 
   if (schedRaw) {
     const locMatch = schedRaw.match(/مکان:\s*([^;,\n]+)/);
     if (locMatch) {
-      locationStr = locMatch[1]!.trim();
+      locationStr = [locMatch[1]!.trim()];
     }
 
     const schedPart = schedRaw.split(/[;\n]/)[0]!.trim();
@@ -76,9 +76,9 @@ function parseScheduleLocation(schedRaw: string): {
       /(شنبه|یکشنبه|دوشنبه|سه شنبه|چهارشنبه|پنج شنبه|جمعه)\s*(?:از\s*)?(\d{1,2}[:.]\d{2})\s*(?:تا|الی|[-_])\s*(\d{1,2}[:.]\d{2})/,
     );
     if (dayMatch) {
-      classSchedule = `${dayMatch[1]} از ${dayMatch[2]!.replace(/[:.]/g, ":")} تا ${dayMatch[3]!.replace(/[:.]/g, ":")}`;
+      classSchedule = [`${dayMatch[1]} از ${dayMatch[2]!.replace(/[:.]/g, ":")} تا ${dayMatch[3]!.replace(/[:.]/g, ":")}`];
     } else if (schedPart) {
-      classSchedule = schedPart;
+      classSchedule = [schedPart];
     }
   }
 
@@ -239,25 +239,25 @@ describe("extension: golestan parsing", () => {
   describe("schedule and location parsing", () => {
     it("should parse schedule without location", () => {
       const result = parseScheduleLocation("شنبه از 07:30 تا 10:05");
-      expect(result.classSchedule).toBe("شنبه از 07:30 تا 10:05");
-      expect(result.location).toBeNull();
+      expect(result.classSchedule).toEqual(["شنبه از 07:30 تا 10:05"]);
+      expect(result.location).toEqual([]);
     });
 
     it("should parse schedule with location after semicolon", () => {
       const result = parseScheduleLocation("شنبه از 07:30 تا 10:05; مکان: فنی مهندسی-2106");
-      expect(result.classSchedule).toBe("شنبه از 07:30 تا 10:05");
-      expect(result.location).toBe("فنی مهندسی-2106");
+      expect(result.classSchedule).toEqual(["شنبه از 07:30 تا 10:05"]);
+      expect(result.location).toEqual(["فنی مهندسی-2106"]);
     });
 
     it("should parse empty schedule", () => {
       const result = parseScheduleLocation("");
-      expect(result.classSchedule).toBeNull();
-      expect(result.location).toBeNull();
+      expect(result.classSchedule).toEqual([]);
+      expect(result.location).toEqual([]);
     });
 
     it("should handle Persian dot as time separator", () => {
       const result = parseScheduleLocation("پنج شنبه از 09.15 تا 11.00");
-      expect(result.classSchedule).toBe("پنج شنبه از 09:15 تا 11:00");
+      expect(result.classSchedule).toEqual(["پنج شنبه از 09:15 تا 11:00"]);
     });
   });
 

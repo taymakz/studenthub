@@ -148,6 +148,30 @@ function entryYearStart(range: string | null | undefined): number | null {
   return null
 }
 
+/** The user's single active university profile (rows[0] or null). */
+async function activeProfileOf(userId: number) {
+  const rows = await db
+    .select()
+    .from(universityProfiles)
+    .where(eq(universityProfiles.userId, userId))
+    .limit(1)
+  return rows[0] ?? null
+}
+
+/** Distinct (universitySlug, majorSlug) pairs of submitted list items —
+ *  the per-profile scope for replace/exclusivity deletes. */
+function distinctPairs(
+  items: Array<{ universitySlug: string; majorSlug: string }>
+): Array<{ universitySlug: string; majorSlug: string }> {
+  const seen = new Map<string, { universitySlug: string; majorSlug: string }>()
+  for (const i of items) {
+    const key = `${i.universitySlug}|${i.majorSlug}`
+    if (!seen.has(key))
+      seen.set(key, { universitySlug: i.universitySlug, majorSlug: i.majorSlug })
+  }
+  return [...seen.values()]
+}
+
 /** Sorted (oldest→newest) نیم‌سال codes that have offering snapshots. */
 function availableSemesterCodes(
   universitySlug: string | null,
@@ -191,29 +215,57 @@ export const meRoutes = new Hono<AppEnv>()
   .get("/me", async (c) => {
     const user = c.get("user")!
 
-    const [profileRows, passedRows, failedRows, notedRows] = await Promise.all([
-      db
-        .select()
-        .from(universityProfiles)
-        .where(eq(universityProfiles.userId, user.id))
-        .limit(1),
-      db
-        .select()
-        .from(passedCourses)
-        .where(eq(passedCourses.userId, user.id))
-        .orderBy(desc(passedCourses.createdAt)),
-      db
-        .select()
-        .from(failedCourses)
-        .where(eq(failedCourses.userId, user.id))
-        .orderBy(desc(failedCourses.createdAt)),
-      db
-        .select()
-        .from(notedCourses)
-        .where(eq(notedCourses.userId, user.id))
-        .orderBy(desc(notedCourses.updatedAt)),
-    ])
+    const profileRows = await db
+      .select()
+      .from(universityProfiles)
+      .where(eq(universityProfiles.userId, user.id))
+      .limit(1)
     const profile = profileRows[0] ?? null
+
+    // noted/passed/failed are per-profile rows (keyed by university/major —
+    // same keys the upsert uses). Scope to the ACTIVE profile so switching
+    // university/major swaps the whole list instead of leaking the previous
+    // one (badge showed old rows while the list matched nothing).
+    const uni = profile?.universitySlug
+    const major = profile?.majorSlug
+    const [passedRows, failedRows, notedRows] =
+      uni && major
+        ? await Promise.all([
+            db
+              .select()
+              .from(passedCourses)
+              .where(
+                and(
+                  eq(passedCourses.userId, user.id),
+                  eq(passedCourses.universitySlug, uni),
+                  eq(passedCourses.majorSlug, major)
+                )
+              )
+              .orderBy(desc(passedCourses.createdAt)),
+            db
+              .select()
+              .from(failedCourses)
+              .where(
+                and(
+                  eq(failedCourses.userId, user.id),
+                  eq(failedCourses.universitySlug, uni),
+                  eq(failedCourses.majorSlug, major)
+                )
+              )
+              .orderBy(desc(failedCourses.createdAt)),
+            db
+              .select()
+              .from(notedCourses)
+              .where(
+                and(
+                  eq(notedCourses.userId, user.id),
+                  eq(notedCourses.universitySlug, uni),
+                  eq(notedCourses.majorSlug, major)
+                )
+              )
+              .orderBy(desc(notedCourses.updatedAt)),
+          ])
+        : [[], [], []]
 
     // Chart / offerings / terms / changes come from the REGISTRY (JSON on disk),
     // not the database - resolved here so the mini app gets it all in ONE call.
@@ -234,8 +286,6 @@ export const meRoutes = new Hono<AppEnv>()
       detail: unknown
     } | null = null
 
-    const uni = profile?.universitySlug
-    const major = profile?.majorSlug
     if (uni && major) {
       const fromIndex = readIndexes().offeringTerms.filter(
         (t) => t.uniSlug === uni && t.majorSlug === major
@@ -494,10 +544,16 @@ export const meRoutes = new Hono<AppEnv>()
 
   .get("/me/passed", async (c) => {
     const user = c.get("user")!
+    const profile = await activeProfileOf(user.id)
+    const filters = [eq(passedCourses.userId, user.id)]
+    if (profile?.universitySlug)
+      filters.push(eq(passedCourses.universitySlug, profile.universitySlug))
+    if (profile?.majorSlug)
+      filters.push(eq(passedCourses.majorSlug, profile.majorSlug))
     const rows = await db
       .select()
       .from(passedCourses)
-      .where(eq(passedCourses.userId, user.id))
+      .where(and(...filters))
       .orderBy(desc(passedCourses.createdAt))
     return ok(c, { passed: rows })
   })
@@ -529,23 +585,49 @@ export const meRoutes = new Hono<AppEnv>()
         return badRequest(c, "حداقل یک درس باید ارسال شود")
       }
 
+      // Replace/exclusivity deletes are scoped to the (uni, major) pairs of
+      // the submitted items — never across profiles. Empty replace falls back
+      // to the ACTIVE profile so clearing the list can't wipe other profiles.
+      const scopePairs = distinctPairs(items)
+      if (scopePairs.length === 0 && replace) {
+        const profile = await activeProfileOf(user.id)
+        if (profile?.universitySlug && profile?.majorSlug) {
+          scopePairs.push({
+            universitySlug: profile.universitySlug,
+            majorSlug: profile.majorSlug,
+          })
+        }
+      }
+
       const result = await db.transaction(async (tx) => {
         if (replace) {
-          await tx
-            .delete(passedCourses)
-            .where(eq(passedCourses.userId, user.id))
+          for (const pair of scopePairs) {
+            await tx
+              .delete(passedCourses)
+              .where(
+                and(
+                  eq(passedCourses.userId, user.id),
+                  eq(passedCourses.universitySlug, pair.universitySlug),
+                  eq(passedCourses.majorSlug, pair.majorSlug)
+                )
+              )
+          }
         }
         // Passed and failed are mutually exclusive — a passed course cannot stay failed.
         if (items.length > 0) {
           const names = items.map((i) => i.courseName)
-          await tx
-            .delete(failedCourses)
-            .where(
-              and(
-                eq(failedCourses.userId, user.id),
-                inArray(failedCourses.courseName, names)
+          for (const pair of scopePairs) {
+            await tx
+              .delete(failedCourses)
+              .where(
+                and(
+                  eq(failedCourses.userId, user.id),
+                  eq(failedCourses.universitySlug, pair.universitySlug),
+                  eq(failedCourses.majorSlug, pair.majorSlug),
+                  inArray(failedCourses.courseName, names)
+                )
               )
-            )
+          }
         }
         if (items.length === 0) return []
         return tx
@@ -562,14 +644,20 @@ export const meRoutes = new Hono<AppEnv>()
     const user = c.get("user")!
     const name = decodeURIComponent(c.req.param("name"))
     if (!name.trim()) return badRequest(c, "نام درس نامعتبر")
+    // Scoped to the ACTIVE profile — removing a course here must not touch
+    // the same-named row of another university/major profile.
+    const profile = await activeProfileOf(user.id)
+    const filters = [
+      eq(passedCourses.userId, user.id),
+      eq(passedCourses.courseName, name),
+    ]
+    if (profile?.universitySlug)
+      filters.push(eq(passedCourses.universitySlug, profile.universitySlug))
+    if (profile?.majorSlug)
+      filters.push(eq(passedCourses.majorSlug, profile.majorSlug))
     const deleted = await db
       .delete(passedCourses)
-      .where(
-        and(
-          eq(passedCourses.userId, user.id),
-          eq(passedCourses.courseName, name)
-        )
-      )
+      .where(and(...filters))
       .returning({ id: passedCourses.id })
     if (deleted.length === 0)
       return notFound(c, "درسی با این نام در فهرست شما نبود")
@@ -580,10 +668,16 @@ export const meRoutes = new Hono<AppEnv>()
 
   .get("/me/failed", async (c) => {
     const user = c.get("user")!
+    const profile = await activeProfileOf(user.id)
+    const filters = [eq(failedCourses.userId, user.id)]
+    if (profile?.universitySlug)
+      filters.push(eq(failedCourses.universitySlug, profile.universitySlug))
+    if (profile?.majorSlug)
+      filters.push(eq(failedCourses.majorSlug, profile.majorSlug))
     const rows = await db
       .select()
       .from(failedCourses)
-      .where(eq(failedCourses.userId, user.id))
+      .where(and(...filters))
       .orderBy(desc(failedCourses.createdAt))
     return ok(c, { failed: rows })
   })
@@ -615,23 +709,47 @@ export const meRoutes = new Hono<AppEnv>()
         return badRequest(c, "حداقل یک درس باید ارسال شود")
       }
 
+      // Same per-profile scoping as the passed list (see above).
+      const scopePairs = distinctPairs(items)
+      if (scopePairs.length === 0 && replace) {
+        const profile = await activeProfileOf(user.id)
+        if (profile?.universitySlug && profile?.majorSlug) {
+          scopePairs.push({
+            universitySlug: profile.universitySlug,
+            majorSlug: profile.majorSlug,
+          })
+        }
+      }
+
       const result = await db.transaction(async (tx) => {
         if (replace) {
-          await tx
-            .delete(failedCourses)
-            .where(eq(failedCourses.userId, user.id))
+          for (const pair of scopePairs) {
+            await tx
+              .delete(failedCourses)
+              .where(
+                and(
+                  eq(failedCourses.userId, user.id),
+                  eq(failedCourses.universitySlug, pair.universitySlug),
+                  eq(failedCourses.majorSlug, pair.majorSlug)
+                )
+              )
+          }
         }
         // Keep the two lists exclusive — a failed course should not remain passed.
         if (items.length > 0) {
           const names = items.map((i) => i.courseName)
-          await tx
-            .delete(passedCourses)
-            .where(
-              and(
-                eq(passedCourses.userId, user.id),
-                inArray(passedCourses.courseName, names)
+          for (const pair of scopePairs) {
+            await tx
+              .delete(passedCourses)
+              .where(
+                and(
+                  eq(passedCourses.userId, user.id),
+                  eq(passedCourses.universitySlug, pair.universitySlug),
+                  eq(passedCourses.majorSlug, pair.majorSlug),
+                  inArray(passedCourses.courseName, names)
+                )
               )
-            )
+          }
         }
         if (items.length === 0) return []
         return tx
@@ -648,14 +766,19 @@ export const meRoutes = new Hono<AppEnv>()
     const user = c.get("user")!
     const name = decodeURIComponent(c.req.param("name"))
     if (!name.trim()) return badRequest(c, "نام درس نامعتبر")
+    // Scoped to the ACTIVE profile (see the passed delete above).
+    const profile = await activeProfileOf(user.id)
+    const filters = [
+      eq(failedCourses.userId, user.id),
+      eq(failedCourses.courseName, name),
+    ]
+    if (profile?.universitySlug)
+      filters.push(eq(failedCourses.universitySlug, profile.universitySlug))
+    if (profile?.majorSlug)
+      filters.push(eq(failedCourses.majorSlug, profile.majorSlug))
     const deleted = await db
       .delete(failedCourses)
-      .where(
-        and(
-          eq(failedCourses.userId, user.id),
-          eq(failedCourses.courseName, name)
-        )
-      )
+      .where(and(...filters))
       .returning({ id: failedCourses.id })
     if (deleted.length === 0)
       return notFound(c, "درسی با این نام در فهرست مردود شما نبود")
@@ -1390,7 +1513,7 @@ export const meRoutes = new Hono<AppEnv>()
       const base = config.CHART_PDF_BASE_URL.replace(/\/$/, "")
       const pdfUrl = `${base}/${encodeURI(pdfRel)}`
       console.log(`[chart:${reqId}] DEBUG trying CDN`, { pdfRel, pdfUrl, base, yearDir, semester, uni, major, degree, bytesLen: bytes.length, registryRoot: registryRoot(), userId: user.id })
-      const { sendRichMessage } = await import("@/lib/telegram/bot.ts")
+      const { sendRichMessage } = await import("@/lib/telegram/bot")
       const sent = await sendRichMessage(user.id, {
         documentUrl: pdfUrl,
         text: buildCaption(),
@@ -1556,7 +1679,7 @@ export const meRoutes = new Hono<AppEnv>()
       }
       const objectUrl = publicExportUrl(key)
       const { sendRichMessage, sendWithFile } =
-        await import("@/lib/telegram/bot.ts")
+        await import("@/lib/telegram/bot")
       let sent = await sendRichMessage(user.id, {
         photoUrl: objectUrl,
         text: "🗓 خروجی عکس شما آماده است",

@@ -5,6 +5,7 @@ import { ChevronLeft } from "lucide-react"
 import { cn } from "@workspace/ui/lib/utils"
 
 import { type Offering, professorName } from "@/lib/api"
+import { joinSchedules } from "@/components/app/profile/schedule-util"
 import {
   CourseBadges,
   CourseCardHeader,
@@ -67,7 +68,7 @@ export function CourseCard({
         </div>
         <div className="mt-2 flex justify-between text-sm text-muted-foreground">
           <span className="ml-1">زمان تشکیل کلاس</span>
-          <span>{offering.classSchedule || "ثبت نشده"}</span>
+          <span>{joinSchedules(offering.classSchedule) || "ثبت نشده"}</span>
         </div>
       </button>
     )

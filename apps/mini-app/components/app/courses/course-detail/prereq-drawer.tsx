@@ -11,7 +11,6 @@ import {
 
 import { CourseCard } from "@/components/app/courses/course-card"
 import { groupByWeekday } from "@/components/app/profile/export-canvas"
-import { extractWeekday } from "@/components/app/profile/schedule-util"
 import { useProfileStore } from "@/stores/profile-store"
 import type { Offering } from "@/lib/api"
 
@@ -56,7 +55,7 @@ export function RequisiteOfferingsDrawer({
     ? offerings.filter((o) => o.courseName === courseName)
     : []
   const items = named.filter(isAvailable)
-  const groups = groupByWeekday(items, (o) => extractWeekday(o.classSchedule))
+  const groups = groupByWeekday(items)
   const ordered = DAY_ORDER.filter((day) =>
     groups.some((g) => g.day === day)
   ).map((day) => ({
@@ -90,22 +89,25 @@ export function RequisiteOfferingsDrawer({
               <div key={day} className="space-y-2">
                 <h3 className="font-semibold text-success">{day}</h3>
                 <div className="space-y-2.5">
-                  {items.map((o) => (
-                    <CourseCard
-                      key={o.index}
-                      offering={o}
-                      viewMode="simple"
-                      onSelect={(c) => {
-                        onOpenChange(false)
-                        onSelectCourse(c)
-                      }}
-                      flags={{
-                        noted: isNoted(o),
-                        passed: isPassed(o),
-                        new: false,
-                      }}
-                    />
-                  ))}
+                  {items.map((entry) => {
+                    const o = entry.offering
+                    return (
+                      <CourseCard
+                        key={`${o.index}-${entry.sessionIndex}`}
+                        offering={o}
+                        viewMode="simple"
+                        onSelect={(c) => {
+                          onOpenChange(false)
+                          onSelectCourse(c)
+                        }}
+                        flags={{
+                          noted: isNoted(o),
+                          passed: isPassed(o),
+                          new: false,
+                        }}
+                      />
+                    )
+                  })}
                 </div>
               </div>
             ))

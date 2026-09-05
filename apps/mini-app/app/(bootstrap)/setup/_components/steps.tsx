@@ -206,10 +206,6 @@ export function SemesterStep({
       options={availableSemesters.map((s) => ({ value: s, label: SEMESTER_LABEL[s] }))}
       value={selected}
       onSelect={(v) => onSelect(v as "MEHR" | "BAHMAN" | "SUMMER")}
-      onCommit={(v) => {
-        onSelect(v as "MEHR" | "BAHMAN" | "SUMMER")
-        setTimeout(() => {}, 0)
-      }}
     />
   )
 }
@@ -224,7 +220,6 @@ export function GenderStep({ selected, onSelect }: { selected?: string; onSelect
       ]}
       value={selected}
       onSelect={(v) => onSelect(v as "MALE" | "FEMALE")}
-      onCommit={(v) => onSelect(v as "MALE" | "FEMALE")}
     />
   )
 }
@@ -330,7 +325,6 @@ export function IsLastTermStep({ selected, onSelect }: { selected?: boolean; onS
       ]}
       value={selected !== undefined ? String(selected) : undefined}
       onSelect={(v) => onSelect(v === "true")}
-      onCommit={(v) => onSelect(v === "true")}
     />
   )
 }

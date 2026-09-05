@@ -7,6 +7,7 @@ import { Spinner } from "@workspace/ui/components/spinner"
 
 import { ProfessorInformation } from "./professor-information"
 import type { Offering } from "@/lib/api"
+import { joinSchedules } from "@/components/app/profile/schedule-util"
 
 export function ProfessorLoading() {
   return (
@@ -92,7 +93,7 @@ export function ProfessorOtherCourses({
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium">{course.courseName}</p>
                 <div className="mt-1 flex items-center gap-2 text-sm text-muted-foreground">
-                  {course.classSchedule && <span>{course.classSchedule}</span>}
+                  {joinSchedules(course.classSchedule) && <span>{joinSchedules(course.classSchedule)}</span>}
                 </div>
               </div>
               <ChevronLeft className="size-4 shrink-0 text-muted-foreground" />

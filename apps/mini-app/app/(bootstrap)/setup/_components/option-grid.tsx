@@ -6,14 +6,12 @@ export function OptionGrid({
   options,
   value,
   onSelect,
-  onCommit,
   onDoubleClick,
   columns = 2,
 }: {
   options: Array<{ value: string; label: string }>
   value?: string
   onSelect: (v: string) => void
-  onCommit?: (v: string) => void
   onDoubleClick?: (v: string) => void
   columns?: number
 }) {
@@ -22,10 +20,7 @@ export function OptionGrid({
       {options.map((opt) => (
         <button
           key={opt.value}
-          onClick={() => {
-            onSelect(opt.value)
-            onCommit?.(opt.value)
-          }}
+          onClick={() => onSelect(opt.value)}
           onDoubleClick={() => onDoubleClick?.(opt.value)}
           className={cn(
             "rounded-full border bg-card px-4 py-2.5 text-center text-sm tabular-nums transition-colors",

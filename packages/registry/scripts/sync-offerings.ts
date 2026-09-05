@@ -60,7 +60,13 @@ function professorName(p: Offering["professor"]): string | null {
 function fieldValue(o: Offering, key: string): string | null {
   if (key === "professor") return professorName(o.professor)
   const v = (o as unknown as Record<string, unknown>)[key]
-  return v == null ? null : String(v)
+  if (v == null) return null
+  // classSchedule/location are arrays — join for the diff record.
+  if (Array.isArray(v)) {
+    const joined = v.filter((x) => x != null && String(x).trim() !== "").join(" ، ")
+    return joined || null
+  }
+  return String(v)
 }
 function calculateDiff(current: OfferingDoc, previous: OfferingDoc | null) {
   if (!previous)

@@ -19,7 +19,7 @@ import {
   listOfferingTerms,
   listUniversitySlugs,
 } from "./loader"
-import { registryRoot } from "./paths"
+import { coursesDir, registryRoot } from "./paths"
 import type { LocalizedText, Semester, UniversityType } from "./schema/index"
 import { coveredSemesters } from "./schema/chart"
 import { formatYearDirectory, type YearDirectory } from "./year-dir"

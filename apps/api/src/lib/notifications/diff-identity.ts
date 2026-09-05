@@ -39,6 +39,20 @@ function professorText(professor: unknown): string | null {
   return null
 }
 
+/** classSchedule/location may be string[] (canonical) or legacy string —
+ *  project both to a stable text form for hashing. */
+function scheduleText(v: unknown): string | null {
+  if (v == null) return null
+  if (Array.isArray(v)) {
+    const joined = v
+      .filter((x) => x != null && String(x).trim() !== "")
+      .join("\n")
+    return joined || null
+  }
+  const s = String(v).trim()
+  return s || null
+}
+
 function asRecord(o: Record<string, unknown>, key: string): unknown {
   return o[key] ?? null
 }
@@ -57,10 +71,10 @@ export function canonicalOfferings(
       degree: (asRecord(o, "degree") as string | null) ?? null,
       minCapacity: (asRecord(o, "minCapacity") as number | null) ?? null,
       maxCapacity: (asRecord(o, "maxCapacity") as number | null) ?? null,
-      classSchedule: (asRecord(o, "classSchedule") as string | null) ?? null,
+      classSchedule: scheduleText(asRecord(o, "classSchedule")),
       examSchedule: (asRecord(o, "examSchedule") as string | null) ?? null,
       professor: professorText(asRecord(o, "professor")),
-      location: (asRecord(o, "location") as string | null) ?? null,
+      location: scheduleText(asRecord(o, "location")),
     }))
     .sort((a, b) => (a.index < b.index ? -1 : a.index > b.index ? 1 : 0))
 }

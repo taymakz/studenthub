@@ -6,7 +6,7 @@ import { describe, it, expect } from "vitest"
 interface Offering {
   index: string
   courseName: string
-  classSchedule: string | null
+  classSchedule: string[]
   examSchedule: string | null
 }
 
@@ -126,7 +126,7 @@ function off(
   return {
     index,
     courseName,
-    classSchedule: null,
+    classSchedule: [],
     examSchedule: null,
     ...overrides,
   } as Offering

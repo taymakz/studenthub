@@ -1,7 +1,7 @@
 import type { Offering } from "@/lib/api"
 import {
-  extractTimes,
-  extractWeekday,
+  classSessions,
+  type ClassSession,
 } from "@/components/app/profile/schedule-util"
 import type { ErrorCourseType } from "./sections"
 
@@ -75,32 +75,31 @@ export function detectConflicts(
   const out: CourseConflict[] = []
   let id = 0
 
-  const byDay = new Map<string, Offering[]>()
-  for (const o of notedOfferings) {
-    const day = extractWeekday(o.classSchedule)
-    if (!day) continue
-    byDay.set(day, [...(byDay.get(day) ?? []), o])
-  }
-  // Class schedule overlaps — waived for last term
+  // Class schedule overlaps — per SESSION, so a course meeting Sunday+Tuesday
+  // is checked on both days. Waived for last term.
   if (!isLastTerm) {
+    const byDay = new Map<string, Array<{ o: Offering; s: ClassSession }>>()
+    for (const o of notedOfferings) {
+      for (const s of classSessions(o)) {
+        if (!s.day || !s.start || !s.end) continue
+        byDay.set(s.day, [...(byDay.get(s.day) ?? []), { o, s }])
+      }
+    }
     for (const [day, group] of byDay.entries()) {
       for (let i = 0; i < group.length; i++) {
         for (let j = i + 1; j < group.length; j++) {
-          const ta = extractTimes(group[i]!.classSchedule)
-          const tb = extractTimes(group[j]!.classSchedule)
-          if (ta.length < 2 || tb.length < 2) continue
           const a = group[i]!
           const b = group[j]!
-          const as = toMinutes(ta[0] ?? "0")
-          const ae = toMinutes(ta[1] ?? "0")
-          const bs = toMinutes(tb[0] ?? "0")
-          const be = toMinutes(tb[1] ?? "0")
+          const as = toMinutes(a.s.start!)
+          const ae = toMinutes(a.s.end!)
+          const bs = toMinutes(b.s.start!)
+          const be = toMinutes(b.s.end!)
           if (as < be && bs < ae) {
             out.push({
               id: `sched-${id++}`,
               reason: `تداخل زمانی ${day}`,
               type: "class_schedule",
-              courses: [a, b],
+              courses: [a.o, b.o],
             })
           }
         }

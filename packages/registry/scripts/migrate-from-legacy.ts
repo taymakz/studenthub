@@ -312,10 +312,14 @@ async function main() {
       ...(r.current_enrollment !== null && r.current_enrollment !== ""
         ? { currentEnrollment: Number.parseInt(r.current_enrollment, 10) || 0 }
         : {}),
-      classSchedule: r.class_schedule ?? null,
+      classSchedule: [r.class_schedule].filter(
+        (s): s is string => typeof s === "string" && s.trim() !== ""
+      ),
       examSchedule: r.exam_schedule ?? null,
       ...(r.professor ? { professor: { fa: r.professor } } : {}),
-      location: r.location || null,
+      location: [r.location].filter(
+        (s): s is string => typeof s === "string" && s.trim() !== ""
+      ),
     })
 
     const scrapedAt = new Date(

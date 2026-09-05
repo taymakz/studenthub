@@ -14,10 +14,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "دوشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "99041-75001",
@@ -32,10 +34,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "دوشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "سید مهدی طباطبایی",
-      "location": null
+      "location": []
     },
     {
       "index": "99083-75099",
@@ -50,10 +54,12 @@
       "minCapacity": null,
       "maxCapacity": 31,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "یکشنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "مرتضی رستم پور",
-      "location": null
+      "location": []
     },
     {
       "index": "99083-75098",
@@ -68,10 +74,12 @@
       "minCapacity": null,
       "maxCapacity": 31,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "یکشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "مرتضی رستم پور",
-      "location": null
+      "location": []
     },
     {
       "index": "90128-75097",
@@ -86,10 +94,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "98841-75096",
@@ -104,10 +114,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/15 از 08:30 تا 10:30",
       "professor": "اکرم اقدسی",
-      "location": null
+      "location": []
     },
     {
       "index": "90128-75095",
@@ -122,10 +134,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "چهارشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "اکرم اقدسی",
-      "location": null
+      "location": []
     },
     {
       "index": "90029-75152",
@@ -140,10 +154,14 @@
       "minCapacity": null,
       "maxCapacity": 48,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 15:55 تا 18:35",
+      "classSchedule": [
+        "چهارشنبه از 15:55 تا 18:35"
+      ],
       "examSchedule": "1405/10/15 از 08:30 تا 10:30",
       "professor": "لیلا محمدی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201115121-76009",
@@ -158,10 +176,14 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "یکشنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/09 از 11:00 تا 13:00",
       "professor": "محمدرضا رستمی",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201181168-76008",
@@ -176,10 +198,14 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "شنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/09 از 11:00 تا 13:00",
       "professor": "محمدرضا رستمی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201111057-76052",
@@ -194,10 +220,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "چهارشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/17 از 11:00 تا 13:00",
       "professor": "پونه عباسی مصرآبادی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201181157-76051",
@@ -212,10 +242,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "چهارشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/14 از 11:00 تا 13:00",
       "professor": "پونه عباسی مصرآبادی",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201118621-76050",
@@ -230,10 +264,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "چهارشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/14 از 14:00 تا 16:00",
       "professor": "پونه عباسی مصرآبادی",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201111058-76049",
@@ -248,10 +286,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "چهارشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/17 از 08:30 تا 10:30",
       "professor": "پونه عباسی مصرآبادی",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201181162-76048",
@@ -266,10 +308,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "چهارشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/23 از 11:00 تا 13:00",
       "professor": "مژگان حسینی همدانی",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201181171-76047",
@@ -284,10 +330,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "چهارشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/19 از 11:00 تا 13:00",
       "professor": "مژگان حسینی همدانی",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201104066-76046",
@@ -302,10 +352,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "سه شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/13 از 08:30 تا 10:30",
       "professor": "هوشمند هدایتی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201118549-76045",
@@ -320,10 +374,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "سه شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/21 از 14:00 تا 16:00",
       "professor": "هوشمند هدایتی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "99083-75097",
@@ -338,10 +396,12 @@
       "minCapacity": null,
       "maxCapacity": 30,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "سه شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "4201103800-76044",
@@ -356,10 +416,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "سه شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/24 از 14:00 تا 16:00",
       "professor": "هوشمند هدایتی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "99083-75096",
@@ -374,10 +438,12 @@
       "minCapacity": null,
       "maxCapacity": 30,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "یکشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "99083-75095",
@@ -392,10 +458,12 @@
       "minCapacity": null,
       "maxCapacity": 30,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "سه شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "پروانه نجمی",
-      "location": null
+      "location": []
     },
     {
       "index": "4201131251-76043",
@@ -410,10 +478,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "سه شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/19 از 08:30 تا 10:30",
       "professor": "نجمه کمش",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "99083-75094",
@@ -428,10 +500,12 @@
       "minCapacity": null,
       "maxCapacity": 31,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "سه شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "پروانه نجمی",
-      "location": null
+      "location": []
     },
     {
       "index": "4201145644-76042",
@@ -446,10 +520,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "سه شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/19 از 11:00 تا 13:00",
       "professor": "نجمه کمش",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201106264-76041",
@@ -464,10 +542,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "سه شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/19 از 08:30 تا 10:30",
       "professor": "نجمه کمش",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201118035-76040",
@@ -482,10 +564,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "سه شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/13 از 08:30 تا 10:30",
       "professor": "نجمه کمش",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201118633-76007",
@@ -500,10 +586,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "سه شنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "محمدرضا رستمی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201181142-76006",
@@ -518,10 +608,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "سه شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/13 از 11:00 تا 13:00",
       "professor": "محمدرضا رستمی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201181163-76005",
@@ -536,10 +630,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "دوشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/13 از 11:00 تا 13:00",
       "professor": "محمدرضا رستمی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201118560-76039",
@@ -554,10 +652,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "دوشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/23 از 11:00 تا 13:00",
       "professor": "گلبرگ درویشیان",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201118647-76038",
@@ -572,10 +674,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "دوشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/21 از 11:00 تا 13:00",
       "professor": "محمدرضا رستمی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201106241-76037",
@@ -590,10 +696,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "دوشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/23 از 14:00 تا 16:00",
       "professor": "محمدرضا رستمی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201181146-76036",
@@ -608,10 +718,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "دوشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/07 از 08:30 تا 10:30",
       "professor": "بیتا اسدی گلمانخانه",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201127432-76035",
@@ -626,10 +740,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "دوشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/24 از 08:30 تا 10:30",
       "professor": "بیتا اسدی گلمانخانه",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201152210-76034",
@@ -644,10 +762,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "دوشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/13 از 14:00 تا 16:00",
       "professor": "بیتا اسدی گلمانخانه",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201118581-76033",
@@ -662,10 +784,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "دوشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/08 از 11:00 تا 13:00",
       "professor": "بیتا اسدی گلمانخانه",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201156134-76032",
@@ -680,10 +806,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "یکشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/23 از 08:30 تا 10:30",
       "professor": "زینب میرزایی جن قشلاقی",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201100835-76031",
@@ -698,10 +828,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "یکشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/24 از 08:30 تا 10:30",
       "professor": "زینب میرزایی جن قشلاقی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201104428-76030",
@@ -716,10 +850,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "یکشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/14 از 08:30 تا 10:30",
       "professor": "نیلوفر سلیمانی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201125098-76029",
@@ -734,10 +872,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "یکشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/17 از 14:00 تا 16:00",
       "professor": "نیلوفر سلیمانی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201140654-76028",
@@ -752,10 +894,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "یکشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/09 از 14:00 تا 16:00",
       "professor": "فاطمه نفرزاده نفری",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201181159-76027",
@@ -770,10 +916,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "یکشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/09 از 08:30 تا 10:30",
       "professor": "فاطمه نفرزاده نفری",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201128298-76026",
@@ -788,10 +938,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "یکشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/17 از 14:00 تا 16:00",
       "professor": "نجمه کمش",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201102987-76025",
@@ -806,10 +960,12 @@
       "minCapacity": null,
       "maxCapacity": 42,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "یکشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/20 از 14:00 تا 16:00",
       "professor": "نجمه کمش",
-      "location": null
+      "location": []
     },
     {
       "index": "4201106255-76024",
@@ -824,10 +980,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "یکشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/23 از 14:00 تا 16:00",
       "professor": "نجمه کمش",
-      "location": null
+      "location": []
     },
     {
       "index": "4201100940-76023",
@@ -842,10 +1000,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/24 از 14:00 تا 16:00",
       "professor": "زینب میرزایی جن قشلاقی",
-      "location": null
+      "location": []
     },
     {
       "index": "4201132553-76022",
@@ -860,10 +1020,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "شنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/21 از 14:00 تا 16:00",
       "professor": "زینب میرزایی جن قشلاقی",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201181161-76021",
@@ -878,10 +1042,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/21 از 08:30 تا 10:30",
       "professor": "پونه عباسی مصرآبادی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201118645-76020",
@@ -896,10 +1064,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/21 از 08:30 تا 10:30",
       "professor": "پونه عباسی مصرآبادی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201118695-76019",
@@ -914,10 +1086,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/20 از 14:00 تا 16:00",
       "professor": "پونه عباسی مصرآبادی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "99083-75093",
@@ -932,10 +1108,12 @@
       "minCapacity": null,
       "maxCapacity": 30,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "مرتضی رستم پور",
-      "location": null
+      "location": []
     },
     {
       "index": "99083-75092",
@@ -950,10 +1128,12 @@
       "minCapacity": null,
       "maxCapacity": 30,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "مرتضی رستم پور",
-      "location": null
+      "location": []
     },
     {
       "index": "4201145028-76018",
@@ -968,10 +1148,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/19 از 14:00 تا 16:00",
       "professor": "پونه عباسی مصرآبادی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201124892-76017",
@@ -986,10 +1170,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/17 از 08:30 تا 10:30",
       "professor": "بیتا اسدی گلمانخانه",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201181151-76016",
@@ -1004,10 +1192,14 @@
       "minCapacity": null,
       "maxCapacity": 42,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/19 از 14:00 تا 16:00",
       "professor": "بیتا اسدی گلمانخانه",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201181164-76015",
@@ -1022,10 +1214,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/21 از 11:00 تا 13:00",
       "professor": "بیتا اسدی گلمانخانه",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201181167-74014",
@@ -1040,10 +1236,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/17 از 11:00 تا 13:00",
       "professor": "بیتا اسدی گلمانخانه",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "99041-75044",
@@ -1058,10 +1258,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "پنج شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/22 از 11:00 تا 13:00",
       "professor": "سید مهدی طباطبایی",
-      "location": null
+      "location": []
     },
     {
       "index": "99041-75043",
@@ -1076,10 +1278,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "پنج شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/22 از 11:00 تا 13:00",
       "professor": "سید مهدی طباطبایی",
-      "location": null
+      "location": []
     },
     {
       "index": "99041-75042",
@@ -1094,10 +1298,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "پنج شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/22 از 11:00 تا 13:00",
       "professor": "سید مهدی طباطبایی",
-      "location": null
+      "location": []
     },
     {
       "index": "99041-75041",
@@ -1112,10 +1318,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "پنج شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/22 از 11:00 تا 13:00",
       "professor": "سید مهدی طباطبایی",
-      "location": null
+      "location": []
     },
     {
       "index": "99083-75091",
@@ -1130,10 +1338,12 @@
       "minCapacity": null,
       "maxCapacity": 30,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "چهارشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "پروانه نجمی",
-      "location": null
+      "location": []
     },
     {
       "index": "99073-75072",
@@ -1148,10 +1358,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "پنج شنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "حسین اکبری",
-      "location": null
+      "location": []
     },
     {
       "index": "99073-75071",
@@ -1166,10 +1378,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "پنج شنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "حسین اکبری",
-      "location": null
+      "location": []
     },
     {
       "index": "99073-75070",
@@ -1184,10 +1398,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "پنج شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "حسین اکبری",
-      "location": null
+      "location": []
     },
     {
       "index": "99073-75069",
@@ -1202,10 +1418,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "پنج شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "حسین اکبری",
-      "location": null
+      "location": []
     },
     {
       "index": "99073-75068",
@@ -1220,10 +1438,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "پنج شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "محمد بهرامی",
-      "location": null
+      "location": []
     },
     {
       "index": "99073-75067",
@@ -1238,10 +1458,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "پنج شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "محمد بهرامی",
-      "location": null
+      "location": []
     },
     {
       "index": "99073-75064",
@@ -1256,10 +1478,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "پنج شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "محمد بهرامی",
-      "location": null
+      "location": []
     },
     {
       "index": "99073-75063",
@@ -1274,10 +1498,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "چهارشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "محمد بهرامی",
-      "location": null
+      "location": []
     },
     {
       "index": "99073-75062",
@@ -1292,10 +1518,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "چهارشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "محمد بهرامی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000035438-75060",
@@ -1310,10 +1538,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "دوشنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "محمد بهرامی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000035438-75059",
@@ -1328,10 +1558,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "دوشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "محمد بهرامی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000035438-75058",
@@ -1346,10 +1578,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "دوشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "محمد بهرامی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000035438-75057",
@@ -1364,10 +1598,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "دوشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "مجتبی فراهانی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000035438-75056",
@@ -1382,10 +1618,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "دوشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "مجتبی فراهانی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000035438-75055",
@@ -1400,10 +1638,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "دوشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "مجتبی فراهانی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000035438-75054",
@@ -1418,10 +1658,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "دوشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "مجتبی فراهانی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000035438-75053",
@@ -1436,10 +1678,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "یکشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "مجتبی فراهانی",
-      "location": null
+      "location": []
     },
     {
       "index": "92381-75086",
@@ -1454,10 +1698,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "پنج شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "میثم طاهرابادی",
-      "location": null
+      "location": []
     },
     {
       "index": "92381-75985",
@@ -1472,10 +1718,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "سه شنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "میثم طاهرابادی",
-      "location": null
+      "location": []
     },
     {
       "index": "90128-75084",
@@ -1490,10 +1738,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "98961-75083",
@@ -1508,10 +1758,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "دوشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "حسن کاظمی",
-      "location": null
+      "location": []
     },
     {
       "index": "98961-75081",
@@ -1526,10 +1778,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "دوشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "حسن کاظمی",
-      "location": null
+      "location": []
     },
     {
       "index": "98961-75080",
@@ -1544,10 +1798,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "دوشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "حسن کاظمی",
-      "location": null
+      "location": []
     },
     {
       "index": "99093-75108",
@@ -1562,10 +1818,12 @@
       "minCapacity": null,
       "maxCapacity": 150,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "چهارشنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/11/02 از 08:00 تا 10:00",
       "professor": "بیتا اسدی",
-      "location": null
+      "location": []
     },
     {
       "index": "99093-75107",
@@ -1580,10 +1838,12 @@
       "minCapacity": null,
       "maxCapacity": 150,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "چهارشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/11/11 از 08:00 تا 10:00",
       "professor": "بیتا اسدی",
-      "location": null
+      "location": []
     },
     {
       "index": "99092-75106",
@@ -1598,10 +1858,12 @@
       "minCapacity": null,
       "maxCapacity": 160,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 14:15 تا 15:15",
+      "classSchedule": [
+        "پنج شنبه از 14:15 تا 15:15"
+      ],
       "examSchedule": "1405/10/25 از 13:00 تا 15:00",
       "professor": "بیتا اسدی",
-      "location": null
+      "location": []
     },
     {
       "index": "99092-75105",
@@ -1616,10 +1878,12 @@
       "minCapacity": null,
       "maxCapacity": 150,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 13:15 تا 14:15",
+      "classSchedule": [
+        "پنج شنبه از 13:15 تا 14:15"
+      ],
       "examSchedule": "1405/10/25 از 13:00 تا 15:00",
       "professor": "بیتا اسدی",
-      "location": null
+      "location": []
     },
     {
       "index": "99091-75104",
@@ -1634,10 +1898,12 @@
       "minCapacity": null,
       "maxCapacity": 150,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 11:15 تا 12:15",
+      "classSchedule": [
+        "پنج شنبه از 11:15 تا 12:15"
+      ],
       "examSchedule": "1405/11/02 از 13:00 تا 15:00",
       "professor": "بیتا اسدی",
-      "location": null
+      "location": []
     },
     {
       "index": "99091-75103",
@@ -1652,10 +1918,12 @@
       "minCapacity": null,
       "maxCapacity": 150,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 10:15 تا 11:15",
+      "classSchedule": [
+        "پنج شنبه از 10:15 تا 11:15"
+      ],
       "examSchedule": "1405/11/02 از 13:00 تا 15:00",
       "professor": "بیتا اسدی",
-      "location": null
+      "location": []
     },
     {
       "index": "99091-75102",
@@ -1670,10 +1938,12 @@
       "minCapacity": null,
       "maxCapacity": 160,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 09:15 تا 10:10",
+      "classSchedule": [
+        "پنج شنبه از 09:15 تا 10:10"
+      ],
       "examSchedule": "1405/11/02 از 13:00 تا 15:00",
       "professor": "بیتا اسدی",
-      "location": null
+      "location": []
     },
     {
       "index": "99090-75101",
@@ -1688,10 +1958,12 @@
       "minCapacity": null,
       "maxCapacity": 200,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 15:15 تا 16:15",
+      "classSchedule": [
+        "پنج شنبه از 15:15 تا 16:15"
+      ],
       "examSchedule": "1405/10/25 از 08:00 تا 10:00",
       "professor": "بیتا اسدی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000004300-2605",
@@ -1706,10 +1978,10 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": null,
+      "classSchedule": [],
       "examSchedule": null,
       "professor": null,
-      "location": null
+      "location": []
     },
     {
       "index": "4201151468-76013",
@@ -1724,10 +1996,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "یکشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/19 از 11:00 تا 13:00",
       "professor": "فاطمه نفرزاده نفری",
-      "location": "فنی مهندسی-2204"
+      "location": [
+        "فنی مهندسی-2204"
+      ]
     },
     {
       "index": "4201151491-76012",
@@ -1742,10 +2018,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "یکشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/17 از 11:00 تا 13:00",
       "professor": "نیلوفر سلیمانی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201154904-76011",
@@ -1760,10 +2040,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "یکشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/23 از 11:00 تا 13:00",
       "professor": "نجمه کمش",
-      "location": null
+      "location": []
     },
     {
       "index": "4201124854-76004",
@@ -1778,10 +2060,14 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "یکشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/20 از 11:00 تا 13:00",
       "professor": "محمدرضا رستمی",
-      "location": "فنی مهندسی-2205"
+      "location": [
+        "فنی مهندسی-2205"
+      ]
     },
     {
       "index": "4201125393-76003",
@@ -1796,10 +2082,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "یکشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/13 از 11:00 تا 13:00",
       "professor": "محمدرضا رستمی",
-      "location": null
+      "location": []
     },
     {
       "index": "4201115121-76002",
@@ -1814,10 +2102,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "دوشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/09 از 14:00 تا 16:00",
       "professor": "محمدرضا رستمی",
-      "location": null
+      "location": []
     },
     {
       "index": "4201181168-76001",
@@ -1832,10 +2122,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/09 از 11:00 تا 13:00",
       "professor": "محمدرضا رستمی",
-      "location": null
+      "location": []
     },
     {
       "index": "90313-75014",
@@ -1850,10 +2142,12 @@
       "minCapacity": null,
       "maxCapacity": 41,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "چهارشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "90313-75012",
@@ -1868,10 +2162,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "چهارشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "90313-75008",
@@ -1886,10 +2182,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "یکشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "90313-75045",
@@ -1904,10 +2202,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "سه شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "90313-75043",
@@ -1922,10 +2222,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "یکشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "90313-75039",
@@ -1940,10 +2242,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "سه شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "اکرم اقدسی",
-      "location": null
+      "location": []
     },
     {
       "index": "90313-75066",
@@ -1958,10 +2262,12 @@
       "minCapacity": null,
       "maxCapacity": 41,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "سه شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "اکرم اقدسی",
-      "location": null
+      "location": []
     },
     {
       "index": "90610-75013",
@@ -1976,10 +2282,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "الهه کابلی",
-      "location": null
+      "location": []
     },
     {
       "index": "90610-75004",
@@ -1994,10 +2302,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "الهه کابلی",
-      "location": null
+      "location": []
     },
     {
       "index": "90610-75005",
@@ -2012,10 +2322,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "الهه کابلی",
-      "location": null
+      "location": []
     },
     {
       "index": "90610-75018",
@@ -2030,10 +2342,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "الهه کابلی",
-      "location": null
+      "location": []
     },
     {
       "index": "90610-75015",
@@ -2048,10 +2362,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "دوشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/22 از 08:30 تا 10:30",
       "professor": "الهه کابلی",
-      "location": null
+      "location": []
     },
     {
       "index": "98841-75021",
@@ -2066,10 +2382,12 @@
       "minCapacity": null,
       "maxCapacity": 41,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "شنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/15 از 08:30 تا 10:30",
       "professor": "اکرم اقدسی",
-      "location": null
+      "location": []
     },
     {
       "index": "98841-75016",
@@ -2084,10 +2402,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "دوشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/15 از 08:30 تا 10:30",
       "professor": "هانی نجفی",
-      "location": null
+      "location": []
     },
     {
       "index": "98841-75054",
@@ -2102,10 +2422,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "دوشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/15 از 08:30 تا 10:30",
       "professor": "هانی نجفی",
-      "location": null
+      "location": []
     },
     {
       "index": "98841-75073",
@@ -2120,10 +2442,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "دوشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/15 از 08:30 تا 10:30",
       "professor": "هانی نجفی",
-      "location": null
+      "location": []
     },
     {
       "index": "90128-75022",
@@ -2138,10 +2462,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "چهارشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "اکرم اقدسی",
-      "location": null
+      "location": []
     },
     {
       "index": "90128-75026",
@@ -2156,10 +2482,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "اکرم اقدسی",
-      "location": null
+      "location": []
     },
     {
       "index": "90128-75071",
@@ -2174,10 +2502,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "90128-75072",
@@ -2192,10 +2522,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "98961-75024",
@@ -2210,10 +2542,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "سه شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "لعیا مرادی پر",
-      "location": null
+      "location": []
     },
     {
       "index": "98961-75034",
@@ -2228,10 +2562,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "چهارشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "اکرم اقدسی",
-      "location": null
+      "location": []
     },
     {
       "index": "98961-75037",
@@ -2246,10 +2582,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "پنج شنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "میثم طاهرابادی",
-      "location": null
+      "location": []
     },
     {
       "index": "98961-75041",
@@ -2264,10 +2602,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "پنج شنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "میثم طاهرابادی",
-      "location": null
+      "location": []
     },
     {
       "index": "98961-75036",
@@ -2282,10 +2622,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "شنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/15 از 14:00 تا 16:00",
       "professor": "اکرم اقدسی",
-      "location": null
+      "location": []
     },
     {
       "index": "90755-75049",
@@ -2300,10 +2642,12 @@
       "minCapacity": null,
       "maxCapacity": 41,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "سه شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "کاوه فرهادی",
-      "location": null
+      "location": []
     },
     {
       "index": "90755-75048",
@@ -2318,10 +2662,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "سه شنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "کاوه فرهادی",
-      "location": null
+      "location": []
     },
     {
       "index": "90755-75047",
@@ -2336,10 +2682,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "سه شنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "کاوه فرهادی",
-      "location": null
+      "location": []
     },
     {
       "index": "90755-75050",
@@ -2354,10 +2702,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "پنج شنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "پنج شنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "کاوه فرهادی",
-      "location": null
+      "location": []
     },
     {
       "index": "90755-75044",
@@ -2372,10 +2722,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "چهارشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "پروانه نجمی",
-      "location": null
+      "location": []
     },
     {
       "index": "90755-75058",
@@ -2390,10 +2742,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "چهارشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "پروانه نجمی",
-      "location": null
+      "location": []
     },
     {
       "index": "90755-75059",
@@ -2408,10 +2762,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "چهارشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/15 از 11:00 تا 13:00",
       "professor": "پروانه نجمی",
-      "location": null
+      "location": []
     },
     {
       "index": "92381-75031",
@@ -2426,10 +2782,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "شنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "هادی حسین مردی",
-      "location": null
+      "location": []
     },
     {
       "index": "92381-75023",
@@ -2444,10 +2802,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "شنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "هادی حسین مردی",
-      "location": null
+      "location": []
     },
     {
       "index": "92381-75091",
@@ -2462,10 +2822,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "یکشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "هادی حسین مردی",
-      "location": null
+      "location": []
     },
     {
       "index": "92381-75092",
@@ -2480,10 +2842,12 @@
       "minCapacity": null,
       "maxCapacity": 40,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 16:45 تا 18:30",
+      "classSchedule": [
+        "یکشنبه از 16:45 تا 18:30"
+      ],
       "examSchedule": "1405/10/22 از 14:00 تا 16:00",
       "professor": "هادی حسین مردی",
-      "location": null
+      "location": []
     },
     {
       "index": "99041-75025",
@@ -2498,10 +2862,12 @@
       "minCapacity": null,
       "maxCapacity": 41,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "دوشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/22 از 11:00 تا 13:00",
       "professor": "سید مهدی طباطبایی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000034807-2605",
@@ -2516,10 +2882,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "سه شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/08 از 11:00 تا 13:00",
       "professor": "کوروش عاکف خلخالی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000034818-2403",
@@ -2534,10 +2902,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "سه شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/19 از 11:00 تا 13:00",
       "professor": "کوروش عاکف خلخالی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000034813-2602",
@@ -2552,10 +2922,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "سه شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/14 از 11:00 تا 13:00",
       "professor": "کوروش عاکف خلخالی",
-      "location": null
+      "location": []
     },
     {
       "index": "7000034814-2601",
@@ -2570,10 +2942,12 @@
       "minCapacity": null,
       "maxCapacity": 25,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "سه شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/12 از 11:00 تا 13:00",
       "professor": "کوروش عاکف خلخالی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75115",
@@ -2588,10 +2962,12 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "چهارشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "فائزه حمیدی راد",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75114",
@@ -2606,10 +2982,12 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "چهارشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "فائزه حمیدی راد",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75113",
@@ -2624,10 +3002,12 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "چهارشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "چهارشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "فائزه حمیدی راد",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75124",
@@ -2642,10 +3022,12 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "سه شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75123",
@@ -2660,10 +3042,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "سه شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75112",
@@ -2678,10 +3062,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "سه شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75108",
@@ -2696,10 +3082,12 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "دوشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75107",
@@ -2714,10 +3102,12 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "دوشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75121",
@@ -2732,10 +3122,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "یکشنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75106",
@@ -2750,10 +3142,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "یکشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75104",
@@ -2768,10 +3162,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "یکشنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75120",
@@ -2786,10 +3182,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "شنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75119",
@@ -2804,10 +3202,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75118",
@@ -2822,10 +3222,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75102",
@@ -2840,10 +3242,12 @@
       "minCapacity": null,
       "maxCapacity": 17,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99062-75101",
@@ -2858,10 +3262,12 @@
       "minCapacity": null,
       "maxCapacity": 17,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/10 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75127",
@@ -2876,10 +3282,12 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "سه شنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75126",
@@ -2894,10 +3302,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 13:15 تا 15:00",
+      "classSchedule": [
+        "سه شنبه از 13:15 تا 15:00"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75125",
@@ -2912,10 +3322,12 @@
       "minCapacity": null,
       "maxCapacity": 17,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "سه شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75111",
@@ -2930,10 +3342,12 @@
       "minCapacity": null,
       "maxCapacity": 17,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "سه شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75110",
@@ -2948,10 +3362,12 @@
       "minCapacity": null,
       "maxCapacity": 17,
       "currentEnrollment": null,
-      "classSchedule": "سه شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "سه شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75109",
@@ -2966,10 +3382,12 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "دوشنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "دوشنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75105",
@@ -2984,10 +3402,12 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "یکشنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75117",
@@ -3002,10 +3422,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 09:15 تا 11:00",
+      "classSchedule": [
+        "شنبه از 09:15 تا 11:00"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75116",
@@ -3020,10 +3442,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 07:30 تا 09:15",
+      "classSchedule": [
+        "شنبه از 07:30 تا 09:15"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75122",
@@ -3038,10 +3462,12 @@
       "minCapacity": null,
       "maxCapacity": 15,
       "currentEnrollment": null,
-      "classSchedule": "یکشنبه از 15:00 تا 16:45",
+      "classSchedule": [
+        "یکشنبه از 15:00 تا 16:45"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "بهزاد سهیلی",
-      "location": null
+      "location": []
     },
     {
       "index": "99079-75103",
@@ -3056,10 +3482,12 @@
       "minCapacity": null,
       "maxCapacity": 16,
       "currentEnrollment": null,
-      "classSchedule": "شنبه از 11:00 تا 12:45",
+      "classSchedule": [
+        "شنبه از 11:00 تا 12:45"
+      ],
       "examSchedule": "1405/10/09 از 08:00 تا 10:00",
       "professor": "سمیه بخشی",
-      "location": null
+      "location": []
     }
   ]
 }

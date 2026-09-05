@@ -41,6 +41,77 @@ export function extractTimes(schedule: string | null | undefined): string[] {
   return [...matches].map((m) => m[1]!)
 }
 
+/* ─── Multi-session helpers (classSchedule/location are arrays) ───────────── */
+
+export interface ClassSession {
+  /** Canonical weekday («سه شنبه») or null when unparsable. */
+  day: string | null
+  start: string | null
+  end: string | null
+  /** Raw session string as stored. */
+  raw: string
+  /** Ordinal of this session within the offering's classSchedule — stable key part. */
+  sessionIndex: number
+  location: string | null
+}
+
+/** Defensive: registry stores string[] (canonical); legacy caches may hold a single string. */
+function scheduleList(v: string[] | string | null | undefined): string[] {
+  if (v == null) return []
+  if (typeof v === "string") return v.trim() ? [v] : []
+  return v
+}
+
+function locationList(
+  v: Array<string | null> | string | null | undefined
+): Array<string | null> {
+  if (v == null) return []
+  if (typeof v === "string") return v.trim() ? [v] : []
+  return v
+}
+
+/** Expand an offering into its per-week sessions, pairing location by index
+ *  (lengths aligned) or broadcasting a single location to all sessions. */
+export function classSessions(
+  o: Pick<Offering, "classSchedule" | "location">
+): ClassSession[] {
+  const schedules = scheduleList(o.classSchedule)
+  const locations = locationList(o.location)
+  return schedules.map((raw, i) => {
+    const times = extractTimes(raw)
+    const start = times[0] ?? null
+    const end = times[1] ?? null
+    let location: string | null = null
+    if (locations.length === schedules.length) location = locations[i] ?? null
+    else if (locations.length === 1) location = locations[0] ?? null
+    return { day: extractWeekday(raw), start, end, raw, sessionIndex: i, location }
+  })
+}
+
+/** All sessions joined with Persian comma — for single-line display. */
+export function joinSchedules(
+  v: string[] | string | null | undefined
+): string | null {
+  const parts: string[] = []
+  for (const s of scheduleList(v)) {
+    const t = s.trim()
+    if (t) parts.push(t)
+  }
+  return parts.length ? parts.join(" ، ") : null
+}
+
+/** Distinct non-null locations joined — for single-line display. */
+export function joinLocations(
+  v: Array<string | null> | string | null | undefined
+): string | null {
+  const parts: string[] = []
+  for (const s of locationList(v)) {
+    const t = (s ?? "").trim()
+    if (t) parts.push(t)
+  }
+  return parts.length ? parts.join(" ، ") : null
+}
+
 /** YYYY/MM/DD (or -) date; returns the canonical "YYYY/MM/DD" or null. */
 export function extractDate(
   schedule: string | null | undefined
@@ -196,7 +267,6 @@ export function persianWeekDayFromDays(days: number): string | null {
     "پنج شنبه",
     "جمعه",
   ]
-  const today = getCurrentDatePersian()
   // Derive today's weekday index from the Persian calendar directly:
   const fmt = PERSIAN_WEEKDAY_FORMATTER.format(new Date())
   const norm = fmt.replace(/[\s\u200c]/g, "")

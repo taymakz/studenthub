@@ -166,8 +166,8 @@ export function scrapeOfferingsFromPage(): ScrapeResult {
     return idx === undefined ? "" : cleanText(cells[idx]?.textContent ?? "");
   }
 
-  function extractFirstSchedule(scheduleText: string): string {
-    if (!scheduleText) return "";
+  function extractAllSessions(scheduleText: string): string[] {
+    if (!scheduleText) return [];
     // Unify homoglyphs, replace ZWNJ/ZWJ/NBSP with space, collapse whitespace,
     // and normalize day variants to canonical forms (سه‌شنبه/سهشنبه -> سه شنبه, etc.)
     // This is done on a copy for matching only, then we return the canonical form.
@@ -185,14 +185,14 @@ export function scrapeOfferingsFromPage(): ScrapeResult {
     // Single regex that matches any canonical Persian day with time pattern,
     // scanning left-to-right. This avoids the substring bug where "شنبه"
     // was found inside "دوشنبه"/"یکشنبه"/etc. when looping per-day.
+    // A course may meet several times a week — ALL sessions are kept.
     const pattern =
       /(شنبه|یکشنبه|دوشنبه|سه شنبه|چهارشنبه|پنج شنبه|جمعه)\s+از\s+\d{1,2}:\d{2}\s+تا\s+\d{1,2}:\d{2}/g;
     const matches = [...cleaned.matchAll(pattern)];
-    const first = matches[0];
-    if (first) {
-      return first[0]!;
+    if (matches.length > 0) {
+      return matches.map((m) => m[0]!);
     }
-    return cleaned;
+    return cleaned ? [cleaned] : [];
   }
 
   function toInt(value: string): number | null {
@@ -232,6 +232,8 @@ export function scrapeOfferingsFromPage(): ScrapeResult {
     }
     seenIndexes.add(index);
 
+    const locationCell = cell(cells, "location");
+
     rows.push({
       index,
       courseCode,
@@ -245,10 +247,12 @@ export function scrapeOfferingsFromPage(): ScrapeResult {
       minCapacity: toInt(cell(cells, "minCapacity")),
       maxCapacity: toInt(cell(cells, "maxCapacity")),
       currentEnrollment: toInt(cell(cells, "currentEnrollment")),
-      classSchedule: extractFirstSchedule(cell(cells, "classSchedule")) || null,
+      classSchedule: extractAllSessions(cell(cells, "classSchedule")),
       examSchedule: cell(cells, "examSchedule") || null,
       professor: cell(cells, "professor") || null,
-      location: cell(cells, "location") || null,
+      // The portal has ONE location column for all sessions — single element
+      // broadcasts to every session (registry convention).
+      location: locationCell ? [locationCell] : [],
     });
   });
 

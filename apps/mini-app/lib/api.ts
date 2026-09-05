@@ -381,12 +381,14 @@ export interface Offering {
   minCapacity?: number
   maxCapacity?: number
   currentEnrollment?: number
-  classSchedule: string | null
+  /** Sessions per week, e.g. ["یکشنبه از 07:30 تا 09:30", "سه شنبه از 09:30 تا 11:30"]. Legacy cached payloads may hold a single string. */
+  classSchedule: string[]
   examSchedule: string | null
   // Registry stores professor as a plain string; API normalizes to { fa } but
   // accept both so cached/old payloads still render.
   professor: string | { fa?: string } | null
-  location: string | null
+  /** Index-matched with classSchedule when lengths align; single-element arrays broadcast. */
+  location: Array<string | null>
 }
 
 /** Extract readable professor name regardless of raw shape (string | {fa} | null). */

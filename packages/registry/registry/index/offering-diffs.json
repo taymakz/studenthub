@@ -1,11 +1,11 @@
 [
   {
-    "id": "c4eb0db5-2e3f-4313-89d2-9476998d689c",
+    "id": "7c5e521c-608a-4542-9304-5b223fea9e90",
     "uniSlug": "azad-malard",
     "majorSlug": "accounting",
     "year": 1405,
     "semester": "MEHR",
-    "createdAt": "2026-09-03T06:14:47.230Z",
+    "createdAt": "2026-09-05T14:21:38.405Z",
     "summary": {
       "added": 0,
       "removed": 0,
@@ -14,12 +14,12 @@
     "hasPrevious": true
   },
   {
-    "id": "66d31fbe-f4de-41ba-a4dc-ff0c3de9afb4",
+    "id": "e0b479a5-73a0-4280-99c0-eade633db018",
     "uniSlug": "azad-malard",
     "majorSlug": "computer-engineering",
     "year": 1405,
     "semester": "MEHR",
-    "createdAt": "2026-09-03T06:14:47.377Z",
+    "createdAt": "2026-09-05T14:21:38.585Z",
     "summary": {
       "added": 0,
       "removed": 0,
@@ -28,12 +28,12 @@
     "hasPrevious": true
   },
   {
-    "id": "79015bae-0b37-4c90-a7c5-306b45ddcec5",
+    "id": "a47dfab6-6d22-4b11-911a-c9e6e75b5f75",
     "uniSlug": "azad-malard",
     "majorSlug": "english-translation",
     "year": 1405,
     "semester": "MEHR",
-    "createdAt": "2026-09-03T06:14:47.446Z",
+    "createdAt": "2026-09-05T14:21:38.747Z",
     "summary": {
       "added": 0,
       "removed": 0,
@@ -42,12 +42,12 @@
     "hasPrevious": true
   },
   {
-    "id": "ccd306c2-2948-4ab8-a649-4d9f9c5560c2",
+    "id": "d8da9ac3-116f-4971-996b-b3359d1558b6",
     "uniSlug": "azad-neyshabur",
     "majorSlug": "computer-engineering",
     "year": 1405,
     "semester": "MEHR",
-    "createdAt": "2026-09-04T13:20:58.964Z",
+    "createdAt": "2026-09-05T14:21:38.921Z",
     "summary": {
       "added": 0,
       "removed": 0,

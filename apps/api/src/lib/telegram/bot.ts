@@ -345,6 +345,7 @@ function getUploadsTarget(): { chatId: string; threadId?: number } | null {
   if (!raw) return null
   if (raw.includes("_")) {
     const [c, t] = raw.split("_")
+    if (!c) return null
     const tid = Number.parseInt(t ?? "", 10)
     if (tid === 1) return { chatId: c }
     return { chatId: c, threadId: Number.isFinite(tid) ? tid : undefined }

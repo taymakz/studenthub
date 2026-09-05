@@ -330,8 +330,8 @@ export function scrapeGolestanOfferings(): ScrapeResult {
         const schedRaw = cleanText(cells[9]?.textContent ?? "");
         const examRaw = cleanText(cells[10]?.textContent ?? "");
 
-        let classSchedule: string | null = null;
-        let locationStr: string | null = null;
+        let classSchedule: string[] = [];
+        let locationStr: Array<string | null> = [];
 
         if (schedRaw) {
             // Golestan format: "شنبه از 07:30 تا 10:05; مکان: فنی مهندسی-2106"
@@ -339,7 +339,7 @@ export function scrapeGolestanOfferings(): ScrapeResult {
             // semicolon/newline - strip it from the schedule text.
             const locMatch = schedRaw.match(/مکان:\s*([^;,\n]+)/);
             if (locMatch) {
-                locationStr = locMatch[1]!.trim();
+                locationStr = [locMatch[1]!.trim()];
             }
 
             // Cut any trailing location portion (everything from ";" / newline onward).
@@ -349,9 +349,9 @@ export function scrapeGolestanOfferings(): ScrapeResult {
                 /(شنبه|یکشنبه|دوشنبه|سه شنبه|چهارشنبه|پنج شنبه|جمعه)\s*(?:از\s*)?(\d{1,2}[:.]\d{2})\s*(?:تا|الی|[-_])\s*(\d{1,2}[:.]\d{2})/,
             );
             if (dayMatch) {
-                classSchedule = `${dayMatch[1]} از ${dayMatch[2]!.replace(/[:.]/g, ":")} تا ${dayMatch[3]!.replace(/[:.]/g, ":")}`;
+                classSchedule = [`${dayMatch[1]} از ${dayMatch[2]!.replace(/[:.]/g, ":")} تا ${dayMatch[3]!.replace(/[:.]/g, ":")}`];
             } else if (schedPart) {
-                classSchedule = schedPart;
+                classSchedule = [schedPart];
             }
         }
 

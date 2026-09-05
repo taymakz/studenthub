@@ -1,4 +1,5 @@
 import { type Offering, professorName } from "@/lib/api"
+import { joinLocations, joinSchedules } from "@/components/app/profile/schedule-util"
 
 /** Thousands-space formatter for course/class codes. */
 export function fmt(code: string | undefined): string {
@@ -28,5 +29,5 @@ export function courseLine(
   if (mode === "code") return o.courseCode || "ثبت نشده"
   if (mode === "nameUnit")
     return `${o.courseName} - ${total} واحد - ${o.courseCode}`
-  return `📘 ${o.courseName}\nکد درس: ${o.courseCode} · کد ارائه: ${o.classCode} · ${total} واحد\nاستاد: ${professorName(o) ?? "—"}\nمکان: ${o.location ?? "—"}\nزمان کلاس: ${o.classSchedule ?? "—"}\nزمان امتحان: ${o.examSchedule ?? "—"}`
+  return `📘 ${o.courseName}\nکد درس: ${o.courseCode} · کد ارائه: ${o.classCode} · ${total} واحد\nاستاد: ${professorName(o) ?? "—"}\nمکان: ${joinLocations(o.location) ?? "—"}\nزمان کلاس: ${joinSchedules(o.classSchedule) ?? "—"}\nزمان امتحان: ${o.examSchedule ?? "—"}`
 }

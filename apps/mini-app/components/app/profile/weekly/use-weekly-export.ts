@@ -1,13 +1,11 @@
 "use client"
 
 import { toastManager } from "@workspace/ui/components/toast"
-import { drawExportHeader, drawExportRow, exportPalette } from "./../export-canvas"
+import { drawExportHeader, drawExportRow, exportPalette, type WeeklyEntry } from "./../export-canvas"
 import { exportImage, ExportUploadCanceled } from "@/lib/export-image"
-import { extractTimes } from "./../schedule-util"
 import { professorName } from "@/lib/api"
-import type { Offering } from "@/lib/api"
 
-export async function captureWeeklyScreenshot(groups: { day: string; items: Offering[] }[], isDark: boolean, user: { photoUrl?: string | null; firstName?: string }, cancelRef: React.MutableRefObject<(() => void) | null>) {
+export async function captureWeeklyScreenshot(groups: { day: string; items: WeeklyEntry[] }[], isDark: boolean, user: { photoUrl?: string | null; firstName?: string }, cancelRef: React.MutableRefObject<(() => void) | null>) {
   const palette = exportPalette(isDark, "green")
   const canvasWidth = 800
   const estimatedHeight = 50 + 200 + 20 + 40 + 60 + groups.reduce((h, g) => h + 50 + g.items.length * 140 + 30, 0) + 50
@@ -22,9 +20,8 @@ export async function captureWeeklyScreenshot(groups: { day: string; items: Offe
   for (const group of groups) {
     if (group.items.length === 0) continue
     ctx.font = `28px Vazirmatn, sans-serif`; ctx.fillStyle = palette.accent; ctx.textAlign = "right"; ctx.fillText(group.day, canvasWidth - 70, y); y += 50
-    for (const o of group.items) {
-      const times = extractTimes(o.classSchedule)
-      y = drawExportRow(ctx, canvasWidth, y, isDark, palette, { name: o.courseName, professor: professorName(o) ?? null, leftTop: times.length > 0 ? `${times[0]} تا ${times[1] ?? ""}`.trim() : undefined, leftBottom: o.location ?? undefined })
+    for (const entry of group.items) {
+      y = drawExportRow(ctx, canvasWidth, y, isDark, palette, { name: entry.offering.courseName, professor: professorName(entry.offering) ?? null, leftTop: entry.start && entry.end ? `${entry.start} تا ${entry.end}` : undefined, leftBottom: entry.location ?? undefined })
     }
     y += 30
   }
