@@ -54,16 +54,17 @@ function professorName(professor: Offering["professor"]): string | null {
 }
 
 function fieldValue(offering: Offering, key: string): string | null {
-  switch (key) {
-    case "professor":
-      return professorName(offering.professor)
-    default:
-      return (
-        (
-          offering[key as keyof Offering] as string | number | null | undefined
-        )?.toString() ?? null
-      )
+  if (key === "professor") return professorName(offering.professor)
+  const v = offering[key as keyof Offering] as unknown
+  if (v == null) return null
+  // classSchedule/location are arrays — join for the notification record.
+  if (Array.isArray(v)) {
+    const joined = v
+      .filter((x) => x != null && String(x).trim() !== "")
+      .join(" ، ")
+    return joined || null
   }
+  return String(v)
 }
 
 /** Diffs a term's latest snapshot against its rotated previous snapshot. */
