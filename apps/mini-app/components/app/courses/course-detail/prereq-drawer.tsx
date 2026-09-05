@@ -89,11 +89,11 @@ export function RequisiteOfferingsDrawer({
               <div key={day} className="space-y-2">
                 <h3 className="font-semibold text-success">{day}</h3>
                 <div className="space-y-2.5">
-                  {items.map((entry, i) => {
+                  {items.map((entry) => {
                     const o = entry.offering
                     return (
                       <CourseCard
-                        key={`${o.index}-${i}`}
+                        key={`${o.index}-${entry.sessionIndex}`}
                         offering={o}
                         viewMode="simple"
                         onSelect={(c) => {

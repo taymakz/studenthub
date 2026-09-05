@@ -56,14 +56,13 @@ export function useSetupWizard() {
   const advanceTimerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
   const submittingRef = React.useRef(false)
 
-  const clearAdvanceTimer = React.useCallback(() => {
-    if (advanceTimerRef.current !== null) {
-      clearTimeout(advanceTimerRef.current)
-      advanceTimerRef.current = null
+  // Unmount cleanup reads the ref directly (empty deps) so a pending
+  // auto-advance never fires after the wizard is gone.
+  React.useEffect(() => {
+    return () => {
+      if (advanceTimerRef.current !== null) clearTimeout(advanceTimerRef.current)
     }
   }, [])
-
-  React.useEffect(() => clearAdvanceTimer, [clearAdvanceTimer])
 
   React.useEffect(() => {
     window.scrollTo({ top: 0, behavior: "instant" as ScrollBehavior })
@@ -240,7 +239,7 @@ export function useSetupWizard() {
     },
   })
 
-  const submit = React.useCallback(() => {
+  const submit = () => {
     if (submittingRef.current) return
     submittingRef.current = true
     submitMut.mutate(undefined, {
@@ -250,7 +249,7 @@ export function useSetupWizard() {
       },
     })
     setSaving(true)
-  }, [submitMut])
+  }
 
   const selectAndMaybeAdvance = (patch: Partial<WizardData>) => {
     setData((prev) => ({ ...prev, ...patch }))
@@ -260,7 +259,7 @@ export function useSetupWizard() {
    *  select handler fires (single click, double-click, chip re-tap). */
   const selectAndAdvance = (patch: Partial<WizardData>, delayMs = 120) => {
     setData((prev) => ({ ...prev, ...patch }))
-    clearAdvanceTimer()
+    if (advanceTimerRef.current !== null) clearTimeout(advanceTimerRef.current)
     advanceTimerRef.current = setTimeout(() => {
       advanceTimerRef.current = null
       setDirection(1)
@@ -271,7 +270,7 @@ export function useSetupWizard() {
   /** Select + submit exactly once (last step). */
   const selectAndSubmit = (patch: Partial<WizardData>, delayMs = 120) => {
     setData((prev) => ({ ...prev, ...patch }))
-    clearAdvanceTimer()
+    if (advanceTimerRef.current !== null) clearTimeout(advanceTimerRef.current)
     advanceTimerRef.current = setTimeout(() => {
       advanceTimerRef.current = null
       submitRef.current()
@@ -279,10 +278,12 @@ export function useSetupWizard() {
   }
 
   // Stable ref so the timer callback always reaches the latest submit.
+  // No deps array: syncs after every render without useCallback (the React
+  // compiler manages the memoization itself).
   const submitRef = React.useRef(submit)
   React.useEffect(() => {
     submitRef.current = submit
-  }, [submit])
+  })
 
   const advanceOnDoubleTap = () => {
     if (isLastStep) submit()

@@ -31,8 +31,9 @@ export function WeeklyGroups({
           <div key={day} className="space-y-2">
             <h3 className="font-semibold text-success">{day}</h3>
             <div className="space-y-2.5">
-              {items.map((entry, i) => {
+              {items.map((entry) => {
                 const o = entry.offering
+                const entryKey = `${o.index}-${entry.sessionIndex}`
                 const mates = matesByIndex?.get(o.index)
                 const hasMates = !!mates && mates.count > 0 && !!onMatesClick
                 const body = (
@@ -47,7 +48,7 @@ export function WeeklyGroups({
                 // action) as valid siblings — no nested buttons, all native.
                 if (hasMates) {
                   return (
-                    <div key={`${o.index}-${i}`} className="rounded-lg border bg-card px-4 pt-3 pb-4 text-sm">
+                    <div key={entryKey} className="rounded-lg border bg-card px-4 pt-3 pb-4 text-sm">
                       <div className="mb-2 flex items-center gap-2">
                         <FriendFaces
                           sample={mates.sample}
@@ -71,9 +72,9 @@ export function WeeklyGroups({
                   )
                 }
                 return readOnly ? (
-                  <div key={`${o.index}-${i}`} className="relative w-full space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
+                  <div key={entryKey} className="relative w-full space-y-2 rounded-lg border bg-card px-4 pt-6 pb-4 text-sm">{body}</div>
                 ) : (
-                  <button type="button" key={`${o.index}-${i}`} className={cn("relative w-full cursor-pointer space-y-2 rounded-lg border bg-card px-4 py-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
+                  <button type="button" key={entryKey} className={cn("relative w-full cursor-pointer space-y-2 rounded-lg border bg-card px-4 py-4 text-start text-sm")} onClick={() => onSelect?.(o)}>{body}</button>
                 )
               })}
             </div>
