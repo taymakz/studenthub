@@ -1,0 +1,858 @@
+{
+  "isCompleted": false,
+  "terms": {
+    "1": [
+      {
+        "name": "حقوق تجارت",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ریاضیات و آمار (پیش نیاز دانشگاهی)",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "زبان انگلیسی پیش دانشگاهی-ترکیبی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "اقتصاد خرد",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "اصول حسابداری (1)",
+        "theoreticalUnits": 4,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "اندیشه اسلامی 1 (مبدا ومعاد)",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "انس با قرآن کریم",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "زبان فارسی (پیش نیاز دانشگاهی)",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ],
+    "2": [
+      {
+        "name": "ریاضی عمومی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "فارسی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "زبان انگلیسی عمومی-ترکیبی(1)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "زبان انگلیسی پیش دانشگاهی-ترکیبی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "اقتصاد کلان",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اقتصاد خرد"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "اصول حسابداری (2)",
+        "theoreticalUnits": 4,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اصول حسابداری (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "تربیت بدنی",
+        "theoreticalUnits": 0.5,
+        "practicalUnits": 0.5,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "آشنایی با دفاع مقدس",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "دانش خانواده و جمعیت",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ],
+    "3": [
+      {
+        "name": "ریاضی کاربردی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "ریاضی عمومی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "حسابداری میانه (1)",
+        "theoreticalUnits": 4,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اصول حسابداری (2)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "بهایابی (1)",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اصول حسابداری (2)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "مالیه عمومی و تنظیم خط مشی مالی دولت",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اقتصاد کلان"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "تفسیر موضوعی قرآن",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "مالیاتی (1)",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "اصول حسابداری (2)",
+          "حقوق تجارت"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "روان شناسی سازمانی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "زبان انگلیسی عمومی-ترکیبی(2)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "زبان انگلیسی عمومی-ترکیبی(1)"
+        ],
+        "corequisites": []
+      }
+    ],
+    "4": [
+      {
+        "name": "آمار و احتمالات",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "کنترلهای داخلی و نظام راهبری شرکتی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "حسابداری میانه (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "حسابداری میانه (2)",
+        "theoreticalUnits": 4,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "حسابداری میانه (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "بهایابی (2)",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "بهایابی (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "پول و ارز و بانکداری",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "رفتار سازمانی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "زبان انگلیسی عمومی-ترکیبی(3)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "زبان انگلیسی عمومی-ترکیبی(2)"
+        ],
+        "corequisites": []
+      }
+    ],
+    "5": [
+      {
+        "name": "مالی (1)",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "بازار سرمایه و ابزار تامین مالی اسلامی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "پول و ارز و بانکداری"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "حسابرسی (1)",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "کنترلهای داخلی و نظام راهبری شرکتی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "اصول و فنون مذاکره",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "تاریخ فرهنگ و تمدن اسلام و ایران",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "اخلاق اسلامی (مبانی و مفاهیم)",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "ورزش 1",
+        "theoreticalUnits": 0,
+        "practicalUnits": 1,
+        "prerequisites": [
+          "تربیت بدنی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "زبان تخصصی 1",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "زبان انگلیسی عمومی-ترکیبی(1)",
+          "زبان انگلیسی عمومی-ترکیبی(2)",
+          "زبان انگلیسی عمومی-ترکیبی(3)",
+          "حسابداری میانه (1)",
+          "بهایابی (1)"
+        ],
+        "corequisites": []
+      }
+    ],
+    "6": [
+      {
+        "name": "حسابرسی (2)",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "حسابرسی (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "مالی (2)",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مالی (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "تحقیق در عملیات",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "حسابداری مدیریت",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "بهایابی (2)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "حسابداری پیشرفته (1)",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "حسابداری میانه (2)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "حسابداری ابزارها و عقود مالی اسلامی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "بازار سرمایه و ابزار تامین مالی اسلامی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "تنظیم و کنترل بودجه دولتی",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مالیه عمومی و تنظیم خط مشی مالی دولت"
+        ],
+        "corequisites": []
+      }
+    ],
+    "7": [
+      {
+        "name": "حسابداری پیشرفته (2)",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "حسابداری پیشرفته (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "مکاتبات تجاری و گزارش نویسی",
+        "theoreticalUnits": 1,
+        "practicalUnits": 1,
+        "prerequisites": [
+          "حقوق تجارت"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "مبانی حسابداری بخش عمومی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "حقوق تجارت"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "مالیاتی (2)",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مالیاتی (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "مدیریت سرمایه گذاری",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "مالی (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "زبان تخصصی 2",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "زبان تخصصی 1"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "تاریخ تحلیلی صدر اسلام",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "مباحث جاری درحسابداری",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": 100,
+        "corequisites": []
+      }
+    ],
+    "8": [
+      {
+        "name": "حسابداری و حسابرسی بخش عمومی",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "کنترلهای داخلی و نظام راهبری شرکتی",
+          "مبانی حسابداری بخش عمومی"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "حسابداری موارد خاص",
+        "theoreticalUnits": 1,
+        "practicalUnits": 1,
+        "prerequisites": [
+          "حسابداری پیشرفته (1)"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "کارآموزی طرح پویش (1) کاردانی و کارشناسی",
+        "theoreticalUnits": 0,
+        "practicalUnits": 2,
+        "prerequisites": 100,
+        "corequisites": []
+      },
+      {
+        "name": "روش تحقیق",
+        "theoreticalUnits": 3,
+        "practicalUnits": 0,
+        "prerequisites": [
+          "آمار و احتمالات"
+        ],
+        "corequisites": []
+      },
+      {
+        "name": "نرم افزارهای کاربردی در حسابداری",
+        "theoreticalUnits": 1,
+        "practicalUnits": 1,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "انقلاب اسلامی ایران",
+        "theoreticalUnits": 2,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      },
+      {
+        "name": "اندیشه های امامین انقلاب اسلامی و وصایای حضرت امام خمینی(ره)",
+        "theoreticalUnits": 1,
+        "practicalUnits": 0,
+        "prerequisites": [],
+        "corequisites": []
+      }
+    ]
+  },
+  "moaref": [],
+  "unknown": [
+    {
+      "name": "آمار کاربردی (1)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "ریاضی کاربردی 1",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "رساله (6 واحد)",
+      "theoreticalUnits": 0,
+      "practicalUnits": 6,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "حسابداری صندوق های سرمایه گذاری",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "رساله (18 واحد)",
+      "theoreticalUnits": 0,
+      "practicalUnits": 18,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "اندیشه اسلامی 2 (نبوت و امامت)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "مبانی سازمان و کسب و کار",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "ریاضیات کاربردی در حسابداری (2)",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "آمار کاربردی در حسابداری (1)",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "حسابرسی پیشرفته",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "مالی 2",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "حسابداری بهای تمام شده (1)",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "زبان خارجی",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "ریاضیات کاربردی در حسابداری (1)",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "مبانی حسابداری مدیریت",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "آمار کاربردی (2)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "آمار کاربردی در حسابداری (2)",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "علوم و معارف دفاع مقدس و مقاومت",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "پایان نامه",
+      "theoreticalUnits": 0,
+      "practicalUnits": 6,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "سیستمهای اطلاعاتی حسابداری (AIS)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "حسابرسی عملیاتی، عملکرد (برای دیوان محاسبات و بخش عمومی)",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "کارآفرینی",
+      "theoreticalUnits": 1,
+      "practicalUnits": 1,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "روان شناسی تحولی 1",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "پول وارزوبانکداری",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "اصول تنظیم و کنترل بودجه دولت",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "اصول حسابرسی (2)",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "مدیریت مالی (1)",
+      "theoreticalUnits": 3,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "رساله (20 واحد)",
+      "theoreticalUnits": 0,
+      "practicalUnits": 20,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "آزمون جامع",
+      "theoreticalUnits": 0,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "اخلاق و مسئولیت اجتماعی",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "زبان تخصصی پیشرفته",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "روش تحقیق، مقاله و رساله نویسی پیشرفته",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "فلسفه علم و روش تحقیق",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "تئوری ها و پژوهش های حسابرسی",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "پژوهش های تجربی حسابداری",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "توسعه عقاید و افکار حسابداری",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "پژوهش های کیفی در حسابداری و حسابرسی",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "متون تخصصی حسابداری به انگلیسی",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "روش پژوهش در حسابداری",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "تئوری ها و مدیریت سرمایه گذاری",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "کاربرد آمار در پژوهش های کمی و کیفی حسابداری",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "تئوری حسابداری (1)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "حاکمیت شرکتی و اخلاق حرفه ای",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "ifrs و تطبیق آن با استانداردهای حسابداری ایران",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "زبان تخصصی (1)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "حسابداری مالیاتی (1)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "کاربینی",
+      "theoreticalUnits": 0.5,
+      "practicalUnits": 0.5,
+      "prerequisites": [],
+      "corequisites": []
+    },
+    {
+      "name": "آیین زندگی (اخلاق کاربردی)",
+      "theoreticalUnits": 2,
+      "practicalUnits": 0,
+      "prerequisites": [],
+      "corequisites": []
+    }
+  ],
+  "electives": {}
+}

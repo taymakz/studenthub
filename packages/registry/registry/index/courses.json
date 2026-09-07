@@ -211,6 +211,11 @@
     "refs": [
       {
         "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -319,6 +324,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -340,6 +350,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       },
       {
@@ -406,6 +421,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -416,6 +436,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -478,6 +503,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -490,6 +520,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -500,6 +535,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -535,6 +575,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       },
       {
@@ -593,6 +638,11 @@
       },
       {
         "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -616,6 +666,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       },
       {
@@ -647,6 +702,11 @@
       },
       {
         "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -671,6 +731,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -738,6 +803,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -748,6 +818,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -822,6 +897,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -843,6 +923,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       },
       {
@@ -874,6 +959,11 @@
       },
       {
         "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -886,6 +976,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -950,6 +1045,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       },
       {
@@ -1146,6 +1246,11 @@
     "refs": [
       {
         "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1182,6 +1287,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1209,6 +1319,18 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "حسابداری ابزارها و عقود مالی اسلامی",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -1247,6 +1369,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1257,6 +1384,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -1283,6 +1415,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1293,6 +1430,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -1307,6 +1449,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1317,6 +1464,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -1331,6 +1483,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1341,6 +1498,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -1355,6 +1517,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1365,6 +1532,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -1493,6 +1665,11 @@
       },
       {
         "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1531,6 +1708,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1541,6 +1723,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -1591,6 +1778,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1613,6 +1805,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -1659,6 +1856,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -1743,6 +1945,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1772,6 +1979,16 @@
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -1788,6 +2005,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       },
       {
@@ -1814,6 +2036,11 @@
       },
       {
         "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -1832,6 +2059,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       },
       {
@@ -1878,6 +2110,30 @@
     ]
   },
   {
+    "name": "زبان تخصصی 1",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "زبان تخصصی 2",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
     "name": "زبان تخصصی کامپیوتر",
     "theoreticalUnits": 2,
     "practicalUnits": 0,
@@ -1906,6 +2162,11 @@
     "theoreticalUnits": 2,
     "practicalUnits": 0,
     "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
       {
         "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
@@ -2150,6 +2411,11 @@
       },
       {
         "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
         "degreeSlug": "bachelors-degree"
       }
@@ -2219,6 +2485,18 @@
       {
         "uniSlug": "azad-neyshabur",
         "majorSlug": "computer-engineering",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "کارآموزی طرح پویش (1) کاردانی و کارشناسی",
+    "theoreticalUnits": 0,
+    "practicalUnits": 2,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
     ]
@@ -2314,6 +2592,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2350,6 +2633,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2360,6 +2648,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -2374,6 +2667,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2384,6 +2682,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -2398,6 +2701,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2408,6 +2716,18 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      }
+    ]
+  },
+  {
+    "name": "مباحث جاری درحسابداری",
+    "theoreticalUnits": 2,
+    "practicalUnits": 0,
+    "refs": [
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -2432,6 +2752,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -2581,6 +2906,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2661,6 +2991,11 @@
     "refs": [
       {
         "uniSlug": "azad-malard",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       }
@@ -2757,6 +3092,11 @@
         "uniSlug": "azad-malard",
         "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
+        "degreeSlug": "bachelors-degree"
       }
     ]
   },
@@ -2843,6 +3183,11 @@
       {
         "uniSlug": "azad-malard",
         "majorSlug": "english-translation",
+        "degreeSlug": "bachelors-degree"
+      },
+      {
+        "uniSlug": "azad-neyshabur",
+        "majorSlug": "accounting",
         "degreeSlug": "bachelors-degree"
       },
       {

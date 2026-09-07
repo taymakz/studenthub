@@ -42,6 +42,20 @@
     "hasPrevious": true
   },
   {
+    "id": "1e521535-baa8-45cf-abf3-8cc9af162462",
+    "uniSlug": "azad-neyshabur",
+    "majorSlug": "accounting",
+    "year": 1405,
+    "semester": "MEHR",
+    "createdAt": "2026-09-06T22:29:33.808Z",
+    "summary": {
+      "added": 0,
+      "removed": 0,
+      "changed": 0
+    },
+    "hasPrevious": true
+  },
+  {
     "id": "d8da9ac3-116f-4971-996b-b3359d1558b6",
     "uniSlug": "azad-neyshabur",
     "majorSlug": "computer-engineering",

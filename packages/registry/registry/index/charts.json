@@ -67,6 +67,17 @@
   },
   {
     "uniSlug": "azad-neyshabur",
+    "majorSlug": "accounting",
+    "degreeSlug": "bachelors-degree",
+    "yearDir": "[1403-1405]",
+    "semesters": [
+      "MEHR",
+      "BAHMAN"
+    ],
+    "path": "universities/azad-neyshabur/majors/accounting/charts/bachelors-degree/[1403-1405]/both.json"
+  },
+  {
+    "uniSlug": "azad-neyshabur",
     "majorSlug": "computer-engineering",
     "degreeSlug": "bachelors-degree",
     "yearDir": "[1403-1405]",

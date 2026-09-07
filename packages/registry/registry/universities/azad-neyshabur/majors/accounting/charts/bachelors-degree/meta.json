@@ -1,0 +1,11 @@
+{
+  "$schema": "../../../../../../../schemas/chart-degree.json",
+  "type": "chart-degree",
+  "slug": "bachelors-degree",
+  "name": {
+    "fa": "کارشناسی پیوسته",
+    "en": "Bachelor's degree"
+  },
+  "termCount": 8,
+  "maxTermCount": 12
+}
